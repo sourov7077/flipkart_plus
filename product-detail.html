@@ -1,0 +1,2174 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Product Detail – Flipkart</title>
+    <link rel="icon" type="image/x-icon" href="https://filpkaart-sammar.shop/hotsale/assets/media/favicon.png">
+      <link rel="icon" type="image/png" href="favicon.png" />
+    <!-- Bootstrap 5 + Font Awesome + Google Font -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ============================================================
+           ROOT & RESET
+           ============================================================ */
+        :root {
+            --primary-blue: #2874f0;
+            --primary-orange: #fb641b;
+            --primary-yellow: #ffe11b;
+            --primary-green: #388e3c;
+            --white: #ffffff;
+            --light-gray: #f1f3f6;
+            --border-gray: #e0e0e0;
+            --text-dark: #212121;
+            --text-light: #878787;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --radius-lg: 8px;
+            --radius-xl: 12px;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--light-gray);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+        a { text-decoration: none; color: inherit; }
+
+        /* ============================================================
+           LOADER
+           ============================================================ */
+        .loader-overlay {
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background:#fff;
+            z-index:99999;
+            display:flex;
+            flex-direction:column;
+            align-items:center;
+            justify-content:center;
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+        .loader-overlay.hidden { opacity:0; visibility:hidden; pointer-events:none; }
+        .loader-logo {
+            width:80px; height:80px;
+            background:var(--primary-yellow);
+            border-radius:50%;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            box-shadow:0 8px 40px rgba(255,225,27,0.4);
+            animation:logoBounce 1.2s ease-in-out infinite;
+        }
+        .loader-logo span { font-style:italic; font-size:40px; font-weight:800; color:var(--primary-blue); }
+        @keyframes logoBounce {
+            0%,100%{ transform:scale(1) translateY(0); }
+            50%{ transform:scale(1.05) translateY(-6px); }
+        }
+        .loader-dots { display:flex; gap:10px; margin-top:24px; }
+        .loader-dots span {
+            width:12px; height:12px; border-radius:50%;
+            background:var(--primary-blue);
+            animation:dotPulse 1.4s ease-in-out infinite;
+        }
+        .loader-dots span:nth-child(1){ animation-delay:0s; }
+        .loader-dots span:nth-child(2){ animation-delay:0.2s; }
+        .loader-dots span:nth-child(3){ animation-delay:0.4s; }
+        @keyframes dotPulse {
+            0%,80%,100%{ transform:scale(0.6); opacity:0.3; }
+            40%{ transform:scale(1); opacity:1; }
+        }
+
+        /* ============================================================
+           HEADER WITH BACK BUTTON
+           ============================================================ */
+        .detail-header {
+            background: var(--primary-blue);
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .detail-header .back-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px 8px;
+            transition: all 0.3s ease;
+        }
+        .detail-header .back-btn:hover {
+            transform: scale(1.1);
+        }
+        .detail-header .header-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            flex: 1;
+        }
+        .detail-header .header-icon {
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            padding: 4px 8px;
+        }
+
+        /* ============================================================
+           PRODUCT DETAIL CARD
+           ============================================================ */
+        .detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 12px 12px 80px 12px;
+        }
+
+        .love-icon {
+            width: 36px;
+            height: 36px;
+            display: block;
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url(https://filpkaart-sammar.shop/hotsale/assets/media/love.png);
+            background-size: 24px 24px;
+            border-radius: 18px;
+            position: absolute;
+            right: 0;
+            border: 1px solid #eee;
+            padding: 24px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .share-icon {
+            width: 36px;
+            height: 36px;
+            display: block;
+            background-color: #fff;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-image: url('https://filpkaart-sammar.shop/hotsale/assets/media/share.png');
+            background-size: 24px 24px;
+            border-radius: 18px;
+            position: absolute;
+            right: 0;
+            border: 1px solid #eee;
+            padding: 24px;
+            border-radius: 50%;
+            z-index: 1;
+            top: 60px;
+        }
+        .product-title.brandname {
+            font-weight: 700;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+        .product-price .discount {
+            color: var(--primary-green);
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .product-price .mrp {
+            color: var(--text-light);
+            text-decoration: line-through;
+            margin-right: 8px;
+        }
+        .product-price .price {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .offerend-container {
+            background: #fff;
+            padding: 10px;
+            text-align: center;
+        }
+        .offerend-container .ddgfgfefe {
+            font-weight: 600;
+        }
+        .offerend-container #test {
+            color: var(--primary-orange);
+            font-weight: 700;
+        }
+        .feature-container {
+            background: #fff;
+            border-radius: var(--radius-lg);
+            padding: 12px 0;
+        }
+        .featured-item img {
+            height: 32px;
+            object-fit: contain;
+        }
+        .feature-title {
+            font-size: 12px;
+            color: var(--text-dark);
+            text-align: center;
+        }
+        .product-details img {
+            width: 100%;
+            display: block;
+        }
+        .fdgd {
+            padding: 0 15px;
+        }
+
+        /* ============================================================
+           RATING & REVIEWS SECTION
+           ============================================================ */
+        .rating-container {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            padding: 16px 20px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .rating-left {
+            width: 35%;
+            min-width: 140px;
+        }
+        .rating-score {
+            font-size: 28px;
+            font-weight: 700;
+            color: #4caf50;
+            text-align: center;
+            line-height: 1.2;
+        }
+        .rating-score .empty {
+            color: #cdcdcd;
+        }
+        .rating-score .star {
+            font-size: 34px;
+        }
+        .rating-count {
+            margin-top: 4px;
+            font-size: 14px;
+            color: #878787;
+            text-align: center;
+            line-height: 1.4;
+        }
+        .divider {
+            width: 1px;
+            height: 80px;
+            background: #ddd;
+            margin: 0 16px;
+        }
+        .rating-right {
+            flex: 1;
+            min-width: 180px;
+        }
+        .rating-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .rating-row span {
+            width: 36px;
+            font-size: 13px;
+            color: #212121;
+            flex-shrink: 0;
+        }
+        .rating-row .bar {
+            flex: 1;
+            height: 6px;
+            background: #eee;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .rating-row .bar .fill {
+            height: 100%;
+            border-radius: 10px;
+        }
+        .green { background-color: #4CAF50; }
+        .orange { background-color: #FFA500; }
+        .red { background-color: #F44336; }
+
+        .dsfsf {
+            background: #eeeeee;
+            height: 1px;
+            margin: 0 16px;
+        }
+
+        .all-reviews {
+            padding: 16px 20px;
+        }
+        .review-item {
+            padding: 14px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .review-item:last-child {
+            border-bottom: none;
+        }
+        .review-item .review-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .review-item .review-rating {
+            font-size: 16px;
+            font-weight: 600;
+            color: #4caf50;
+        }
+        .review-item .review-rating .ful { color: #4caf50; }
+        .review-item .review-rating .empty { color: #cdcdcd; }
+        .review-item .review-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #212121;
+        }
+        .review-item .review-text {
+            font-size: 14px;
+            color: #212121;
+            margin: 4px 0;
+            line-height: 1.5;
+        }
+        .review-item .review-user {
+            font-size: 13px;
+            font-weight: 500;
+            color: #212121;
+        }
+        .review-item .review-meta {
+            font-size: 12px;
+            color: #878787;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-top: 4px;
+        }
+        .review-item .review-meta .helpful {
+            color: #2874f0;
+            font-weight: 500;
+        }
+        .review-item .review-meta .verified {
+            color: #388e3c;
+            font-weight: 500;
+        }
+        .review-item .review-meta .verified i {
+            color: #388e3c;
+        }
+
+        /* ============================================================
+           BUTTON CONTAINER
+           ============================================================ */
+        .button-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            background: #fff;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.08);
+            z-index: 1000;
+        }
+        .button-container .buynow-button {
+            flex: 1;
+            padding: 14px 0;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .button-container .buynow-button-white {
+            background: #fff;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+        .button-container .buynow-button-white:hover {
+            background: var(--primary-blue);
+            color: #fff;
+        }
+        .button-container .buynow-button:not(.buynow-button-white) {
+            background: var(--primary-orange);
+            color: #fff;
+        }
+        .button-container .buynow-button:not(.buynow-button-white):hover {
+            background: #e85a0e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(251,100,27,0.3);
+        }
+
+        /* ============================================================
+           ORDER PAGE
+           ============================================================ */
+        .order-page {
+            display: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background:#0a0a0a;
+            z-index:99999;
+            overflow-y:auto;
+            padding:20px;
+            animation:fadeIn 0.4s ease;
+        }
+        .order-page.active { display:flex; align-items:center; justify-content:center; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+
+        .order-page .order-container {
+            background:#0a0a0a;
+            color:#ffffff;
+            max-width:480px;
+            width:100%;
+            padding:24px 20px 20px;
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:20px;
+            max-height:95vh;
+            overflow-y:auto;
+            box-shadow:0 24px 60px rgba(0,0,0,0.5);
+            animation:modalSlideUp 0.4s ease;
+        }
+        @keyframes modalSlideUp {
+            from { opacity:0; transform:translateY(30px) scale(0.95); }
+            to { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .order-page .order-close { float:right; background:none; border:none; color:#888; font-size:22px; cursor:pointer; }
+        .order-page .order-close:hover { color:#fff; transform:rotate(90deg); }
+        .order-page .order-title { font-size:20px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+        .order-page .order-title i { color:var(--primary-orange); }
+
+        .order-steps {
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:20px;
+            position:relative;
+        }
+        .order-steps::before {
+            content:'';
+            position:absolute;
+            top:50%;
+            left:12%;
+            right:12%;
+            height:2px;
+            background:rgba(255,255,255,0.08);
+            transform:translateY(-50%);
+        }
+        .order-steps .step {
+            flex:1;
+            text-align:center;
+            position:relative;
+            z-index:1;
+        }
+        .order-steps .step .num {
+            width:30px; height:30px;
+            border-radius:50%;
+            background:rgba(255,255,255,0.06);
+            border:2px solid rgba(255,255,255,0.1);
+            color:#666;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin:0 auto 4px;
+            font-weight:700;
+            font-size:12px;
+            transition:all 0.3s ease;
+        }
+        .order-steps .step.active .num { background:var(--primary-blue); border-color:var(--primary-blue); color:#fff; }
+        .order-steps .step.done .num { background:var(--primary-green); border-color:var(--primary-green); color:#fff; }
+        .order-steps .step .label { font-size:9px; text-transform:uppercase; color:#666; font-weight:500; letter-spacing:0.3px; }
+        .order-steps .step.active .label { color:var(--primary-blue); }
+        .order-steps .step.done .label { color:var(--primary-green); }
+
+        .step-content { display:none; animation:fadeInUp 0.4s ease; }
+        .step-content.active { display:block; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+        .step-content .form-group { margin-bottom:16px; }
+        .step-content .form-group label { display:block; font-size:13px; font-weight:500; color:#aaa; margin-bottom:4px; }
+        .step-content .form-group input,
+        .step-content .form-group select,
+        .step-content .form-group textarea {
+            width:100%;
+            padding:12px 14px;
+            background:#0d0d0d;
+            border:1.5px solid rgba(255,255,255,0.08);
+            border-radius:10px;
+            color:#fff;
+            font-size:15px;
+            outline:none;
+            transition:all 0.3s ease;
+            font-family:inherit;
+        }
+        .step-content .form-group input:focus,
+        .step-content .form-group select:focus,
+        .step-content .form-group textarea:focus { border-color:var(--primary-blue); }
+        .step-content .form-group input::placeholder,
+        .step-content .form-group textarea::placeholder { color:#555; }
+        .step-content .form-group select option { background:#0d0d0d; color:#fff; }
+        .step-content .form-row { display:flex; gap:12px; }
+        .step-content .form-row .form-group { flex:1; }
+
+        .form-group .error-msg {
+            font-size:12px;
+            color:#ff4444;
+            display:none;
+            margin-top:4px;
+            font-weight:500;
+        }
+        .form-group .error-msg.show { display:block; }
+        .form-group input.error,
+        .form-group select.error {
+            border-color:#ff4444 !important;
+            box-shadow:0 0 0 3px rgba(255,68,68,0.1) !important;
+        }
+        .form-group input.success,
+        .form-group select.success {
+            border-color:var(--primary-green) !important;
+            box-shadow:0 0 0 3px rgba(56,142,60,0.1) !important;
+        }
+
+        .payment-methods { display:flex; flex-direction:column; gap:8px; margin:8px 0 16px; }
+        .payment-methods .pm-option {
+            display:flex;
+            align-items:center;
+            gap:14px;
+            padding:12px 16px;
+            background:#0d0d0d;
+            border:1.5px solid rgba(255,255,255,0.06);
+            border-radius:10px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+        }
+        .payment-methods .pm-option:hover { border-color:rgba(255,255,255,0.15); }
+        .payment-methods .pm-option.selected { border-color:var(--primary-blue); box-shadow:0 0 0 1px rgba(59,130,246,0.15); }
+        .payment-methods .pm-option .pm-icon {
+            width:40px;height:40px;border-radius:8px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:18px;color:#fff;flex-shrink:0;
+        }
+        .payment-methods .pm-option .pm-icon.phonepe { background:#5f259f; }
+        .payment-methods .pm-option .pm-icon.paytm { background:#00baf2; }
+        .payment-methods .pm-option .pm-icon.gpay { background:#4285f4; }
+        .payment-methods .pm-option .pm-icon.upi { background:#3b82f6; }
+        .payment-methods .pm-option .pm-info { flex:1; }
+        .payment-methods .pm-option .pm-info .pm-name { font-weight:600; font-size:15px; }
+        .payment-methods .pm-option .pm-info .pm-detail { font-size:12px; color:#888; }
+        .payment-methods .pm-option .pm-check {
+            width:22px;height:22px;border-radius:50%;
+            border:2px solid rgba(255,255,255,0.1);
+            display:flex;align-items:center;justify-content:center;
+            transition:all 0.3s ease;
+        }
+        .payment-methods .pm-option.selected .pm-check { background:var(--primary-blue); border-color:var(--primary-blue); }
+        .payment-methods .pm-option.selected .pm-check::after { content:'✓'; color:#fff; font-size:12px; font-weight:700; }
+
+        .order-summary {
+            background:#0d0d0d;
+            border-radius:12px;
+            padding:16px;
+            margin:8px 0 16px;
+        }
+        .order-summary .summary-row {
+            display:flex;
+            justify-content:space-between;
+            padding:6px 0;
+            font-size:14px;
+            color:#aaa;
+        }
+        .order-summary .summary-row.total {
+            font-size:18px;
+            font-weight:700;
+            color:#fff;
+            border-top:1px solid rgba(255,255,255,0.06);
+            padding-top:12px;
+            margin-top:4px;
+        }
+        .order-summary .summary-row.total .amount { color:var(--primary-blue); }
+        .order-summary .summary-row .free { color:var(--primary-green); font-weight:600; }
+
+        .step-buttons { display:flex; gap:10px; margin-top:16px; }
+        .step-buttons .btn {
+            flex:1;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all 0.3s ease;
+        }
+        .step-buttons .btn-prev { background:rgba(255,255,255,0.06); color:#aaa; flex:0.5; }
+        .step-buttons .btn-prev:hover { background:rgba(255,255,255,0.12); color:#fff; }
+        .step-buttons .btn-next { background:linear-gradient(135deg, var(--primary-orange), #ea580c); color:#fff; }
+        .step-buttons .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(249,115,22,0.3); }
+        .step-buttons .btn-next:disabled { opacity:0.5; cursor:not-allowed; }
+        .step-buttons .btn-confirm { background:linear-gradient(135deg, var(--primary-blue), #1a5bc7); color:#fff; }
+        .step-buttons .btn-confirm:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(40,116,240,0.3); }
+        .step-buttons .btn-confirm:disabled { opacity:0.5; cursor:not-allowed; }
+
+        .price-detail-div .product-price-list { display:flex; justify-content:space-between; padding:4px 0; }
+        .price-detail-div .total { border-top:1px solid rgba(255,255,255,0.08); }
+
+        .custom-toast {
+            position:fixed; bottom:100px; left:50%; transform:translateX(-50%) scale(0.9);
+            padding:12px 28px; border-radius:12px; background:#1a237e; color:#fff;
+            font-weight:600; font-size:14px; z-index:999999;
+            box-shadow:0 8px 30px rgba(0,0,0,0.2);
+            opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            font-family:'Inter',sans-serif; max-width:90%; text-align:center;
+        }
+        .custom-toast.show { opacity:1; transform:translateX(-50%) scale(1); }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 575.98px) {
+            .button-container { padding:8px 12px; }
+            .button-container .buynow-button { font-size:14px; padding:12px 0; }
+            .detail-container { padding:8px 8px 80px 8px; }
+            .rating-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 12px 14px;
+            }
+            .rating-left {
+                width: 100%;
+                text-align: center;
+            }
+            .divider {
+                width: 100%;
+                height: 1px;
+                margin: 8px 0;
+            }
+            .rating-right {
+                width: 100%;
+            }
+            .rating-score {
+                font-size: 24px;
+            }
+            .all-reviews {
+                padding: 12px 14px;
+            }
+            .detail-header .header-title {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    LOADER
+    ============================================================ -->
+    <div class="loader-overlay" id="loaderOverlay">
+        <div class="loader-logo"><span>F</span></div>
+        <div class="loader-dots"><span></span><span></span><span></span></div>
+    </div>
+
+    <!-- ============================================================
+    HEADER WITH BACK BUTTON
+    ============================================================ -->
+    <div class="detail-header">
+        <button class="back-btn" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <span class="header-title">Product Details</span>
+        <span class="header-icon"><i class="fas fa-shopping-cart"></i></span>
+    </div>
+
+    <!-- ============================================================
+    PRODUCT DETAIL PAGE
+    ============================================================ -->
+    <div class="detail-container" id="detailContainer">
+
+        <div class="_1fhgRH">
+            <div class="container p-1 card">
+                <div class="container-fluid px-0 product-slider">
+                    <div class="love-icon"></div>
+                    <div class="share-icon"></div>
+                    <div id="sliderX" class="carousel slide" data-bs-ride="carousel">
+                        <ol class="carousel-indicators" id="carouselIndicators"></ol>
+                        <div class="carousel-inner" id="carouselInner"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container-fluid p-3 mt-1 card">
+                <span class="product-title brandname" id="prodBrand">Atomberg</span>
+                <div class="product-title" id="prodName">Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)</div>
+                <img style="width: 100px" class="my-2" src="https://filpkaart-sammar.shop/hotsale/assets/media/plue-fassured.png" alt="plue-fassured">
+                <div class="product-price d-flex my-2">
+                    <span class="discount" id="prodDiscount">83% off</span>
+                    <span class="mrp" id="prodMrp">₹ 2,599.00</span>
+                    <span class="price" id="prodPrice">₹ 419.00</span>
+                </div>
+            </div>
+
+            <div class="container-fluid p-3 offerend-container card">
+                <div class="text-center">
+                    <span class="ddgfgfefe">Offer ends in </span>
+                    <span id="test"></span>
+                </div>
+            </div>
+
+            <div class="container-fluid p-3 mb-1 card">
+                <img class="my-2" src="https://filpkaart-sammar.shop/hotsale/assets/media/pay-latter.png" alt="pay-latter">
+            </div>
+
+            <div class="container-fluid px-2 py-3 d-flex feature-container product-extra card">
+                <div class="col-4 featured-item d-flex align-items-center flex-column bd-highlight px-1">
+                    <img class="featured-img mb-3" src="https://filpkaart-sammar.shop/hotsale/assets/media/replacement.png" />
+                    <span class="feature-title">7 days Replacement</span>
+                </div>
+                <div class="col-4 featured-item d-flex align-items-center flex-column bd-highlight px-1">
+                    <img class="featured-img mb-3" src="https://filpkaart-sammar.shop/hotsale/assets/media/non-cod.png" />
+                    <span class="feature-title">No Cash On Delivery</span>
+                </div>
+                <div class="col-4 featured-item d-flex align-items-center flex-column bd-highlight px-1">
+                    <img class="featured-img mb-3 mt-1" src="https://filpkaart-sammar.shop/hotsale/assets/media/plue-fassured.png" />
+                    <span class="feature-title">Plus (F-Assured)</span>
+                </div>
+            </div>
+
+            <!-- ============================================================
+            PRODUCT DESCRIPTION WITH DYNAMIC IMAGES
+            ============================================================ -->
+            <div class="container-fluid product-detail px-0 py-3 card">
+                <div class="product-details" id="productDescription">
+                    <!-- Dynamically rendered from JavaScript -->
+                </div>
+                <div class="fdgd"></div>
+            </div>
+
+            <!-- ============================================================
+            RATING & REVIEWS SECTION (Static)
+            ============================================================ -->
+            <div class="container-fluid px-0 py-3 card mt-3">
+                <div class="rating-container">
+                    <div class="rating-left">
+                        <div class="rating-score">
+                            <span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="empty">★</span>
+                        </div>
+                        <div class="rating-count">5,917 ratings and <br> 583 reviews</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="rating-right">
+                        <div class="rating-row"><span>5 ★</span><div class="bar"><div class="fill green" style="width: 82%;"></div></div></div>
+                        <div class="rating-row"><span>4 ★</span><div class="bar"><div class="fill green" style="width: 48%;"></div></div></div>
+                        <div class="rating-row"><span>3 ★</span><div class="bar"><div class="fill green" style="width: 21%;"></div></div></div>
+                        <div class="rating-row"><span>2 ★</span><div class="bar"><div class="fill orange" style="width: 7%;"></div></div></div>
+                        <div class="rating-row"><span>1 ★</span><div class="bar"><div class="fill red" style="width: 4%;"></div></div></div>
+                    </div>
+                </div>
+                <div class="dsfsf"></div>
+                <div class="all-reviews">
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-rating"><span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="empty">★</span></span>
+                            <span class="review-title">Very Good</span>
+                        </div>
+                        <div class="review-text">Review for: Color White • Motor Technology BLDC</div>
+                        <div class="review-text" style="font-weight:400; color:#212121;">The smartfan from atomberg are really nice. This is very good budget fit.</div>
+                        <div class="review-user">Umesh Gupta, Mumbai</div>
+                        <div class="review-meta">
+                            <span class="helpful"><i class="far fa-thumbs-up"></i> Helpful for 69</span>
+                            <span>12</span>
+                            <span class="verified"><i class="fas fa-check-circle"></i> Verified Purchase · Feb, 2024</span>
+                        </div>
+                    </div>
+                    <div class="review-item">
+                        <div class="review-header">
+                            <span class="review-rating"><span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="ful">★</span><span class="empty">★</span></span>
+                            <span class="review-title">Value-for-money</span>
+                        </div>
+                        <div class="review-text">Review for: Color Brown • Motor Technology BLDC</div>
+                        <div class="review-text" style="font-weight:400; color:#212121;">Nice purchase</div>
+                        <div class="review-user">BIPLAB SAHU, Paschim Medinipu...</div>
+                        <div class="review-meta">
+                            <span class="helpful"><i class="far fa-thumbs-up"></i> Helpful for 12</span>
+                            <span>12</span>
+                            <span class="verified"><i class="fas fa-check-circle"></i> Verified Purchase · Apr, 2024</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- BOTTOM BUTTONS -->
+        <div class="button-container flex">
+            <button class="buynow-button buynow-button-white product-page-buy" onclick="addToCart()">
+                <i class="fas fa-shopping-cart me-1"></i> Add to Cart
+            </button>
+            <button class="buynow-button product-page-buy" onclick="openOrderPage()">
+                <i class="fas fa-bolt me-1"></i> Buy Now
+            </button>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    ORDER PAGE
+    ============================================================ -->
+    <div class="order-page" id="orderPage">
+        <div class="order-container">
+            <button class="order-close" onclick="closeOrderPage()">&times;</button>
+            <div class="order-title"><i class="fas fa-shopping-bag"></i> Place Order</div>
+
+            <div class="order-steps" id="orderSteps">
+                <div class="step active" data-step="1"><div class="num">1</div><div class="label">Address</div></div>
+                <div class="step" data-step="2"><div class="num">2</div><div class="label">Summary</div></div>
+                <div class="step" data-step="3"><div class="num">3</div><div class="label">Payment</div></div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div class="step-content active" id="step1">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="ordName" placeholder="Enter your full name" />
+                    <div class="error-msg" id="errName">Please enter your full name</div>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="ordPhone" placeholder="Enter 10-digit number" maxlength="10" />
+                    <div class="error-msg" id="errPhone">Enter a valid 10-digit mobile number</div>
+                </div>
+                <div class="form-group">
+                    <label>Pincode *</label>
+                    <input type="text" id="ordPincode" placeholder="Enter 6-digit pincode" maxlength="6" />
+                    <div class="error-msg" id="errPincode">Enter a valid 6-digit pincode</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="ordCity" placeholder="City" />
+                        <div class="error-msg" id="errCity">Please enter your city</div>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <select id="ordState">
+                            <option value="">Select State</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="error-msg" id="errState">Please select your state</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>House No., Building Name *</label>
+                    <input type="text" id="ordAddress" placeholder="House No., Building Name" />
+                    <div class="error-msg" id="errAddress">Please enter your house/building name</div>
+                </div>
+                <div class="form-group">
+                    <label>Road name, Area, Colony</label>
+                    <input type="text" id="ordAddress2" placeholder="Road name, Area, Colony" />
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" disabled>Back</button>
+                    <button class="btn btn-next" id="step1Next" onclick="validateStep1()">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div class="step-content" id="step2">
+                <div class="order-summary">
+                    <div class="summary-row"><span>Product</span><span id="summaryProduct">Loading...</span></div>
+                    <div class="summary-row"><span>Quantity</span><span id="summaryQty">1</span></div>
+                    <div class="summary-row"><span>Price</span><span id="summaryPrice">₹0</span></div>
+                    <div class="summary-row"><span>Delivery Charges</span><span class="free">FREE</span></div>
+                    <div class="summary-row total"><span>Total</span><span class="amount" id="summaryTotal">₹0</span></div>
+                </div>
+                <div style="font-size:13px; color:#888; text-align:center; margin:4px 0;">
+                    <i class="fas fa-shield-alt"></i> Secure checkout with encrypted payment
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" onclick="goToOrderStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-next" onclick="goToOrderStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 3 -->
+            <div class="step-content" id="step3">
+                <div class="payment-methods" id="paymentMethods"></div>
+
+                <div class="card px-3 py-4 mb-2" style="background:#0d0d0d; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+                    <h4 style="color:#fff; font-size:16px; font-weight:600;">Price Details</h4>
+                    <div class="price-detail-div mt-2">
+                        <div class="product-price-list my-2">
+                            <span class="title" style="color:#aaa;">Price (1 item)</span>
+                            <span class="data selling_price me-0 td-none" id="mrpOrder" style="color:#fff;">₹0</span>
+                        </div>
+                        <div class="product-price-list my-2">
+                            <span class="title" style="color:#aaa;">Delivery Charges</span>
+                            <span class="data text-success">FREE</span>
+                        </div>
+                        <div class="product-price-list mt-3 pt-3 total" style="border-top:1px solid rgba(255,255,255,0.08);">
+                            <span class="title" style="color:#fff; font-weight:600;">Amount Payable</span>
+                            <span class="data selling_price" id="sellingPriceOrder" style="color:var(--primary-blue); font-weight:700;">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:8px 0;">
+                    <img src="https://filpkaart-sammar.shop/hotsale/assets/media/policy.png" style="width:100%; border-radius:8px;" alt="policy">
+                    <img src="https://filpkaart-sammar.shop/hotsale/assets/media/safety-label-badge.jpg" style="width:100%; border-radius:8px; margin-top:6px;" alt="safety">
+                </div>
+
+                <div style="font-size:13px; color:#888; text-align:center; margin:6px 0;">
+                    <i class="fas fa-lock"></i> Your payment is secure
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" onclick="goToOrderStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-confirm" id="confirmBtn" onclick="confirmOrder()" disabled><i class="fas fa-check"></i> Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    TOAST
+    ============================================================ -->
+    <div class="custom-toast" id="toast"></div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // ============================================================
+        // COMPLETE PRODUCT DATA (29 products with descImages)
+        // ============================================================
+        const PRODUCTS_DATA = [
+            { 
+                id: 1, 
+                name: 'LEADER', 
+                price: 499, 
+                oldPrice: 6289, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/1536/1536/xif0q/cycle/q/z/x/beast-26t-ibc-premium-cycle-for-men-with-front-suspension-dual-original-imahhyasvz8rmhxh.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/1536/1536/xif0q/cycle/q/z/x/beast-26t-ibc-premium-cycle-for-men-with-front-suspension-dual-original-imahhyasvz8rmhxh.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/1536/1536/xif0q/cycle/q/z/x/beast-26t-ibc-premium-cycle-for-men-with-front-suspension-dual-original-imahhyasvz8rmhxh.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/1536/1536/xif0q/cycle/q/z/x/beast-26t-ibc-premium-cycle-for-men-with-front-suspension-dual-original-imahhyasvz8rmhxh.jpeg?q=90'
+                ], 
+                rating: 4.2, 
+                reviews: 2653, 
+                inStock: true, 
+                stock: 500,
+                brand: 'leader',
+                description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes 26 T (inch) Mountain Cycle (7 Gear, Black, Only Front Suspension)',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377885Screenshot_20260126_030609.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377885Screenshot_20260126_030527.webp'
+                ]
+            },
+            { 
+                id: 238, 
+                name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', 
+                price: 449, 
+                oldPrice: 2228, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/induction-cook-top/z/y/y/-original-imagqhpkgjdzsu2e.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/induction-cook-top/2/2/k/-original-imagqhpkqzffwz8z.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/induction-cook-top/0/j/g/-original-imagqhpkuh4efunp.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/induction-cook-top/t/d/6/-original-imagqhpkz8zyh9qa.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/induction-cook-top/h/z/l/-original-imagqhpkhz6z7qh4.jpeg?q=70'
+                ], 
+                rating: 4.2, 
+                reviews: 2653, 
+                inStock: true, 
+                stock: 15,
+                brand: 'Pigeon',
+                description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377885Screenshot_20260126_030609.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377885Screenshot_20260126_030527.webp'
+                ]
+            },
+            { 
+                id: 239, 
+                name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', 
+                price: 498, 
+                oldPrice: 2499, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-cooker/y/q/j/vrc-1-8c-vrc-1-8c-with-2-pots-v-guard-original-imahhrey9qchgdxt.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-cooker/k/h/g/vrc-1-8c-vrc-1-8c-with-2-pots-v-guard-original-imahhreyjjn3g42z.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-cooker/a/a/h/vrc-1-8c-vrc-1-8c-with-2-pots-v-guard-original-imahhrefyjrwwhwe.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-cooker/n/o/i/vrc-1-8c-vrc-1-8c-with-2-pots-v-guard-original-imahhreygehqj2u9.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-cooker/m/m/w/vrc-1-8c-vrc-1-8c-with-2-pots-v-guard-original-imahhrey6pfkjphk.jpeg?q=70'
+                ], 
+                rating: 4.7, 
+                reviews: 5690, 
+                inStock: true, 
+                stock: 20,
+                brand: 'V-Guard',
+                description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769388186Screenshot_20260126_060710.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769388186Screenshot_20260126_030309.webp'
+                ]
+            },
+            { 
+                id: 240, 
+                name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', 
+                price: 398, 
+                oldPrice: 1699, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/cookware-set/1/k/5/3-30841-prestige-original-imahhspxghgcgpmr.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/cookware-set/b/z/7/-original-imahjrv7fjzhgfph.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/cookware-set/4/i/u/-original-imahjrv7dtnxtgz2.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/cookware-set/t/c/d/-original-imahjrv7nxjvezgg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/cookware-set/g/h/p/-original-imahjrv7ze6wgejg.jpeg?q=70'
+                ], 
+                rating: 4.7, 
+                reviews: 8666, 
+                inStock: true, 
+                stock: 10,
+                brand: 'Prestige',
+                description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377977Screenshot_20260126_030936.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377977Screenshot_20260126_030956.webp'
+                ]
+            },
+            { 
+                id: 241, 
+                name: 'Pigeon PG-KESSEL-BOTTLE-COMBI Electric Kettle (1.2 L, Silver, Black)', 
+                price: 299, 
+                oldPrice: 999, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-kettle/t/g/5/-original-imahcfj7hsxquhyz.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-kettle/7/0/m/-original-imahcfj7nk6pn6up.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/electric-kettle/t/f/f/-original-imahcfj7fcyjwqhg.jpeg?q=70'
+                ], 
+                rating: 4.4, 
+                reviews: 7802, 
+                inStock: true, 
+                stock: 25,
+                brand: 'Pigeon',
+                description: 'Pigeon Electric Kettle with 1.2L capacity, stainless steel body, and auto shut-off.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387400kettle.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693874001kettle.webp'
+                ]
+            },
+            { 
+                id: 242, 
+                name: 'Crompton DS 500 W Mixer Grinder (ACGM-DS500W3J BLK | 3 Jars | Black & Grey)', 
+                price: 597, 
+                oldPrice: 1799, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/s/o/f/acgm-ds500w3j-blk-crompton-original-imags4eghgrkwmgg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/o/s/a/acgm-ds500w3j-blk-crompton-original-imags4egyhcdmkjw.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/3/a/1/acgm-ds500w3j-blk-crompton-original-imags4eggwdj6mtf.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/m/f/t/-original-imah4b75u84k5w7m.jpeg?q=70',
+                    'https://rukminim2.flixcart.com/image/832/832/xif0q/mixer-grinder-juicer/y/g/9/acgm-ds500w3j-blk-crompton-original-imags4eg6zhynxrk.jpeg?q=70'
+                ], 
+                rating: 4.4, 
+                reviews: 6636, 
+                inStock: true, 
+                stock: 12,
+                brand: 'Crompton',
+                description: 'Crompton DS 500W Mixer Grinder with 3 jars and 500W motor.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377744Screenshot_20260126_030059.webp'
+                ]
+            },
+            { 
+                id: 243, 
+                name: 'Butterfly Aluminium Pressure Cooker 2 L, 3 L, 5 L Outer Lid Pressure Cooker (Aluminium)', 
+                price: 549, 
+                oldPrice: 1827, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/kcuug7k0/pressure-cooker/h/k/w/8906022173611-butterfly-original-imaftw7bx4gczgjg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/jy90eq80/pressure-cooker/n/h/n/8906022173604-butterfly-original-imafggwrmnzn5vgh.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/jy90eq80/pressure-cooker/g/h/t/8906022174823-butterfly-original-imafggzvb2mncged.jpeg?q=70'
+                ], 
+                rating: 4.6, 
+                reviews: 7229, 
+                inStock: true, 
+                stock: 8,
+                brand: 'Butterfly',
+                description: 'Butterfly Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377680Screenshot_20260126_025916.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769377680Screenshot_20260126_025829.webp'
+                ]
+            },
+            { 
+                id: 244, 
+                name: 'THUNDERFIT 3 Pc Stainless Steel Knife Set Printed SS Ultra Sharp Butcher, Meat, Pairing, Vegetable for Kitchen', 
+                price: 298, 
+                oldPrice: 799, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/kitchen-knife/s/0/8/3-3-pc-stainless-steel-knife-set-printed-ss-ultra-sharp-butcher-original-imahhhb6a6vyjvgf.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/kitchen-knife/f/k/7/3-3-pc-stainless-steel-knife-set-printed-ss-ultra-sharp-butcher-original-imahhhb6bq4zyfcf.jpeg?q=70'
+                ], 
+                rating: 4.8, 
+                reviews: 6205, 
+                inStock: true, 
+                stock: 30,
+                brand: 'THUNDERFIT',
+                description: 'THUNDERFIT 3-Piece Stainless Steel Knife Set with ultra sharp blades.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387759thunder.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693877591thunder.webp'
+                ]
+            },
+            { 
+                id: 245, 
+                name: 'JKR Enterprise 260 W White Electric Whisk, Hand Blender (JKR-2019)', 
+                price: 199, 
+                oldPrice: 599, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/hand-blender/a/u/j/7-speed-260-w-hand-blender-jkr-2019-jkr-enterprise-original-imahhhhftfc93cwv.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/hand-blender/m/6/8/7-speed-260-w-hand-blender-jkr-2019-jkr-enterprise-original-imahhhhfyt9zgyzu.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/hand-blender/k/9/m/7-speed-260-w-hand-blender-jkr-2019-jkr-enterprise-original-imahhhhftthuhnpk.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/hand-blender/3/c/n/7-speed-260-w-hand-blender-jkr-2019-jkr-enterprise-original-imahhhhfkdgsm37v.jpeg?q=70',
+                    'https://rukminim2.flixcart.com/image/832/832/xif0q/hand-blender/k/m/r/7-speed-260-w-hand-blender-jkr-2019-jkr-enterprise-original-imahhhhfuyfukrf9.jpeg?q=70'
+                ], 
+                rating: 4.6, 
+                reviews: 4633, 
+                inStock: true, 
+                stock: 18,
+                brand: 'JKR Enterprise',
+                description: 'JKR Enterprise 260W Electric Whisk with 7 speed settings.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387505handblender.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693875051handblender.webp'
+                ]
+            },
+            { 
+                id: 246, 
+                name: 'Owme Portable USB Rechargeable Juicer Blender Mini Smoothie Maker Bottle 105 W Juicer Mixer Grinder (Portable Handheld Juicer | 1 Jar | Blue)', 
+                price: 249, 
+                oldPrice: 999, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/y/6/g/juicer-mixer-electric-blenders-for-smoothies-and-juices-electric-original-imahj8rhzr47gedy.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/m/b/b/juicer-mixer-electric-blenders-for-smoothies-and-juices-electric-original-imahj8rhxftqggyz.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/4/g/n/portable-handheld-juicer-owme-original-imahja28e2zub4z9.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/hand-juicer/e/i/l/portable-blender-for-smoothie-and-juices-buytropolis-original-imahbcayyuzyxvgr.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/mixer-grinder-juicer/5/p/r/juicer-mixer-electric-blenders-for-smoothies-and-juices-electric-original-imahj8rhwkg3nzgc.jpeg?q=70'
+                ], 
+                rating: 4.5, 
+                reviews: 6060, 
+                inStock: true, 
+                stock: 22,
+                brand: 'Owme',
+                description: 'Owme Portable USB Rechargeable Juicer Blender with 105W motor.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769388218Screenshot_20260126_060929.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769388218Screenshot_20260126_060956.webp'
+                ]
+            },
+            { 
+                id: 247, 
+                name: 'Samsung 23 L Auto Cook Programs, Child Safety Lock, Memory Feature, Deodorization Solo Microwave Oven (MS23A3513AK, BLACK)', 
+                price: 799, 
+                oldPrice: 6999, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/microwave-new/t/i/2/-original-imaheyusmgcrqpkf.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/microwave-new/x/l/r/-original-imaheyuseeduzuhe.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/microwave-new/s/1/a/-original-imaheyusmpwmsxfz.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/microwave-new/2/v/t/-original-imaheyuszgue7y53.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/microwave-new/0/u/r/-original-imaheyusgngqgr7b.jpeg?q=70'
+                ], 
+                rating: 4.2, 
+                reviews: 9759, 
+                inStock: true, 
+                stock: 5,
+                brand: 'Samsung',
+                description: 'Samsung 23L Solo Microwave Oven with Auto Cook Programs and Child Safety Lock.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693873471oven.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387347oven.webp'
+                ]
+            },
+            { 
+                id: 248, 
+                name: 'Longway Multipurpose Portable Digital Kitchen Weighing Scale (Gray)', 
+                price: 149, 
+                oldPrice: 399, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/weighing-scale/o/q/j/-original-imahhp6mz5aqgyuh.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/weighing-scale/l/x/p/-original-imahhp6mcgtvbhw2.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/weighing-scale/v/5/b/-original-imahhp6mwwzfjsx5.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/weighing-scale/y/a/l/-original-imahhp6m96ushpxq.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/weighing-scale/h/l/v/-original-imahhp6mhudg3bcv.jpeg?q=70'
+                ], 
+                rating: 4.6, 
+                reviews: 2798, 
+                inStock: true, 
+                stock: 40,
+                brand: 'Longway',
+                description: 'Longway Portable Digital Kitchen Weighing Scale with precise measurement.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387455weighingscale.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693874551weighing.webp'
+                ]
+            },
+            { 
+                id: 249, 
+                name: 'Prestige Nutrifry Digital Air Fryer (4.5 L)', 
+                price: 1599, 
+                oldPrice: 3498, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/air-fryer/5/m/z/black-4-5-1200-nutrifry-digital-prestige-original-imahfbghvqr7n7mp.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/air-fryer/a/c/v/black-4-5-1200-nutrifry-digital-prestige-original-imahfbghbxfjfxcs.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/air-fryer/i/s/k/black-4-5-1200-nutrifry-digital-prestige-original-imahfbghgzvhh5wh.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/air-fryer/6/e/c/black-4-5-1200-nutrifry-digital-prestige-original-imahfbghgcjspagu.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/air-fryer/8/p/a/black-4-5-1200-nutrifry-digital-prestige-original-imahfbgh98ygshny.jpeg?q=70'
+                ], 
+                rating: 4.6, 
+                reviews: 8182, 
+                inStock: true, 
+                stock: 7,
+                brand: 'Prestige',
+                description: 'Prestige Nutrifry Digital Air Fryer with 4.5L capacity and 8 preset programs.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387480airfryer.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693874801airfryer.webp'
+                ]
+            },
+            { 
+                id: 251, 
+                name: 'realme TechLife 7.5 kg 5 Star Rating Semi Automatic Top Load Washing Machine Black, Grey (RMSA755NNNDG)', 
+                price: 2999, 
+                oldPrice: 7790, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/washing-machine-new/i/o/b/-original-imahjpgh9rmyzpj7.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/washing-machine-new/b/d/e/-original-imahg4zy2hqcpjxd.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/washing-machine-new/z/5/r/-original-imahg4zyght8wtev.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/washing-machine-new/m/d/e/-original-imahg4zyrutrurys.jpeg?q=70',
+                    'https://rukminim2.flixcart.com/image/832/832/xif0q/washing-machine-new/6/y/0/-original-imahg4zymzzynfpm.jpeg?q=70'
+                ], 
+                rating: 4.5, 
+                reviews: 2941, 
+                inStock: true, 
+                stock: 3,
+                brand: 'realme',
+                description: 'realme TechLife 7.5kg Semi Automatic Top Load Washing Machine with 5 Star rating.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693873191washing.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387319washing.webp'
+                ]
+            },
+            { 
+                id: 252, 
+                name: 'Flipkart SmartBuy Pack of 40 Melamin Emerald Bloom Melamine Dishwasher Safe|Stain Resistant Dinner Set (White, Green)', 
+                price: 469, 
+                oldPrice: 1399, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/dinner-set/3/1/f/no-40-emerald-bloom-melamine-dinner-set-dishwasher-safe-stain-original-imahfey2beb46t2y.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/dinner-set/z/j/w/no-40-emerald-bloom-melamine-dinner-set-dishwasher-safe-stain-original-imahfey2ptwgayag.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/dinner-set/s/z/p/no-40-emerald-bloom-melamine-dinner-set-dishwasher-safe-stain-original-imahfey2afy5y9pg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/dinner-set/n/h/x/no-40-emerald-bloom-melamine-dinner-set-dishwasher-safe-stain-original-imahfey2g3zscgzg.jpeg?q=70'
+                ], 
+                rating: 4.8, 
+                reviews: 4790, 
+                inStock: true, 
+                stock: 15,
+                brand: 'Flipkart SmartBuy',
+                description: 'Flipkart SmartBuy Pack of 40 Melamine Dinner Set with Emerald Bloom design.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938737240dinner1.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938737240dinner.webp'
+                ]
+            },
+            { 
+                id: 253, 
+                name: 'Sowbaghya Pack of 26 Steel Dinner Set (Silver)', 
+                price: 1299, 
+                oldPrice: 2299, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/dinner-set/d/w/k/no-26-26pcs-dinner-set-sowbaghya-original-imagkgp3gxz9gfjm.jpeg?q=70'
+                ], 
+                rating: 4.4, 
+                reviews: 3464, 
+                inStock: true, 
+                stock: 10,
+                brand: 'Sowbaghya',
+                description: 'Sowbaghya Pack of 26 Steel Dinner Set in silver finish.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938726326-dinner-1.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938726326 dinner.webp'
+                ]
+            },
+            { 
+                id: 254, 
+                name: 'Flipkart SmartBuy Plastic Grocery Container - 1200 ml, 650 ml, 350 ml, 250 ml (Pack of 20, Silver)', 
+                price: 197, 
+                oldPrice: 401, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/container/d/q/h/20-fs-p12-blue-container-flipkart-smartbuy-original-imah6uawfzukar4a.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/container/j/d/b/20-fs-p12-blue-container-flipkart-smartbuy-original-imah6uawghtzamwr.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/container/l/a/t/20-fs-p12-blue-container-flipkart-smartbuy-original-imah6uawqgprxyr4.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/container/i/0/n/24-wc-silver-line-container-set-24-wecoco-original-imah4ay6zzugdzmg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/container/z/f/l/24-wc-silver-line-container-set-24-wecoco-original-imah4ay6tcgyhdgy.jpeg?q=70'
+                ], 
+                rating: 4.4, 
+                reviews: 1387, 
+                inStock: true, 
+                stock: 25,
+                brand: 'Flipkart SmartBuy',
+                description: 'Flipkart SmartBuy Pack of 20 Plastic Grocery Containers in 4 sizes.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938723412 plastic-1.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-176938723412 plastic.webp'
+                ]
+            },
+            { 
+                id: 255, 
+                name: 'Snapple TAG Stainless Steel Water Bottle Single Wall ISI Certified 1000 ml Steel Bottle (Pack of 6, Silver)', 
+                price: 649, 
+                oldPrice: 1199, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/p/m/h/1000-tag-stainless-steel-water-bottle-single-wall-isi-certified-original-imahe38yhyvd92zg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/l/i/q/1000-tag-stainless-steel-water-bottle-single-wall-isi-certified-original-imahe38yacz57jwt.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/1/n/h/1000-tag-stainless-steel-water-bottle-single-wall-isi-certified-original-imahe38y6r6nhthb.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/l/f/j/1000-tag-stainless-steel-water-bottle-single-wall-isi-certified-original-imahe38ytxhwgyxp.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/l/2/s/1000-tag-stainless-steel-water-bottle-single-wall-isi-certified-original-imahe38ypfdtzc6j.jpeg?q=70'
+                ], 
+                rating: 4.8, 
+                reviews: 5260, 
+                inStock: true, 
+                stock: 12,
+                brand: 'Snapple',
+                description: 'Snapple TAG Stainless Steel Water Bottle Pack of 6 with 1000ml capacity.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693872901-6bottle.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693872916bottle.webp'
+                ]
+            },
+            { 
+                id: 256, 
+                name: 'NYTK RETAIL 2025 Foldable Barbeque With - 2 Spatula,1 Bbq, 10 Stick & 1 Air Blower Charcoal Grill (Foldable)', 
+                price: 489, 
+                oldPrice: 999, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/barbecue-grill/e/p/i/yes-foldable-barbeque-with-2-spatula-1-bbq-12-stick-1-air-blower-original-imahjm24mzcgp3qz.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/barbecue-grill/j/d/e/yes-2025-foldable-barbeque-with-2-spatula-1-bbq-10-stick-1-air-original-imahjm268jan8hvg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/barbecue-grill/l/r/a/yes-charcoal-grill-combo-charcoal-clvmart-original-imahdhjgddzajjwz.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/barbecue-grill/t/q/a/yes-mini-barbeque-set-charcoal-daxanstore-original-imahhrph9ygufebc.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/barbecue-grill/9/n/h/yes-mini-barbeque-set-charcoal-daxanstore-original-imahhrphzjgr2fbv.jpeg?q=70'
+                ], 
+                rating: 4.9, 
+                reviews: 6013, 
+                inStock: true, 
+                stock: 6,
+                brand: 'NYTK RETAIL',
+                description: 'NYTK RETAIL 2025 Foldable Barbeque Grill with complete accessory set.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387542barbeque.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693875421barbeque.webp'
+                ]
+            },
+            { 
+                id: 257, 
+                name: 'MGKENTERPRISE Fruits/Vegetables Kitchen Rack Plastic, Steel 4 Layer Portable Modern Trolly Plastic Fruit & Vegetable Basket', 
+                price: 397, 
+                oldPrice: 799, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/desk-organizer/a/f/e/4-compartments-plastic-portable-desk-organizer-black-portable-original-imahgfnnvffbbzdw.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/desk-organizer/n/b/p/4-compartments-plastic-portable-desk-organizer-black-portable-original-imahgfnnhmrkqhze.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/desk-organizer/p/j/i/4-compartments-plastic-portable-desk-organizer-black-portable-original-imahgfv2sarkggpg.jpeg?q=70'
+                ], 
+                rating: 4.8, 
+                reviews: 9478, 
+                inStock: true, 
+                stock: 20,
+                brand: 'MGKENTERPRISE',
+                description: 'MGKENTERPRISE 4-Layer Portable Kitchen Rack for fruits and vegetables.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-1769387428rack.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-26-01-2026-17693874281rack.webp'
+                ]
+            },
+            { 
+                id: 258, 
+                name: 'MILTON Go Electric Stainless Steel Kettle, 2 Litres and Flip Lid Bottle, 750 ml 2750 ml Steel Flask (Pack of 2, Silver)', 
+                price: 397, 
+                oldPrice: 1699, 
+                images: [
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/u/r/s/2750-go-electric-stainless-steel-kettle-2-litres-and-flip-lid-original-imahem7ydhfhrm5u.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/0/e/3/3000-go-electric-stainless-steel-kettle-1-5-litres-and-duo-dlx-original-imahem7pjkz4ndyd.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/c/u/h/3000-go-electric-stainless-steel-kettle-1-5-litres-and-duo-dlx-original-imahem7pkghn9qsg.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/k/r/d/2750-go-electric-stainless-steel-kettle-2-litres-and-flip-lid-original-imahem7yppdaud2g.jpeg?q=70',
+                    'http://rukmini1.flixcart.com/image/1500/1500/xif0q/bottle/s/g/q/2750-go-electric-stainless-steel-kettle-2-litres-and-flip-lid-original-imahem7yzf35rznf.jpeg?q=70'
+                ], 
+                rating: 4.5, 
+                reviews: 8350, 
+                inStock: true, 
+                stock: 14,
+                brand: 'MILTON',
+                description: 'MILTON Go Electric Stainless Steel Kettle 2L with Flip Lid Bottle.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-30-01-2026-1769769168Screenshot_20260130_155951.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-30-01-2026-1769769168Screenshot_20260130_160022.webp'
+                ]
+            },
+            { 
+                id: 259, 
+                name: 'Wildcraft Medium Check-in Suitcase (67 cm) 4 Wheels - Grit : TorQ - Black', 
+                price: 399, 
+                oldPrice: 1999, 
+                images: [
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/suitcase/r/k/e/-original-imahe3jrnzhsr6zv.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/suitcase/z/4/s/-original-imahe3jrgucjpznw.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/suitcase/m/l/z/-original-imahe3jrnhfe5qkg.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/suitcase/s/r/h/-original-imahe3jrv3zyjvbw.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/suitcase/r/f/x/-original-imahe3jrhzkt2tnn.jpeg?q=60'
+                ], 
+                rating: 4.3, 
+                reviews: 7383, 
+                inStock: true, 
+                stock: 8,
+                brand: 'Wildcraft',
+                description: 'Wildcraft Medium Check-in Suitcase 67cm with 4 wheels.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-31-01-2026-1769809141Screenshot_20260131_030646.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-31-01-2026-1769809141Screenshot_20260131_030719.webp'
+                ]
+            },
+            { 
+                id: 261, 
+                name: 'Turbo Heavy Duty - Comfortable for Home and Restaurant - Super Strong Plastic Outdoor Chair (Feather Brown, Set of 4, Pre-assembled)', 
+                price: 497, 
+                oldPrice: 2999, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/outdoor-chair/q/q/y/62-4-pp-polypropylene-58-4-1-turbo-f-brown-set-of-4-primegold-88-original-imaha64qg23d67ap.jpeg?q=60',
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/outdoor-chair/r/b/4/62-4-pp-polypropylene-58-4-1-turbo-f-brown-set-of-4-primegold-88-original-imaha64q8hjngfnr.jpeg?q=60',
+                    'https://rukmini1.flixcart.com/image/1500/1500/xif0q/outdoor-chair/s/n/n/62-4-pp-polypropylene-58-4-1-turbo-f-brown-set-of-4-primegold-88-original-imaha64qajfb7xfp.jpeg?q=70',
+                    'https://rukminim1.flixcart.com/image/1000/1340/xif0q/outdoor-chair/a/b/4/62-4-pp-polypropylene-58-4-1-turbo-f-brown-set-of-4-primegold-88-original-imaha64qbzktwjgh.jpeg?q=60'
+                ], 
+                rating: 4.3, 
+                reviews: 2835, 
+                inStock: true, 
+                stock: 5,
+                brand: 'Turbo',
+                description: 'Turbo Heavy Duty Outdoor Chair Set of 4 in Feather Brown.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-18-02-2026-1771421637Screenshot_20260218_185832.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-18-02-2026-1771421637Screenshot_20260218_190002.webp'
+                ]
+            },
+            { 
+                id: 262, 
+                name: 'Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)', 
+                price: 419, 
+                oldPrice: 2599, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/n/k/p/renesa-prime-remote-high-air-delivery-led-speed-indicator-low-original-imahnjbgyfqha6s3.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/l/q/w/-original-imahbh6uqqfrr2ey.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/1/t/e/-original-imahn6z5k5zyub87.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/i/j/f/-original-imahn6z5gxunjgfx.jpeg?q=90'
+                ], 
+                rating: 4.4, 
+                reviews: 6188, 
+                inStock: true, 
+                stock: 9,
+                brand: 'Atomberg',
+                description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty and BLDC Motor. High air delivery with remote control. Energy efficient 5 Star rating.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538569Atombarg description 1.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538709Atombarg description 2.webp'
+                ]
+            },
+            { 
+                id: 263, 
+                name: 'Kanishka Celling Fan with 2 Year Warranty Energy Saving, Anti Dust, Anti Rust, High Air Delivery, Ultra High Speed 1200 mm Ceiling Fan (Smoke Brown | Pack of 2)', 
+                price: 549, 
+                oldPrice: 2499, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/3200/2960/xif0q/icons/original-FANGMK922HY2VNBW_1.jpg',
+                    'https://rukminim1.flixcart.com/image/3200/3180/xif0q/icons/original-FANGMK922HY2VNBW_2.jpg',
+                    'https://rukminim1.flixcart.com/image/3200/3180/xif0q/icons/original-FANGMK922HY2VNBW_3.jpg',
+                    'https://rukminim1.flixcart.com/image/3200/3180/xif0q/icons/original-FANGMK922HY2VNBW_4.jpg',
+                    'https://rukminim1.flixcart.com/image/3200/3200/xif0q/icons/original-FANGMK922HY2VNBW_5.jpg'
+                ], 
+                rating: 4.3, 
+                reviews: 5308, 
+                inStock: true, 
+                stock: 6,
+                brand: 'Kanishka',
+                description: 'Kanishka Ceiling Fan Pack of 2 with 2 Year Warranty in Smoke Brown.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-27-02-2026-1772153725Screenshot_20260227_062256.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-27-02-2026-1772153725Screenshot_20260227_062112.webp'
+                ]
+            },
+            { 
+                id: 264, 
+                name: 'BAJAJ Premium 35 L Tower Air Cooler (White, TX 35)', 
+                price: 699, 
+                oldPrice: 2999, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/air-cooler/j/k/d/-original-imahaf284hxudgma.jpeg?q=60',
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/air-cooler/w/d/0/140-0-tx-35-35-cg-original-imah9jy3pkyrq8my.jpeg?q=60',
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/air-cooler/j/s/v/140-0-tx-35-35-cg-original-imah9jy3fvayffnz.jpeg?q=60',
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/air-cooler/k/t/j/140-0-tx-35-35-cg-original-imah9jy3ktcmpkja.jpeg?q=60',
+                    'https://rukminim1.flixcart.com/image/1600/2140/xif0q/air-cooler/r/3/z/140-0-tx-35-35-cg-original-imah9jy3ehxunht5.jpeg?q=60'
+                ], 
+                rating: 4.2, 
+                reviews: 1312, 
+                inStock: true, 
+                stock: 4,
+                brand: 'BAJAJ',
+                description: 'BAJAJ Premium 35L Tower Air Cooler in White (TX 35).',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-28-02-2026-1772234075Screenshot_20260228_044146.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-28-02-2026-1772234075Screenshot_20260228_044111.webp'
+                ]
+            },
+            { 
+                id: 276, 
+                name: 'Safari Hard Body Set of 3 Luggage 4 Wheels - Magnum Fury Set of 3 (Small 55cm | Medium 65cm | Large 75cm) 4W - Blue', 
+                price: 499, 
+                oldPrice: 3999, 
+                images: [
+                    'https://rukminim2.flixcart.com/image/3200/4260/xif0q/suitcase/o/w/j/-original-imahgtgfhyzyp6zx.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/3200/4260/xif0q/suitcase/o/t/v/-original-imahgtgfgzqwggzy.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/3200/4260/xif0q/suitcase/w/s/y/-original-imahgtgfxagnp8qs.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1000/1330/xif0q/suitcase/8/2/e/-original-imahgtgfgcds4ff9.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2130/xif0q/suitcase/e/3/8/-original-imahgtgfxmbhvfbv.jpeg?q=60'
+                ], 
+                rating: 4.5, 
+                reviews: 1751, 
+                inStock: true, 
+                stock: 7,
+                brand: 'Safari',
+                description: 'Safari Hard Body Luggage Set of 3 with 4 Wheels in Blue.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-11-03-2026-1773189735Screenshot_20260311_061025.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-11-03-2026-1773189735Screenshot_20260311_060955.webp'
+                ]
+            },
+            { 
+                id: 277, 
+                name: 'BAJAJ 2 L, 3 L, 5 L Pressure Cooker (Aluminium)', 
+                price: 399, 
+                oldPrice: 1799, 
+                images: [
+                    'https://rukmini1.flixcart.com/image/1500/1500/xif0q/pressure-cooker/s/n/z/-original-imagtcm3mjrgwda3.jpeg?q=70',
+                    'https://rukminim2.flixcart.com/image/800/1070/xif0q/pressure-cooker/x/k/f/-original-imagtcm3kg3j5fgr.jpeg?q=90',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/pressure-cooker/b/i/a/-original-imagtcm3hfhacaxg.jpeg?q=60',
+                    'https://rukminim2.flixcart.com/image/1600/2140/xif0q/pressure-cooker/5/o/r/-original-imagtcm3szkzzwyj.jpeg?q=60'
+                ], 
+                rating: 4.6, 
+                reviews: 2477, 
+                inStock: true, 
+                stock: 10,
+                brand: 'BAJAJ',
+                description: 'BAJAJ Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-12-03-2026-1773334383Screenshot_20260312_204956.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-12-03-2026-1773334383Screenshot_20260312_205106.webp'
+                ]
+            },
+            { 
+                id: 278, 
+                name: 'SONY New SA-D40M2 All In One 4.1ch Home Theatre system with Powerful Subwoofer 100 W Bluetooth Home Audio Speaker (Black, 4.1 Channel)', 
+                price: 499, 
+                oldPrice: 9490, 
+                images: [
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/speaker/d/k/e/-original-imah4ggaf5dt5cet.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/speaker/1/q/q/-original-imah4ggacgjaczsh.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/speaker/f/l/a/-original-imah4ggaz9hdkpmn.jpeg?q=90',
+                    'https://rukminim1.flixcart.com/image/2940/2940/xif0q/speaker/d/v/u/-original-imah4ggahxymggww.jpeg?q=90'
+                ], 
+                rating: 4.4, 
+                reviews: 6571, 
+                inStock: true, 
+                stock: 3,
+                brand: 'SONY',
+                description: 'SONY SA-D40M2 4.1ch Home Theatre System with Bluetooth and subwoofer.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-25-05-2026-1779709591D 40 des.webp.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-25-05-2026-1779709591D 40 rev.webp.webp'
+                ]
+            },
+            { 
+                id: 279, 
+                name: 'GREEN SOUL Kiev Orthopedic Office Chair | Ergonomic Design with Rocking Function Leatherette Office Adjustable Arm Chair (Black, DIY(Do-It-Yourself))', 
+                price: 467, 
+                oldPrice: 7190, 
+                images: [
+                    'https://rukminim2.flixcart.com/image/2940/2940/xif0q/office-study-chair/i/5/c/1-mango-wood-66-kiev-hb-black-411-fk-green-soul-124-original-imahmhw4dku5gdgz.jpeg?q=90',
+                    'https://rukminim2.flixcart.com/image/2940/2940/xif0q/office-study-chair/k/m/x/1-mango-wood-66-kiev-hb-black-411-fk-green-soul-124-original-imahmhw4uuhrjpch.jpeg?q=90',
+                    'https://rukminim2.flixcart.com/image/2940/2940/xif0q/office-study-chair/n/z/k/1-mango-wood-66-kiev-hb-black-411-fk-green-soul-124-original-imahmhw4grcfzqhd.jpeg?q=90',
+                    'https://rukminim2.flixcart.com/image/2940/2940/xif0q/office-study-chair/s/9/n/1-mango-wood-66-kiev-hb-black-411-fk-green-soul-124-original-imahmhw4fsmezekz.jpeg?q=90'
+                ], 
+                rating: 4.7, 
+                reviews: 8834, 
+                inStock: true, 
+                stock: 5,
+                brand: 'GREEN SOUL',
+                description: 'GREEN SOUL Kiev Orthopedic Office Chair with ergonomic design.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-10-06-2026-1781034377chair description.webp.webp'
+                ]
+            }
+        ];
+
+        // ============================================================
+        // STATE
+        // ============================================================
+        let currentProduct = null;
+        let currentQty = 1;
+        let currentOrderStep = 1;
+        let selectedPayment = null;
+        let paymentMethods = [];
+        let orders = [];
+
+        // ============================================================
+        // GO BACK FUNCTION
+        // ============================================================
+        function goBack() {
+            window.history.back();
+        }
+
+        // ============================================================
+        // LOAD PAYMENT METHODS & ORDERS
+        // ============================================================
+        function loadPaymentData() {
+            try {
+                const saved = localStorage.getItem('admin_payments');
+                if (saved) {
+                    paymentMethods = JSON.parse(saved);
+                } else {
+                    paymentMethods = [
+                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s21ynuc@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s21ynuc@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s21ynuc@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s21ynuc@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                    ];
+                    localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
+                }
+            } catch(e) {
+                paymentMethods = [
+                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s21ynuc@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s21ynuc@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s21ynuc@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s21ynuc@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                ];
+            }
+            try {
+                const saved = localStorage.getItem('admin_orders');
+                if (saved) orders = JSON.parse(saved);
+                else orders = [];
+            } catch(e) { orders = []; }
+        }
+
+        function saveOrders() {
+            localStorage.setItem('admin_orders', JSON.stringify(orders));
+        }
+
+        // ============================================================
+        // LOAD PRODUCT FROM SESSION / URL
+        // ============================================================
+        function loadProduct() {
+            try {
+                const saved = sessionStorage.getItem('selectedProduct');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    const fullProduct = PRODUCTS_DATA.find(p => p.id === parsed.id);
+                    if (fullProduct) {
+                        currentProduct = fullProduct;
+                        renderProduct(currentProduct);
+                        return;
+                    }
+                    currentProduct = parsed;
+                    renderProduct(currentProduct);
+                    return;
+                }
+            } catch(e) {}
+
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            if (id) {
+                const found = PRODUCTS_DATA.find(p => p.id == id);
+                if (found) {
+                    currentProduct = found;
+                    renderProduct(currentProduct);
+                    return;
+                }
+            }
+
+            // Fallback
+            const defaultProduct = PRODUCTS_DATA.find(p => p.id === 262) || {
+                id: 262,
+                name: 'Atomberg Renesa Prime Ceiling Fan',
+                brand: 'Atomberg',
+                price: 419,
+                oldPrice: 2599,
+                images: ['https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/n/k/p/renesa-prime-remote-high-air-delivery-led-speed-indicator-low-original-imahnjbgyfqha6s3.jpeg?q=90'],
+                rating: 4.4,
+                reviews: 6188,
+                inStock: true,
+                stock: 9,
+                description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty.',
+                descImages: [
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538569Atombarg description 1.webp',
+                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538709Atombarg description 2.webp'
+                ]
+            };
+            currentProduct = defaultProduct;
+            renderProduct(currentProduct);
+        }
+
+        // ============================================================
+        // RENDER PRODUCT (DYNAMIC WITH DESCRIPTION IMAGES)
+        // ============================================================
+        function renderProduct(product) {
+            if (!product) return;
+
+            // Brand & Name
+            document.getElementById('prodBrand').textContent = product.brand || 'Flipkart';
+            document.getElementById('prodName').textContent = product.name || 'Product';
+
+            // Price
+            const price = product.price || 0;
+            const oldPrice = product.oldPrice || 0;
+            const discount = oldPrice > 0 ? Math.round((1 - price/oldPrice) * 100) : 0;
+            document.getElementById('prodPrice').textContent = `₹ ${price.toLocaleString()}`;
+            document.getElementById('prodMrp').textContent = oldPrice > 0 ? `₹ ${oldPrice.toLocaleString()}` : '';
+            document.getElementById('prodDiscount').textContent = discount > 0 ? `${discount}% off` : '';
+
+            // Carousel Images (all product images)
+            const images = product.images || [product.image];
+            const carouselInner = document.getElementById('carouselInner');
+            const carouselIndicators = document.getElementById('carouselIndicators');
+
+            if (images && images.length > 0) {
+                carouselInner.innerHTML = images.map((img, i) => `
+                    <div class="carousel-item ${i === 0 ? 'active' : ''}">
+                        <img class="d-block img-fluid m-auto" style="height: 400px; object-fit:contain;" 
+                             src="${img}" alt="Slide ${i+1}" 
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                    </div>
+                `).join('');
+                carouselIndicators.innerHTML = images.map((_, i) => `
+                    <li data-bs-target="#sliderX" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>
+                `).join('');
+            } else {
+                carouselInner.innerHTML = `
+                    <div class="carousel-item active">
+                        <img class="d-block img-fluid m-auto" style="height: 400px; object-fit:contain;" 
+                             src="${product.image || ''}" alt="Product"
+                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                    </div>
+                `;
+                carouselIndicators.innerHTML = `<li data-bs-target="#sliderX" data-bs-slide-to="0" class="active"></li>`;
+            }
+
+            // ============================================================
+            // DESCRIPTION WITH IMAGES - DYNAMIC
+            // ============================================================
+            const descContainer = document.getElementById('productDescription');
+            
+            let descImages = product.descImages || [];
+            
+            // If descImages is empty, check PRODUCTS_DATA again
+            if (descImages.length === 0) {
+                const fullProduct = PRODUCTS_DATA.find(p => p.id === product.id);
+                if (fullProduct && fullProduct.descImages && fullProduct.descImages.length > 0) {
+                    descImages = fullProduct.descImages;
+                }
+            }
+            
+            let descHTML = '';
+            
+            // Description text
+            if (product.description) {
+                descHTML += `<div style="padding:12px 16px; font-size:14px; color:#212121; line-height:1.8;">${product.description}</div>`;
+            }
+            
+            // Render description images dynamically
+            if (descImages && descImages.length > 0) {
+                descHTML += descImages.map(img => `
+                    <img width="100%" src="${img}" alt="Description Image" 
+                         onerror="this.style.display='none'" 
+                         style="display:block; margin:0; max-width:100%;" />
+                `).join('');
+            }
+            
+            // Fallback if no descImages
+            if (!descHTML || descHTML.trim() === '') {
+                descHTML = `
+                    <div style="padding:24px 16px; color:#999; text-align:center; background:#f9f9f9; border-radius:8px; margin:8px 12px;">
+                        <i class="fas fa-image" style="font-size:32px; opacity:0.3; display:block; margin-bottom:8px;"></i>
+                        <span style="font-size:14px;">No description images available</span>
+                    </div>
+                `;
+            }
+            
+            descContainer.innerHTML = descHTML;
+
+            updateOrderSummary();
+        }
+
+        // ============================================================
+        // ORDER SUMMARY
+        // ============================================================
+        function updateOrderSummary() {
+            if (!currentProduct) return;
+            const price = currentProduct.price || 0;
+            const total = price * currentQty;
+            const oldPrice = currentProduct.oldPrice || 0;
+
+            document.getElementById('summaryProduct').textContent = currentProduct.name || 'Product';
+            document.getElementById('summaryQty').textContent = currentQty;
+            document.getElementById('summaryPrice').textContent = `₹${price.toLocaleString()}`;
+            document.getElementById('summaryTotal').textContent = `₹${total.toLocaleString()}`;
+            document.getElementById('mrpOrder').textContent = oldPrice > 0 ? `₹${oldPrice.toLocaleString()}` : `₹${price.toLocaleString()}`;
+            document.getElementById('sellingPriceOrder').textContent = `₹${total.toLocaleString()}`;
+        }
+
+        // ============================================================
+        // REAL-TIME VALIDATION FOR STEP 1
+        // ============================================================
+        function validateField(inputId, errorId, condition) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            if (!input || !error) return false;
+            
+            const isValid = condition(input.value);
+            input.classList.remove('error', 'success');
+            error.classList.remove('show');
+            
+            if (isValid) {
+                input.classList.add('success');
+                return true;
+            } else {
+                input.classList.add('error');
+                error.classList.add('show');
+                return false;
+            }
+        }
+
+        function validateName() {
+            return validateField('ordName', 'errName', (val) => val.trim().length >= 2);
+        }
+        function validatePhone() {
+            return validateField('ordPhone', 'errPhone', (val) => /^[0-9]{10}$/.test(val.trim()));
+        }
+        function validatePincode() {
+            return validateField('ordPincode', 'errPincode', (val) => /^[0-9]{6}$/.test(val.trim()));
+        }
+        function validateCity() {
+            return validateField('ordCity', 'errCity', (val) => val.trim().length >= 2);
+        }
+        function validateState() {
+            return validateField('ordState', 'errState', (val) => val.trim() !== '');
+        }
+        function validateAddress() {
+            return validateField('ordAddress', 'errAddress', (val) => val.trim().length >= 2);
+        }
+
+        function initValidation() {
+            const fields = [
+                { id: 'ordName', fn: validateName },
+                { id: 'ordPhone', fn: validatePhone },
+                { id: 'ordPincode', fn: validatePincode },
+                { id: 'ordCity', fn: validateCity },
+                { id: 'ordState', fn: validateState },
+                { id: 'ordAddress', fn: validateAddress }
+            ];
+            
+            fields.forEach(({ id, fn }) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', fn);
+                    el.addEventListener('change', fn);
+                    el.addEventListener('blur', fn);
+                }
+            });
+        }
+
+        function validateStep1() {
+            const isNameValid = validateName();
+            const isPhoneValid = validatePhone();
+            const isPincodeValid = validatePincode();
+            const isCityValid = validateCity();
+            const isStateValid = validateState();
+            const isAddressValid = validateAddress();
+
+            if (isNameValid && isPhoneValid && isPincodeValid && isCityValid && isStateValid && isAddressValid) {
+                goToOrderStep(2);
+            } else {
+                showToast('❌ Please fill all required fields correctly');
+            }
+        }
+
+        // ============================================================
+        // OPEN / CLOSE ORDER PAGE
+        // ============================================================
+        function openOrderPage() {
+            if (!currentProduct) { showToast('❌ No product selected'); return; }
+            if (!currentProduct.inStock) { showToast('❌ Product is out of stock'); return; }
+
+            currentOrderStep = 1;
+            selectedPayment = null;
+            document.getElementById('orderPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('ordName').value = '';
+            document.getElementById('ordPhone').value = '';
+            document.getElementById('ordPincode').value = '';
+            document.getElementById('ordCity').value = '';
+            document.getElementById('ordState').value = '';
+            document.getElementById('ordAddress').value = '';
+            document.getElementById('ordAddress2').value = '';
+
+            document.querySelectorAll('#step1 .form-group input, #step1 .form-group select').forEach(el => {
+                el.classList.remove('error', 'success');
+            });
+            document.querySelectorAll('#step1 .error-msg').forEach(el => el.classList.remove('show'));
+
+            updateOrderSummary();
+            renderOrderPaymentMethods();
+            goToOrderStep(1);
+        }
+
+        function closeOrderPage() {
+            document.getElementById('orderPage').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // ============================================================
+        // ORDER STEP NAVIGATION
+        // ============================================================
+        function goToOrderStep(step) {
+            currentOrderStep = step;
+            document.querySelectorAll('.order-steps .step').forEach(el => {
+                const s = parseInt(el.dataset.step);
+                el.classList.remove('active', 'done');
+                if (s === step) el.classList.add('active');
+                else if (s < step) el.classList.add('done');
+            });
+            document.querySelectorAll('.step-content').forEach((el, i) => {
+                el.classList.toggle('active', (i + 1) === step);
+            });
+            document.querySelector('.order-container').scrollTop = 0;
+        }
+
+// ============================================================
+// PAYMENT METHODS - RENDER WITH LOGO SUPPORT (Direct file paths)
+// ============================================================
+function renderOrderPaymentMethods() {
+    const container = document.getElementById('paymentMethods');
+    if (!container) return;
+    const enabled = paymentMethods.filter(p => p.status === 'enabled');
+    if (enabled.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
+        document.getElementById('confirmBtn').disabled = true;
+        return;
+    }
+    document.getElementById('confirmBtn').disabled = false;
+    
+    const iconMap = { phonepe: 'phonepe', paytm: 'paytm', googlepay: 'gpay', upi: 'upi' };
+    const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm', googlepay: 'Google Pay', upi: 'UPI' };
+    
+    container.innerHTML = enabled.map(p => {
+        // Direct logo paths from your screenshot - phonePe.png and paytm.png
+        let logoPath = '';
+        if (p.name === 'phonepe') {
+            logoPath = 'phonePe.png';
+        } else if (p.name === 'paytm') {
+            logoPath = 'paytm.png';
+        } else if (p.logo) {
+            logoPath = p.logo;
+        }
+        
+        const hasLogo = logoPath && logoPath.trim() !== '';
+        
+        return `
+            <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
+                <div class="pm-icon ${iconMap[p.name] || 'upi'}">
+                    ${hasLogo ? 
+                        `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}\\'></i>';" />` : 
+                        `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}"></i>`
+                    }
+                </div>
+                <div class="pm-info">
+                    <div class="pm-name">${displayMap[p.name] || p.name}</div>
+                    <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
+                </div>
+                <div class="pm-check"></div>
+            </div>
+        `;
+    }).join('');
+}
+
+        function selectOrderPayment(id) {
+            selectedPayment = id;
+            document.querySelectorAll('.pm-option').forEach(el => {
+                const onclickStr = el.getAttribute('onclick') || '';
+                el.classList.toggle('selected', onclickStr.includes(id));
+            });
+            document.getElementById('confirmBtn').disabled = false;
+        }
+
+        // ============================================================
+        // CONFIRM ORDER
+        // ============================================================
+        function confirmOrder() {
+            if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
+            const method = paymentMethods.find(p => p.id === selectedPayment);
+            if (!method) { showToast('❌ Invalid payment method'); return; }
+
+            const name = document.getElementById('ordName').value.trim();
+            const phone = document.getElementById('ordPhone').value.trim();
+            const pincode = document.getElementById('ordPincode').value.trim();
+            const city = document.getElementById('ordCity').value.trim();
+            const state = document.getElementById('ordState').value;
+            const address = document.getElementById('ordAddress').value.trim();
+            const address2 = document.getElementById('ordAddress2').value.trim();
+
+            if (!name || !phone || !pincode || !city || !address) {
+                showToast('❌ Please fill all required fields');
+                return;
+            }
+            if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
+            if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
+
+            const orderId = 'FLIP-' + Date.now().toString().slice(-6);
+            const amount = currentProduct.price * currentQty;
+
+            const order = {
+                id: orderId,
+                product: currentProduct.name,
+                productId: currentProduct.id,
+                quantity: currentQty,
+                total: amount,
+                customer: name,
+                phone: phone,
+                address: address + (address2 ? ', ' + address2 : ''),
+                city: city,
+                state: state,
+                pincode: pincode,
+                payment: method.name,
+                status: 'pending',
+                date: new Date().toISOString().split('T')[0]
+            };
+            orders.unshift(order);
+            saveOrders();
+
+            let deepLink = method.deepLink || '';
+            deepLink = deepLink.replace(/{amount}/g, amount);
+            deepLink = deepLink.replace(/{orderId}/g, orderId);
+
+            if (!deepLink || deepLink === method.deepLink) {
+                const baseLinks = {
+                    'phonepe': `phonepe://pay?pa=${method.receiver}&pn=Flipkart&am=${amount}&cu=INR&tn=Order_${orderId}`,
+                    'paytm': `paytmmp://pay?pa=${method.receiver}&pn=Flipkart&am=${amount}&cu=INR&tn=Order_${orderId}`,
+                    'googlepay': `gpay://upi/pay?pa=${method.receiver}&pn=Flipkart&am=${amount}&cu=INR&tn=Order_${orderId}`,
+                    'upi': `upi://pay?pa=${method.receiver}&pn=Flipkart&am=${amount}&cu=INR&tn=Order_${orderId}`
+                };
+                deepLink = baseLinks[method.name] || baseLinks['upi'];
+            }
+
+            closeOrderPage();
+            showToast('⏳ Opening payment app...');
+            setTimeout(() => { window.open(deepLink, '_blank'); }, 500);
+            setTimeout(() => {
+                window.location.href = `success.html?orderId=${orderId}&saved=${Math.round(amount * 0.1)}`;
+            }, 3000);
+        }
+
+        // ============================================================
+        // ADD TO CART
+        // ============================================================
+        function addToCart() {
+            showToast('✅ Added to cart!');
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(message) {
+            const existing = document.querySelector('.custom-toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'custom-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // ============================================================
+        // OFFER TIMER
+        // ============================================================
+        setInterval(function() {
+            var d = new Date();
+            var seconds = d.getMinutes() * 60 + d.getSeconds();
+            var fiveMin = 60 * 20;
+            var timeleft = fiveMin - seconds % fiveMin;
+            var result = parseInt(timeleft / 60) + 'min ' + timeleft % 60 + 'sec';
+            document.getElementById('test').innerHTML = result;
+        }, 500);
+
+        // ============================================================
+        // HIDE LOADER
+        // ============================================================
+        function hideLoader() {
+            const loader = document.getElementById('loaderOverlay');
+            if (loader) {
+                loader.classList.add('hidden');
+                setTimeout(() => { loader.style.display = 'none'; }, 500);
+            }
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPaymentData();
+            loadProduct();
+            initValidation();
+
+            document.getElementById('orderPage').addEventListener('click', function(e) {
+                if (e.target === this) closeOrderPage();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (document.getElementById('orderPage').classList.contains('active')) closeOrderPage();
+                }
+            });
+            setTimeout(hideLoader, 600);
+        });
+
+        // Expose functions
+        window.goBack = goBack;
+        window.openOrderPage = openOrderPage;
+        window.closeOrderPage = closeOrderPage;
+        window.goToOrderStep = goToOrderStep;
+        window.selectOrderPayment = selectOrderPayment;
+        window.confirmOrder = confirmOrder;
+        window.addToCart = addToCart;
+        window.showToast = showToast;
+        window.validateStep1 = validateStep1;
+        window.updateQty = function(delta) {
+            const newQty = currentQty + delta;
+            if (newQty < 1) return;
+            const maxStock = currentProduct?.stock || 99;
+            if (newQty > maxStock) {
+                showToast(`Only ${maxStock} items available`);
+                return;
+            }
+            currentQty = newQty;
+            updateOrderSummary();
+        };
+    </script>
+</body>
+</html>

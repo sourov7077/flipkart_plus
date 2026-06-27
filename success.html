@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Placed - Flipkart</title>
+      <link rel="icon" type="image/png" href="favicon.png" />
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .card {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            padding: 40px 25px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            text-align: center;
+            position: relative;
+            animation: cardPop 0.6s ease forwards;
+        }
+        @keyframes cardPop {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .checkmark-circle {
+            width: 110px;
+            height: 110px;
+            margin: 0 auto 25px;
+            background: linear-gradient(135deg, #36d399, #10b981);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pop 0.6s ease forwards;
+        }
+        .checkmark {
+            font-size: 60px;
+            color: #fff;
+            transform: scale(0);
+            animation: tick 0.4s 0.5s forwards;
+        }
+        @keyframes pop {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        @keyframes tick {
+            0% { transform: scale(0); }
+            100% { transform: scale(1); }
+        }
+        h2 {
+            font-size: 26px;
+            margin-bottom: 12px;
+            color: #212121;
+        }
+        p {
+            color: #555;
+            font-size: 16px;
+        }
+        .savings {
+            color: #16a34a;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        .order-id {
+            background: #f8f9fa;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+            margin-top: 12px;
+            display: inline-block;
+        }
+        .btn-continue {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 36px;
+            background: var(--primary-blue, #2874f0);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-continue:hover {
+            background: #1a5bc7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(40,116,240,0.3);
+        }
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            top: -10px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        .auto-redirect {
+            font-size: 12px;
+            color: #999;
+            margin-top: 16px;
+        }
+        .auto-redirect span {
+            color: var(--primary-blue, #2874f0);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="checkmark-circle">
+            <div class="checkmark">✓</div>
+        </div>
+    
+        <h2>Order Placed Successfully!</h2>
+        <p>Your order has been confirmed and will be shipped soon.</p>
+        <p class="savings">🎉 You saved ₹<span id="savedAmount">0</span> on this order</p>
+        <div class="order-id" id="orderIdDisplay">Order #FLIP-0001</div>
+        
+        <button class="btn-continue" onclick="continueShopping()">
+            <i class="fas fa-shopping-bag"></i> Continue Shopping
+        </button>
+        <p class="auto-redirect">Redirecting to home in <span id="countdown">5</span> seconds...</p>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <script>
+        // ============================================================
+        // GET ORDER DATA FROM URL
+        // ============================================================
+        function getOrderData() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                orderId: params.get('orderId') || 'FLIP-' + Date.now().toString().slice(-6),
+                saved: params.get('saved') || '0'
+            };
+        }
+
+        // ============================================================
+        // DISPLAY ORDER INFO
+        // ============================================================
+        function displayOrderInfo() {
+            const data = getOrderData();
+            document.getElementById('orderIdDisplay').textContent = 'Order #' + data.orderId;
+            document.getElementById('savedAmount').textContent = parseInt(data.saved).toLocaleString();
+        }
+
+        // ============================================================
+        // CONFETTI GENERATOR
+        // ============================================================
+        function createConfetti() {
+            const container = document.getElementById('confettiContainer');
+            const colors = ['#f43f5e', '#3b82f6', '#facc15', '#22c55e', '#a855f7', '#ec4899', '#14b8a6', '#f97316'];
+            
+            for (let i = 0; i < 60; i++) {
+                const conf = document.createElement('div');
+                conf.classList.add('confetti');
+                conf.style.left = Math.random() * 100 + '%';
+                conf.style.background = colors[Math.floor(Math.random() * colors.length)];
+                conf.style.width = (Math.random() * 6 + 4) + 'px';
+                conf.style.height = (Math.random() * 6 + 4) + 'px';
+                conf.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                conf.style.animationDuration = (Math.random() * 2 + 1.5) + 's';
+                conf.style.animationDelay = (Math.random() * 1.5) + 's';
+                container.appendChild(conf);
+                
+                setTimeout(() => { conf.remove(); }, 4000);
+            }
+        }
+
+        // ============================================================
+        // COUNTDOWN REDIRECT
+        // ============================================================
+        let countdown = 5;
+        function startCountdown() {
+            const el = document.getElementById('countdown');
+            const interval = setInterval(() => {
+                countdown--;
+                if (el) el.textContent = countdown;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    continueShopping();
+                }
+            }, 1000);
+        }
+
+        // ============================================================
+        // CONTINUE SHOPPING
+        // ============================================================
+        function continueShopping() {
+            window.location.href = 'index.html';
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        document.addEventListener('DOMContentLoaded', function() {
+            displayOrderInfo();
+            createConfetti();
+            startCountdown();
+        });
+    </script>
+</body>
+</html>
