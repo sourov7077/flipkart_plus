@@ -1666,30 +1666,46 @@
         // ============================================================
         // LOAD PAYMENT METHODS & ORDERS
         // ============================================================
-        function loadPaymentData() {
-            try {
-                const saved = localStorage.getItem('admin_payments');
-                if (saved) {
-                    paymentMethods = JSON.parse(saved);
-                } else {
-                    paymentMethods = [
-                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
-                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
-                    ];
-                    localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
+function loadPaymentData() {
+    try {
+        const saved = localStorage.getItem('admin_payments');
+        if (saved) {
+            paymentMethods = JSON.parse(saved);
+        } else {
+            paymentMethods = [
+                { 
+                    id: 1, 
+                    name: 'phonepe', 
+                    displayName: 'PhonePe', 
+                    receiver: 'partym.s1rsa53@pty',  // PhonePe-র জন্য আলাদা UPI
+                    instructions: 'Pay with PhonePe', 
+                    status: 'enabled', 
+                    deepLink: 'phonepe://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
+                },
+                { 
+                    id: 2, 
+                    name: 'paytm', 
+                    displayName: 'Paytm', 
+                    receiver: 'partym.s1rsa53@pty',  // Paytm-এর জন্য আলাদা UPI
+                    instructions: 'Pay with Paytm', 
+                    status: 'enabled', 
+                    deepLink: 'paytmmp://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
                 }
-            } catch(e) {
-                paymentMethods = [
-                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
-                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
-                ];
-            }
-            try {
-                const saved = localStorage.getItem('admin_orders');
-                if (saved) orders = JSON.parse(saved);
-                else orders = [];
-            } catch(e) { orders = []; }
+            ];
+            localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
         }
+    } catch(e) {
+        paymentMethods = [
+            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'partym.s1rsa53@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=partym.s1rsa53@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+        ];
+    }
+    try {
+        const saved = localStorage.getItem('admin_orders');
+        if (saved) orders = JSON.parse(saved);
+        else orders = [];
+    } catch(e) { orders = []; }
+}
 
         function saveOrders() {
             localStorage.setItem('admin_orders', JSON.stringify(orders));
