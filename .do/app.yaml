@@ -1,0 +1,33 @@
+alerts:
+- rule: DEPLOYMENT_FAILED
+- rule: DOMAIN_FAILED
+domains:
+- domain: flipkart-plus-offers.shop
+  type: PRIMARY
+features:
+- buildpack-stack=ubuntu-22
+ingress:
+  rules:
+  - component:
+      name: flipkart-plus
+    match:
+      path:
+        prefix: /
+  - match:
+      path:
+        prefix: /
+    redirect:
+      uri: https://flipkart-plus-offers.shop
+      code: 301
+name: flipkart-offers
+region: blr
+static_sites:
+- environment_slug: html
+  github:
+    branch: main
+    deploy_on_push: true
+    repo: sourov7077/flipkart_plus
+  name: flipkart-plus
+  source_dir: /
+vpc:
+  id: 65973a8c-e50b-41b9-9d9c-334951d828e5
