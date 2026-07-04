@@ -1676,27 +1676,27 @@ function loadPaymentData() {
                     id: 1, 
                     name: 'phonepe', 
                     displayName: 'PhonePe', 
-                    receiver: 'paytm.s2g5nt6@pty',  // ← আপনার PhonePe UPI
+                    receiver: '7908669961@ptyes',  // ← আপনার PhonePe UPI
                     instructions: 'Pay with PhonePe', 
                     status: 'enabled', 
-                    deepLink: 'phonepe://pay?pa=paytm.s2g5nt6@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
+                    deepLink: 'phonepe://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
                 },
                 { 
                     id: 2, 
                     name: 'paytm', 
                     displayName: 'Paytm', 
-                    receiver: 'paytm.s2g5nt6@pty',  // ← আপনার Paytm UPI
+                    receiver: '7908669961@ptyes',  // ← আপনার Paytm UPI
                     instructions: 'Pay with Paytm', 
                     status: 'enabled', 
-                    deepLink: 'paytmmp://pay?pa=paytm.s2g5nt6@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
+                    deepLink: 'paytmmp://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' 
                 }
             ];
             localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
         }
     } catch(e) {
         paymentMethods = [
-            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2g5nt6@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2g5nt6@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
-            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2g5nt6@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2g5nt6@pty&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '7908669961@ptyes', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '7908669961@ptyes', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
         ];
     }
     try {
