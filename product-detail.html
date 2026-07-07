@@ -4,15 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Product Detail – Flipkart</title>
+    <link rel="icon" type="image/x-icon" href="https://filpkaart-sammar.shop/hotsale/assets/media/favicon.png">
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        /* ============================================================
-           ROOT & RESET
-           ============================================================ */
         :root {
             --primary-blue: #2874f0;
             --primary-orange: #fb641b;
@@ -37,9 +35,7 @@
         }
         a { text-decoration: none; color: inherit; }
 
-        /* ============================================================
-           LOADER
-           ============================================================ */
+        /* LOADER */
         .loader-overlay {
             position: fixed;
             top:0; left:0; right:0; bottom:0;
@@ -81,9 +77,7 @@
             40%{ transform:scale(1); opacity:1; }
         }
 
-        /* ============================================================
-           HEADER WITH BACK BUTTON
-           ============================================================ */
+        /* HEADER */
         .detail-header {
             background: var(--primary-blue);
             padding: 10px 14px;
@@ -104,9 +98,7 @@
             padding: 4px 8px;
             transition: all 0.3s ease;
         }
-        .detail-header .back-btn:hover {
-            transform: scale(1.1);
-        }
+        .detail-header .back-btn:hover { transform: scale(1.1); }
         .detail-header .header-title {
             color: #fff;
             font-size: 16px;
@@ -120,15 +112,12 @@
             padding: 4px 8px;
         }
 
-        /* ============================================================
-           PRODUCT DETAIL CARD
-           ============================================================ */
+        /* PRODUCT DETAIL CARD */
         .detail-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 12px 12px 80px 12px;
         }
-
         .love-icon {
             width: 36px;
             height: 36px;
@@ -217,9 +206,7 @@
             padding: 0 15px;
         }
 
-        /* ============================================================
-           RATING & REVIEWS SECTION
-           ============================================================ */
+        /* RATING & REVIEWS */
         .rating-container {
             display: flex;
             align-items: center;
@@ -240,12 +227,8 @@
             text-align: center;
             line-height: 1.2;
         }
-        .rating-score .empty {
-            color: #cdcdcd;
-        }
-        .rating-score .star {
-            font-size: 34px;
-        }
+        .rating-score .empty { color: #cdcdcd; }
+        .rating-score .star { font-size: 34px; }
         .rating-count {
             margin-top: 4px;
             font-size: 14px;
@@ -289,13 +272,11 @@
         .green { background-color: #4CAF50; }
         .orange { background-color: #FFA500; }
         .red { background-color: #F44336; }
-
         .dsfsf {
             background: #eeeeee;
             height: 1px;
             margin: 0 16px;
         }
-
         .all-reviews {
             padding: 16px 20px;
         }
@@ -303,9 +284,7 @@
             padding: 14px 0;
             border-bottom: 1px solid #f0f0f0;
         }
-        .review-item:last-child {
-            border-bottom: none;
-        }
+        .review-item:last-child { border-bottom: none; }
         .review-item .review-header {
             display: flex;
             align-items: center;
@@ -352,13 +331,9 @@
             color: #388e3c;
             font-weight: 500;
         }
-        .review-item .review-meta .verified i {
-            color: #388e3c;
-        }
+        .review-item .review-meta .verified i { color: #388e3c; }
 
-        /* ============================================================
-           BUTTON CONTAINER
-           ============================================================ */
+        /* BUTTON CONTAINER */
         .button-container {
             position: fixed;
             bottom: 0;
@@ -400,38 +375,217 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 16px rgba(251,100,27,0.3);
         }
-        
-        /* QR Payment Button */
-        .qr-pay-btn {
-            flex: 1;
-            padding: 14px 0;
-            border: none;
-            border-radius: var(--radius-lg);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            background: linear-gradient(135deg, #fb641b, #f57c00);
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .qr-pay-btn:hover {
-            background: #e85a0e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(251,100,27,0.3);
-        }
-        .qr-pay-btn i {
-            font-size: 18px;
-        }
 
-        /* ============================================================
-           QR CODE MODAL
-           ============================================================ */
-        #qrOverlay {
+        /* ORDER PAGE */
+        .order-page {
+            display: none;
+            position: fixed;
+            top:0; left:0; right:0; bottom:0;
+            background:#0a0a0a;
+            z-index:99999;
+            overflow-y:auto;
+            padding:20px;
+            animation:fadeIn 0.4s ease;
+        }
+        .order-page.active { display:flex; align-items:center; justify-content:center; }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        .order-page .order-container {
+            background:#0a0a0a;
+            color:#ffffff;
+            max-width:480px;
+            width:100%;
+            padding:24px 20px 20px;
+            border:1px solid rgba(255,255,255,0.06);
+            border-radius:20px;
+            max-height:95vh;
+            overflow-y:auto;
+            box-shadow:0 24px 60px rgba(0,0,0,0.5);
+            animation:modalSlideUp 0.4s ease;
+        }
+        @keyframes modalSlideUp {
+            from { opacity:0; transform:translateY(30px) scale(0.95); }
+            to { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .order-page .order-close { float:right; background:none; border:none; color:#888; font-size:22px; cursor:pointer; }
+        .order-page .order-close:hover { color:#fff; transform:rotate(90deg); }
+        .order-page .order-title { font-size:20px; font-weight:700; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+        .order-page .order-title i { color:var(--primary-orange); }
+        .order-steps {
+            display:flex;
+            justify-content:space-between;
+            margin-bottom:20px;
+            position:relative;
+        }
+        .order-steps::before {
+            content:'';
+            position:absolute;
+            top:50%;
+            left:12%;
+            right:12%;
+            height:2px;
+            background:rgba(255,255,255,0.08);
+            transform:translateY(-50%);
+        }
+        .order-steps .step {
+            flex:1;
+            text-align:center;
+            position:relative;
+            z-index:1;
+        }
+        .order-steps .step .num {
+            width:30px; height:30px;
+            border-radius:50%;
+            background:rgba(255,255,255,0.06);
+            border:2px solid rgba(255,255,255,0.1);
+            color:#666;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            margin:0 auto 4px;
+            font-weight:700;
+            font-size:12px;
+            transition:all 0.3s ease;
+        }
+        .order-steps .step.active .num { background:var(--primary-blue); border-color:var(--primary-blue); color:#fff; }
+        .order-steps .step.done .num { background:var(--primary-green); border-color:var(--primary-green); color:#fff; }
+        .order-steps .step .label { font-size:9px; text-transform:uppercase; color:#666; font-weight:500; letter-spacing:0.3px; }
+        .order-steps .step.active .label { color:var(--primary-blue); }
+        .order-steps .step.done .label { color:var(--primary-green); }
+        .step-content { display:none; animation:fadeInUp 0.4s ease; }
+        .step-content.active { display:block; }
+        @keyframes fadeInUp { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+        .step-content .form-group { margin-bottom:16px; }
+        .step-content .form-group label { display:block; font-size:13px; font-weight:500; color:#aaa; margin-bottom:4px; }
+        .step-content .form-group input,
+        .step-content .form-group select,
+        .step-content .form-group textarea {
+            width:100%;
+            padding:12px 14px;
+            background:#0d0d0d;
+            border:1.5px solid rgba(255,255,255,0.08);
+            border-radius:10px;
+            color:#fff;
+            font-size:15px;
+            outline:none;
+            transition:all 0.3s ease;
+            font-family:inherit;
+        }
+        .step-content .form-group input:focus,
+        .step-content .form-group select:focus,
+        .step-content .form-group textarea:focus { border-color:var(--primary-blue); }
+        .step-content .form-group input::placeholder,
+        .step-content .form-group textarea::placeholder { color:#555; }
+        .step-content .form-group select option { background:#0d0d0d; color:#fff; }
+        .step-content .form-row { display:flex; gap:12px; }
+        .step-content .form-row .form-group { flex:1; }
+        .form-group .error-msg {
+            font-size:12px;
+            color:#ff4444;
+            display:none;
+            margin-top:4px;
+            font-weight:500;
+        }
+        .form-group .error-msg.show { display:block; }
+        .form-group input.error,
+        .form-group select.error {
+            border-color:#ff4444 !important;
+            box-shadow:0 0 0 3px rgba(255,68,68,0.1) !important;
+        }
+        .form-group input.success,
+        .form-group select.success {
+            border-color:var(--primary-green) !important;
+            box-shadow:0 0 0 3px rgba(56,142,60,0.1) !important;
+        }
+        .payment-methods { display:flex; flex-direction:column; gap:8px; margin:8px 0 16px; }
+        .payment-methods .pm-option {
+            display:flex;
+            align-items:center;
+            gap:14px;
+            padding:12px 16px;
+            background:#0d0d0d;
+            border:1.5px solid rgba(255,255,255,0.06);
+            border-radius:10px;
+            cursor:pointer;
+            transition:all 0.3s ease;
+        }
+        .payment-methods .pm-option:hover { border-color:rgba(255,255,255,0.15); }
+        .payment-methods .pm-option.selected { border-color:var(--primary-blue); box-shadow:0 0 0 1px rgba(59,130,246,0.15); }
+        .payment-methods .pm-option .pm-icon {
+            width:40px;height:40px;border-radius:8px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:18px;color:#fff;flex-shrink:0;
+        }
+        .payment-methods .pm-option .pm-icon.phonepe { background:#5f259f; }
+        .payment-methods .pm-option .pm-icon.paytm { background:#00baf2; }
+        .payment-methods .pm-option .pm-icon.gpay { background:#4285f4; }
+        .payment-methods .pm-option .pm-icon.upi { background:#3b82f6; }
+        .payment-methods .pm-option .pm-info { flex:1; }
+        .payment-methods .pm-option .pm-info .pm-name { font-weight:600; font-size:15px; }
+        .payment-methods .pm-option .pm-info .pm-detail { font-size:12px; color:#888; }
+        .payment-methods .pm-option .pm-check {
+            width:22px;height:22px;border-radius:50%;
+            border:2px solid rgba(255,255,255,0.1);
+            display:flex;align-items:center;justify-content:center;
+            transition:all 0.3s ease;
+        }
+        .payment-methods .pm-option.selected .pm-check { background:var(--primary-blue); border-color:var(--primary-blue); }
+        .payment-methods .pm-option.selected .pm-check::after { content:'✓'; color:#fff; font-size:12px; font-weight:700; }
+        .order-summary {
+            background:#0d0d0d;
+            border-radius:12px;
+            padding:16px;
+            margin:8px 0 16px;
+        }
+        .order-summary .summary-row {
+            display:flex;
+            justify-content:space-between;
+            padding:6px 0;
+            font-size:14px;
+            color:#aaa;
+        }
+        .order-summary .summary-row.total {
+            font-size:18px;
+            font-weight:700;
+            color:#fff;
+            border-top:1px solid rgba(255,255,255,0.06);
+            padding-top:12px;
+            margin-top:4px;
+        }
+        .order-summary .summary-row.total .amount { color:var(--primary-blue); }
+        .order-summary .summary-row .free { color:var(--primary-green); font-weight:600; }
+        .step-buttons { display:flex; gap:10px; margin-top:16px; }
+        .step-buttons .btn {
+            flex:1;
+            padding:14px;
+            border:none;
+            border-radius:10px;
+            font-size:15px;
+            font-weight:600;
+            cursor:pointer;
+            transition:all 0.3s ease;
+        }
+        .step-buttons .btn-prev { background:rgba(255,255,255,0.06); color:#aaa; flex:0.5; }
+        .step-buttons .btn-prev:hover { background:rgba(255,255,255,0.12); color:#fff; }
+        .step-buttons .btn-next { background:linear-gradient(135deg, var(--primary-orange), #ea580c); color:#fff; }
+        .step-buttons .btn-next:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(249,115,22,0.3); }
+        .step-buttons .btn-next:disabled { opacity:0.5; cursor:not-allowed; }
+        .step-buttons .btn-confirm { background:linear-gradient(135deg, var(--primary-blue), #1a5bc7); color:#fff; }
+        .step-buttons .btn-confirm:hover { transform:translateY(-2px); box-shadow:0 8px 30px rgba(40,116,240,0.3); }
+        .step-buttons .btn-confirm:disabled { opacity:0.5; cursor:not-allowed; }
+        .price-detail-div .product-price-list { display:flex; justify-content:space-between; padding:4px 0; }
+        .price-detail-div .total { border-top:1px solid rgba(255,255,255,0.08); }
+        .custom-toast {
+            position:fixed; bottom:100px; left:50%; transform:translateX(-50%) scale(0.9);
+            padding:12px 28px; border-radius:12px; background:#1a237e; color:#fff;
+            font-weight:600; font-size:14px; z-index:999999;
+            box-shadow:0 8px 30px rgba(0,0,0,0.2);
+            opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
+            font-family:'Inter',sans-serif; max-width:90%; text-align:center;
+        }
+        .custom-toast.show { opacity:1; transform:translateX(-50%) scale(1); }
+
+        /* QR CODE MODAL */
+        .qr-modal-overlay {
             display: none;
             position: fixed;
             top: 0;
@@ -445,9 +599,7 @@
             align-items: center;
             padding: 20px;
         }
-        #qrOverlay.active {
-            display: flex;
-        }
+        .qr-modal-overlay.active { display: flex; }
         .qr-modal-box {
             background: #fff;
             border-radius: 20px;
@@ -508,6 +660,12 @@
             color: var(--primary-green);
             margin-right: 6px;
         }
+        .qr-modal-box .qr-app-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-blue);
+            margin: 4px 0;
+        }
         .qr-modal-box .qr-close-btn {
             width: 100%;
             padding: 12px;
@@ -525,23 +683,9 @@
             background: #d0d0d0;
         }
 
-        .custom-toast {
-            position:fixed; bottom:100px; left:50%; transform:translateX(-50%) scale(0.9);
-            padding:12px 28px; border-radius:12px; background:#1a237e; color:#fff;
-            font-weight:600; font-size:14px; z-index:999999;
-            box-shadow:0 8px 30px rgba(0,0,0,0.2);
-            opacity:0; transition:all 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            font-family:'Inter',sans-serif; max-width:90%; text-align:center;
-        }
-        .custom-toast.show { opacity:1; transform:translateX(-50%) scale(1); }
-
-        /* ============================================================
-           RESPONSIVE
-           ============================================================ */
         @media (max-width: 575.98px) {
             .button-container { padding:8px 12px; }
             .button-container .buynow-button { font-size:14px; padding:12px 0; }
-            .qr-pay-btn { font-size:14px; padding:12px 0; }
             .detail-container { padding:8px 8px 80px 8px; }
             .rating-container {
                 flex-direction: column;
@@ -560,15 +704,9 @@
             .rating-right {
                 width: 100%;
             }
-            .rating-score {
-                font-size: 24px;
-            }
-            .all-reviews {
-                padding: 12px 14px;
-            }
-            .detail-header .header-title {
-                font-size: 14px;
-            }
+            .rating-score { font-size: 24px; }
+            .all-reviews { padding: 12px 14px; }
+            .detail-header .header-title { font-size: 14px; }
             .qr-modal-box { padding: 20px; }
             .qr-modal-box .qr-image img { width: 180px; height: 180px; }
         }
@@ -576,17 +714,13 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    LOADER
-    ============================================================ -->
+    <!-- LOADER -->
     <div class="loader-overlay" id="loaderOverlay">
         <div class="loader-logo"><span>F</span></div>
         <div class="loader-dots"><span></span><span></span><span></span></div>
     </div>
 
-    <!-- ============================================================
-    HEADER WITH BACK BUTTON
-    ============================================================ -->
+    <!-- HEADER -->
     <div class="detail-header">
         <button class="back-btn" onclick="goBack()">
             <i class="fas fa-arrow-left"></i>
@@ -595,9 +729,7 @@
         <span class="header-icon"><i class="fas fa-shopping-cart"></i></span>
     </div>
 
-    <!-- ============================================================
-    PRODUCT DETAIL PAGE
-    ============================================================ -->
+    <!-- PRODUCT DETAIL PAGE -->
     <div class="detail-container" id="detailContainer">
 
         <div class="_1fhgRH">
@@ -649,9 +781,7 @@
                 </div>
             </div>
 
-            <!-- ============================================================
-            PRODUCT DESCRIPTION WITH DYNAMIC IMAGES
-            ============================================================ -->
+            <!-- PRODUCT DESCRIPTION -->
             <div class="container-fluid product-detail px-0 py-3 card">
                 <div class="product-details" id="productDescription">
                     <!-- Dynamically rendered from JavaScript -->
@@ -659,9 +789,7 @@
                 <div class="fdgd"></div>
             </div>
 
-            <!-- ============================================================
-            RATING & REVIEWS SECTION (Static)
-            ============================================================ -->
+            <!-- RATING & REVIEWS -->
             <div class="container-fluid px-0 py-3 card mt-3">
                 <div class="rating-container">
                     <div class="rating-left">
@@ -714,772 +842,257 @@
 
         </div>
 
-        <!-- ============================================================
-        BOTTOM BUTTONS
-        ============================================================ -->
+        <!-- BOTTOM BUTTONS (Add to Cart & Buy Now - Buy Now এখন QR Modal খুলবে) -->
         <div class="button-container flex">
             <button class="buynow-button buynow-button-white product-page-buy" onclick="addToCart()">
                 <i class="fas fa-shopping-cart me-1"></i> Add to Cart
             </button>
-            <button class="qr-pay-btn" onclick="showQRCode()">
-                <i class="fas fa-qrcode me-1"></i> Pay ₹<span id="payAmount">0</span> with QR
+            <button class="buynow-button product-page-buy" onclick="openOrderPage()">
+                <i class="fas fa-bolt me-1"></i> Buy Now
             </button>
         </div>
 
     </div>
 
-    <!-- ============================================================
-    QR CODE MODAL
-    ============================================================ -->
-    <div id="qrOverlay">
+    <!-- ORDER PAGE (STEP 1: Address, STEP 2: Summary, STEP 3: Payment) -->
+    <div class="order-page" id="orderPage">
+        <div class="order-container">
+            <button class="order-close" onclick="closeOrderPage()">&times;</button>
+            <div class="order-title"><i class="fas fa-shopping-bag"></i> Place Order</div>
+
+            <div class="order-steps" id="orderSteps">
+                <div class="step active" data-step="1"><div class="num">1</div><div class="label">Address</div></div>
+                <div class="step" data-step="2"><div class="num">2</div><div class="label">Summary</div></div>
+                <div class="step" data-step="3"><div class="num">3</div><div class="label">Payment</div></div>
+            </div>
+
+            <!-- STEP 1: ADDRESS -->
+            <div class="step-content active" id="step1">
+                <div class="form-group">
+                    <label>Full Name *</label>
+                    <input type="text" id="ordName" placeholder="Enter your full name" />
+                    <div class="error-msg" id="errName">Please enter your full name</div>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number *</label>
+                    <input type="tel" id="ordPhone" placeholder="Enter 10-digit number" maxlength="10" />
+                    <div class="error-msg" id="errPhone">Enter a valid 10-digit mobile number</div>
+                </div>
+                <div class="form-group">
+                    <label>Pincode *</label>
+                    <input type="text" id="ordPincode" placeholder="Enter 6-digit pincode" maxlength="6" />
+                    <div class="error-msg" id="errPincode">Enter a valid 6-digit pincode</div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>City *</label>
+                        <input type="text" id="ordCity" placeholder="City" />
+                        <div class="error-msg" id="errCity">Please enter your city</div>
+                    </div>
+                    <div class="form-group">
+                        <label>State</label>
+                        <select id="ordState">
+                            <option value="">Select State</option>
+                            <option value="Delhi">Delhi</option>
+                            <option value="Maharashtra">Maharashtra</option>
+                            <option value="Karnataka">Karnataka</option>
+                            <option value="Tamil Nadu">Tamil Nadu</option>
+                            <option value="Uttar Pradesh">Uttar Pradesh</option>
+                            <option value="West Bengal">West Bengal</option>
+                            <option value="Rajasthan">Rajasthan</option>
+                            <option value="Gujarat">Gujarat</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <div class="error-msg" id="errState">Please select your state</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>House No., Building Name *</label>
+                    <input type="text" id="ordAddress" placeholder="House No., Building Name" />
+                    <div class="error-msg" id="errAddress">Please enter your house/building name</div>
+                </div>
+                <div class="form-group">
+                    <label>Road name, Area, Colony</label>
+                    <input type="text" id="ordAddress2" placeholder="Road name, Area, Colony" />
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" disabled>Back</button>
+                    <button class="btn btn-next" id="step1Next" onclick="validateStep1()">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 2: SUMMARY -->
+            <div class="step-content" id="step2">
+                <div class="order-summary">
+                    <div class="summary-row"><span>Product</span><span id="summaryProduct">Loading...</span></div>
+                    <div class="summary-row"><span>Quantity</span><span id="summaryQty">1</span></div>
+                    <div class="summary-row"><span>Price</span><span id="summaryPrice">₹0</span></div>
+                    <div class="summary-row"><span>Delivery Charges</span><span class="free">FREE</span></div>
+                    <div class="summary-row total"><span>Total</span><span class="amount" id="summaryTotal">₹0</span></div>
+                </div>
+                <div style="font-size:13px; color:#888; text-align:center; margin:4px 0;">
+                    <i class="fas fa-shield-alt"></i> Secure checkout with encrypted payment
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" onclick="goToOrderStep(1)"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-next" onclick="goToOrderStep(3)">Next <i class="fas fa-arrow-right"></i></button>
+                </div>
+            </div>
+
+            <!-- STEP 3: PAYMENT -->
+            <div class="step-content" id="step3">
+                <div class="payment-methods" id="paymentMethods"></div>
+
+                <div class="card px-3 py-4 mb-2" style="background:#0d0d0d; border-radius:12px; border:1px solid rgba(255,255,255,0.06);">
+                    <h4 style="color:#fff; font-size:16px; font-weight:600;">Price Details</h4>
+                    <div class="price-detail-div mt-2">
+                        <div class="product-price-list my-2">
+                            <span class="title" style="color:#aaa;">Price (1 item)</span>
+                            <span class="data selling_price me-0 td-none" id="mrpOrder" style="color:#fff;">₹0</span>
+                        </div>
+                        <div class="product-price-list my-2">
+                            <span class="title" style="color:#aaa;">Delivery Charges</span>
+                            <span class="data text-success">FREE</span>
+                        </div>
+                        <div class="product-price-list mt-3 pt-3 total" style="border-top:1px solid rgba(255,255,255,0.08);">
+                            <span class="title" style="color:#fff; font-weight:600;">Amount Payable</span>
+                            <span class="data selling_price" id="sellingPriceOrder" style="color:var(--primary-blue); font-weight:700;">₹0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin:8px 0;">
+                    <img src="https://filpkaart-sammar.shop/hotsale/assets/media/policy.png" style="width:100%; border-radius:8px;" alt="policy">
+                    <img src="https://filpkaart-sammar.shop/hotsale/assets/media/safety-label-badge.jpg" style="width:100%; border-radius:8px; margin-top:6px;" alt="safety">
+                </div>
+
+                <div style="font-size:13px; color:#888; text-align:center; margin:6px 0;">
+                    <i class="fas fa-lock"></i> Your payment is secure
+                </div>
+                <div class="step-buttons">
+                    <button class="btn btn-prev" onclick="goToOrderStep(2)"><i class="fas fa-arrow-left"></i> Back</button>
+                    <button class="btn btn-confirm" id="confirmBtn" onclick="confirmOrderWithQR()"><i class="fas fa-check"></i> Confirm Order</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- QR CODE MODAL -->
+    <div class="qr-modal-overlay" id="qrModal">
         <div class="qr-modal-box">
             <h3>Scan to Pay</h3>
             <div class="qr-amount">₹<span id="qrAmount">0</span></div>
-            
             <div class="qr-image">
                 <img id="qrImage" src="" alt="UPI QR Code" />
             </div>
-            
             <div class="qr-order-id">Order: <span id="qrOrderId">FLIP-XXXXXX</span></div>
-            
             <div class="qr-upi-id">
                 <i class="fas fa-circle-check"></i> 
                 <span id="qrUPI">9882046180@okbizaxis</span>
             </div>
-            
+            <div class="qr-app-name" id="qrAppName">📱 PhonePe</div>
             <p style="color:#888; font-size:13px; margin:4px 0 12px;">
-                <i class="fas fa-phone"></i> Scan with PhonePe, GPay, Paytm or any UPI app
+                <i class="fas fa-phone"></i> Scan with selected UPI app
             </p>
-            
-            <button class="qr-close-btn" onclick="closeQR()">
+            <button class="qr-close-btn" onclick="closeQRModal()">
                 <i class="fas fa-times"></i> Close
             </button>
         </div>
     </div>
 
-    <!-- ============================================================
-    TOAST
-    ============================================================ -->
+    <!-- TOAST -->
     <div class="custom-toast" id="toast"></div>
 
-    <!-- ============================================================
-    JAVASCRIPT
-    ============================================================ -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ============================================================
-        // COMPLETE PRODUCT DATA (29 products with descImages)
+        // PRODUCT DATA (29 products with descImages)
         // ============================================================
         const PRODUCTS_DATA = [
-            { 
-                id: 1, 
-                name: 'LEADER BEAST 26T Premium Cycle', 
-                price: 499, 
-                oldPrice: 6289, 
-                images: [
-                    'media/img/1_product_1.jpeg',
-                    'media/img/1_product_2.jpeg',
-                    'media/img/1_product_3.jpeg',
-                    'media/img/1_product_4.jpeg',
-                    'media/img/1_product_5.jpeg'
-                ], 
-                rating: 4.2, 
-                reviews: 2653, 
-                inStock: true, 
-                stock: 500,
-                brand: 'LEADER',
-                description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes',
-                descImages: [
-                    'media/img/1_desc_1.jpg',
-                    'media/img/1_desc_2.jpg',
-                    'media/img/1_desc_3.jpg'
-                ]
-            },
-            { 
-                id: 2, 
-                name: 'vivo V50 5G (Rose Red, 128 GB)', 
-                price: 999, 
-                oldPrice: 34999, 
-                images: [
-                    'media/img/2_product_1.jpeg',
-                    'media/img/2_product_2.jpeg',
-                    'media/img/2_product_3.jpeg',
-                    'media/img/2_product_4.jpeg',
-                    'media/img/2_product_5.jpeg'
-                ], 
-                rating: 4.2, 
-                reviews: 2653, 
-                inStock: true, 
-                stock: 500,
-                brand: 'vivo',
-                description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone that combines stunning design with powerful performance. It features a large 6.78-inch AMOLED display with a smooth 120Hz refresh rate and FHD+ resolution, delivering vibrant visuals for gaming and streaming. Powered by the Snapdragon 7 Gen 3 (4nm) processor, coupled with 8 GB RAM (expandable virtually up to 16 GB) and 128 GB UFS 3.1 storage, this device ensures lightning-fast performance and seamless multitasking. The camera setup is impressive, with a 50 MP main rear camera, an 8 MP ultrawide lens, a 2 MP depth sensor, and a 50 MP front camera for stunning selfies and portrait shots. A massive 5000 mAh battery with 66W FlashCharge keeps you powered throughout the day, while Funtouch OS 14 based on Android 14 offers a smooth and intuitive user experience. Additional features include 5G connectivity, Wi-Fi 6, Bluetooth 5.3, USB-C, and advanced security options like an in-display fingerprint sensor and face unlock. Available in Rose Red, Blue, and Black, the vivo V50 5G is the perfect choice for users seeking style, speed, and reliability.',
-                descImages: [
-                    'media/img/2_desc_1.jpg',
-                    'media/img/2_desc_2.jpg',
-                    'media/img/2_desc_3.jpg'
-                ]
-            },
-            { 
-                id: 238, 
-                name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', 
-                price: 449, 
-                oldPrice: 2228, 
-                images: [
-                    'media/img/238_product_2.jpeg',
-                    'media/img/238_product_3.jpeg',
-                    'media/img/238_product_4.jpeg',
-                    'media/img/238_product_5.jpeg'
-                ], 
-                rating: 4.2, 
-                reviews: 2653, 
-                inStock: true, 
-                stock: 15,
-                brand: 'Pigeon',
-                description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.',
-                descImages: [
-                    'media/img/238_desc_1.webp',
-                    'media/img/238_desc_2.webp'
-                ]
-            },
-            { 
-                id: 239, 
-                name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', 
-                price: 498, 
-                oldPrice: 2499, 
-                images: [
-                    'media/img/239_product_1.jpeg',
-                    'media/img/239_product_2.jpeg',
-                    'media/img/239_product_3.jpeg',
-                    'media/img/239_product_4.jpeg',
-                    'media/img/239_product_5.jpeg'
-                ], 
-                rating: 4.7, 
-                reviews: 5690, 
-                inStock: true, 
-                stock: 20,
-                brand: 'V-Guard',
-                description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.',
-                descImages: [
-                    'media/img/239_desc_1.webp',
-                    'media/img/239_desc_2.webp'
-                ]
-            },
-            { 
-                id: 240, 
-                name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', 
-                price: 398, 
-                oldPrice: 1699, 
-                images: [
-                    'media/img/240_product_1.jpeg',
-                    'media/img/240_product_2.jpeg',
-                    'media/img/240_product_3.jpeg',
-                    'media/img/240_product_4.jpeg',
-                    'media/img/240_product_5.jpeg'
-                ], 
-                rating: 4.7, 
-                reviews: 8666, 
-                inStock: true, 
-                stock: 10,
-                brand: 'Prestige',
-                description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.',
-                descImages: [
-                    'media/img/240_desc_1.webp',
-                    'media/img/240_desc_2.webp'
-                ]
-            },
-            { 
-                id: 241, 
-                name: 'Pigeon PG-KESSEL-BOTTLE-COMBI Electric Kettle (1.2 L, Silver, Black)', 
-                price: 299, 
-                oldPrice: 999, 
-                images: [
-                    'media/img/241_product_1.jpeg',
-                    'media/img/241_product_2.jpeg',
-                    'media/img/241_product_3.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 7802, 
-                inStock: true, 
-                stock: 25,
-                brand: 'Pigeon',
-                description: 'Pigeon Electric Kettle with 1.2L capacity, stainless steel body, and auto shut-off.',
-                descImages: [
-                    'media/img/241_desc_1.webp',
-                    'media/img/241_desc_2.webp'
-                ]
-            },
-            { 
-                id: 242, 
-                name: 'Crompton DS 500 W Mixer Grinder (ACGM-DS500W3J BLK | 3 Jars | Black & Grey)', 
-                price: 597, 
-                oldPrice: 1799, 
-                images: [
-                    'media/img/242_product_1.jpeg',
-                    'media/img/242_product_2.jpeg',
-                    'media/img/242_product_3.jpeg',
-                    'media/img/242_product_4.jpeg',
-                    'media/img/242_product_5.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 6636, 
-                inStock: true, 
-                stock: 12,
-                brand: 'Crompton',
-                description: 'Crompton DS 500W Mixer Grinder with 3 jars and 500W motor.',
-                descImages: [
-                    'media/img/242_desc_1.webp'
-                ]
-            },
-            { 
-                id: 243, 
-                name: 'Butterfly Aluminium Pressure Cooker 2 L, 3 L, 5 L Outer Lid Pressure Cooker (Aluminium)', 
-                price: 549, 
-                oldPrice: 1827, 
-                images: [
-                    'media/img/243_product_1.jpeg',
-                    'media/img/243_product_2.jpeg',
-                    'media/img/243_product_3.jpeg'
-                ], 
-                rating: 4.6, 
-                reviews: 7229, 
-                inStock: true, 
-                stock: 8,
-                brand: 'Butterfly',
-                description: 'Butterfly Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
-                descImages: [
-                    'media/img/243_desc_1.webp',
-                    'media/img/243_desc_2.webp'
-                ]
-            },
-            { 
-                id: 244, 
-                name: 'THUNDERFIT 3 Pc Stainless Steel Knife Set Printed SS Ultra Sharp Butcher, Meat, Pairing, Vegetable for Kitchen', 
-                price: 298, 
-                oldPrice: 799, 
-                images: [
-                    'media/img/244_product_1.jpeg',
-                    'media/img/244_product_2.jpeg'
-                ], 
-                rating: 4.8, 
-                reviews: 6205, 
-                inStock: true, 
-                stock: 30,
-                brand: 'THUNDERFIT',
-                description: 'THUNDERFIT 3-Piece Stainless Steel Knife Set with ultra sharp blades.',
-                descImages: [
-                    'media/img/244_desc_1.webp',
-                    'media/img/244_desc_2.webp'
-                ]
-            },
-            { 
-                id: 245, 
-                name: 'JKR Enterprise 260 W White Electric Whisk, Hand Blender (JKR-2019)', 
-                price: 199, 
-                oldPrice: 599, 
-                images: [
-                    'media/img/245_product_1.jpeg',
-                    'media/img/245_product_2.jpeg',
-                    'media/img/245_product_3.jpeg',
-                    'media/img/245_product_4.jpeg',
-                    'media/img/245_product_5.jpeg'
-                ], 
-                rating: 4.6, 
-                reviews: 4633, 
-                inStock: true, 
-                stock: 18,
-                brand: 'JKR Enterprise',
-                description: 'JKR Enterprise 260W Electric Whisk with 7 speed settings.',
-                descImages: [
-                    'media/img/245_desc_1.webp',
-                    'media/img/245_desc_2.webp'
-                ]
-            },
-            { 
-                id: 246, 
-                name: 'Owme Portable USB Rechargeable Juicer Blender Mini Smoothie Maker Bottle 105 W Juicer Mixer Grinder (Portable Handheld Juicer | 1 Jar | Blue)', 
-                price: 249, 
-                oldPrice: 999, 
-                images: [
-                    'media/img/246_product_1.jpeg',
-                    'media/img/246_product_2.jpeg',
-                    'media/img/246_product_3.jpeg',
-                    'media/img/246_product_4.jpeg',
-                    'media/img/246_product_5.jpeg'
-                ], 
-                rating: 4.5, 
-                reviews: 6060, 
-                inStock: true, 
-                stock: 22,
-                brand: 'Owme',
-                description: 'Owme Portable USB Rechargeable Juicer Blender with 105W motor.',
-                descImages: [
-                    'media/img/246_desc_1.webp',
-                    'media/img/246_desc_2.webp'
-                ]
-            },
-            { 
-                id: 247, 
-                name: 'Samsung 23 L Auto Cook Programs, Child Safety Lock, Memory Feature, Deodorization Solo Microwave Oven (MS23A3513AK, BLACK)', 
-                price: 799, 
-                oldPrice: 6999, 
-                images: [
-                    'media/img/247_product_1.jpeg',
-                    'media/img/247_product_2.jpeg',
-                    'media/img/247_product_3.jpeg',
-                    'media/img/247_product_4.jpeg',
-                    'media/img/247_product_5.jpeg'
-                ], 
-                rating: 4.2, 
-                reviews: 9759, 
-                inStock: true, 
-                stock: 5,
-                brand: 'Samsung',
-                description: 'Samsung 23L Solo Microwave Oven with Auto Cook Programs and Child Safety Lock.',
-                descImages: [
-                    'media/img/247_desc_1.webp',
-                    'media/img/247_desc_2.webp'
-                ]
-            },
-            { 
-                id: 248, 
-                name: 'Longway Multipurpose Portable Digital Kitchen Weighing Scale (Gray)', 
-                price: 149, 
-                oldPrice: 399, 
-                images: [
-                    'media/img/248_product_1.jpeg',
-                    'media/img/248_product_2.jpeg',
-                    'media/img/248_product_3.jpeg',
-                    'media/img/248_product_4.jpeg',
-                    'media/img/248_product_5.jpeg'
-                ], 
-                rating: 4.6, 
-                reviews: 2798, 
-                inStock: true, 
-                stock: 40,
-                brand: 'Longway',
-                description: 'Longway Portable Digital Kitchen Weighing Scale with precise measurement.',
-                descImages: [
-                    'media/img/248_desc_1.webp',
-                    'media/img/248_desc_2.webp'
-                ]
-            },
-            { 
-                id: 249, 
-                name: 'Prestige Nutrifry Digital Air Fryer (4.5 L)', 
-                price: 1599, 
-                oldPrice: 3498, 
-                images: [
-                    'media/img/249_product_1.jpeg',
-                    'media/img/249_product_2.jpeg',
-                    'media/img/249_product_3.jpeg',
-                    'media/img/249_product_4.jpeg',
-                    'media/img/249_product_5.jpeg'
-                ], 
-                rating: 4.6, 
-                reviews: 8182, 
-                inStock: true, 
-                stock: 7,
-                brand: 'Prestige',
-                description: 'Prestige Nutrifry Digital Air Fryer with 4.5L capacity and 8 preset programs.',
-                descImages: [
-                    'media/img/249_desc_1.webp',
-                    'media/img/249_desc_2.webp'
-                ]
-            },
-            { 
-                id: 251, 
-                name: 'realme TechLife 7.5 kg 5 Star Rating Semi Automatic Top Load Washing Machine Black, Grey (RMSA755NNNDG)', 
-                price: 2999, 
-                oldPrice: 7790, 
-                images: [
-                    'media/img/251_product_1.jpeg',
-                    'media/img/251_product_2.jpeg',
-                    'media/img/251_product_3.jpeg',
-                    'media/img/251_product_4.jpeg',
-                    'media/img/251_product_5.jpeg'
-                ], 
-                rating: 4.5, 
-                reviews: 2941, 
-                inStock: true, 
-                stock: 3,
-                brand: 'realme',
-                description: 'realme TechLife 7.5kg Semi Automatic Top Load Washing Machine with 5 Star rating.',
-                descImages: [
-                    'media/img/251_desc_1.webp',
-                    'media/img/251_desc_2.webp'
-                ]
-            },
-            { 
-                id: 252, 
-                name: 'Flipkart SmartBuy Pack of 40 Melamin Emerald Bloom Melamine Dishwasher Safe|Stain Resistant Dinner Set (White, Green)', 
-                price: 469, 
-                oldPrice: 1399, 
-                images: [
-                    'media/img/252_product_1.jpeg',
-                    'media/img/252_product_2.jpeg',
-                    'media/img/252_product_3.jpeg',
-                    'media/img/252_product_4.jpeg'
-                ], 
-                rating: 4.8, 
-                reviews: 4790, 
-                inStock: true, 
-                stock: 15,
-                brand: 'Flipkart SmartBuy',
-                description: 'Flipkart SmartBuy Pack of 40 Melamine Dinner Set with Emerald Bloom design.',
-                descImages: [
-                    'media/img/252_desc_1.webp',
-                    'media/img/252_desc_2.webp'
-                ]
-            },
-            { 
-                id: 253, 
-                name: 'Sowbaghya Pack of 26 Steel Dinner Set (Silver)', 
-                price: 1299, 
-                oldPrice: 2299, 
-                images: [
-                    'media/img/253_product_1.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 3464, 
-                inStock: true, 
-                stock: 10,
-                brand: 'Sowbaghya',
-                description: 'Sowbaghya Pack of 26 Steel Dinner Set in silver finish.',
-                descImages: [
-                    'media/img/253_desc_1.webp',
-                    'media/img/253_desc_2.webp'
-                ]
-            },
-            { 
-                id: 254, 
-                name: 'Flipkart SmartBuy Plastic Grocery Container - 1200 ml, 650 ml, 350 ml, 250 ml (Pack of 20, Silver)', 
-                price: 197, 
-                oldPrice: 401, 
-                images: [
-                    'media/img/254_product_1.jpeg',
-                    'media/img/254_product_2.jpeg',
-                    'media/img/254_product_3.jpeg',
-                    'media/img/254_product_4.jpeg',
-                    'media/img/254_product_5.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 1387, 
-                inStock: true, 
-                stock: 25,
-                brand: 'Flipkart SmartBuy',
-                description: 'Flipkart SmartBuy Pack of 20 Plastic Grocery Containers in 4 sizes.',
-                descImages: [
-                    'media/img/254_desc_1.webp',
-                    'media/img/254_desc_2.webp'
-                ]
-            },
-            { 
-                id: 255, 
-                name: 'Snapple TAG Stainless Steel Water Bottle Single Wall ISI Certified 1000 ml Steel Bottle (Pack of 6, Silver)', 
-                price: 649, 
-                oldPrice: 1199, 
-                images: [
-                    'media/img/255_product_1.jpeg',
-                    'media/img/255_product_2.jpeg',
-                    'media/img/255_product_3.jpeg',
-                    'media/img/255_product_4.jpeg',
-                    'media/img/255_product_5.jpeg'
-                ], 
-                rating: 4.8, 
-                reviews: 5260, 
-                inStock: true, 
-                stock: 12,
-                brand: 'Snapple',
-                description: 'Snapple TAG Stainless Steel Water Bottle Pack of 6 with 1000ml capacity.',
-                descImages: [
-                    'media/img/255_desc_1.webp',
-                    'media/img/255_desc_2.webp'
-                ]
-            },
-            { 
-                id: 256, 
-                name: 'NYTK RETAIL 2025 Foldable Barbeque With - 2 Spatula,1 Bbq, 10 Stick & 1 Air Blower Charcoal Grill (Foldable)', 
-                price: 489, 
-                oldPrice: 999, 
-                images: [
-                    'media/img/256_product_1.jpeg',
-                    'media/img/256_product_2.jpeg',
-                    'media/img/256_product_3.jpeg',
-                    'media/img/256_product_4.jpeg',
-                    'media/img/256_product_5.jpeg'
-                ], 
-                rating: 4.9, 
-                reviews: 6013, 
-                inStock: true, 
-                stock: 6,
-                brand: 'NYTK RETAIL',
-                description: 'NYTK RETAIL 2025 Foldable Barbeque Grill with complete accessory set.',
-                descImages: [
-                    'media/img/256_desc_1.webp',
-                    'media/img/256_desc_2.webp'
-                ]
-            },
-            { 
-                id: 257, 
-                name: 'MGKENTERPRISE Fruits/Vegetables Kitchen Rack Plastic, Steel 4 Layer Portable Modern Trolly Plastic Fruit & Vegetable Basket', 
-                price: 397, 
-                oldPrice: 799, 
-                images: [
-                    'media/img/257_product_1.jpeg',
-                    'media/img/257_product_2.jpeg',
-                    'media/img/257_product_3.jpeg'
-                ], 
-                rating: 4.8, 
-                reviews: 9478, 
-                inStock: true, 
-                stock: 20,
-                brand: 'MGKENTERPRISE',
-                description: 'MGKENTERPRISE 4-Layer Portable Kitchen Rack for fruits and vegetables.',
-                descImages: [
-                    'media/img/257_desc_1.webp',
-                    'media/img/257_desc_2.webp'
-                ]
-            },
-            { 
-                id: 258, 
-                name: 'MILTON Go Electric Stainless Steel Kettle, 2 Litres and Flip Lid Bottle, 750 ml 2750 ml Steel Flask (Pack of 2, Silver)', 
-                price: 397, 
-                oldPrice: 1699, 
-                images: [
-                    'media/img/258_product_1.jpeg',
-                    'media/img/258_product_2.jpeg',
-                    'media/img/258_product_3.jpeg',
-                    'media/img/258_product_4.jpeg',
-                    'media/img/258_product_5.jpeg'
-                ], 
-                rating: 4.5, 
-                reviews: 8350, 
-                inStock: true, 
-                stock: 14,
-                brand: 'MILTON',
-                description: 'MILTON Go Electric Stainless Steel Kettle 2L with Flip Lid Bottle.',
-                descImages: [
-                    'media/img/258_desc_1.webp',
-                    'media/img/258_desc_2.webp'
-                ]
-            },
-            { 
-                id: 259, 
-                name: 'Wildcraft Medium Check-in Suitcase (67 cm) 4 Wheels - Grit : TorQ - Black', 
-                price: 399, 
-                oldPrice: 1999, 
-                images: [
-                    'media/img/259_product_1.jpeg',
-                    'media/img/259_product_2.jpeg',
-                    'media/img/259_product_3.jpeg',
-                    'media/img/259_product_4.jpeg',
-                    'media/img/259_product_5.jpeg'
-                ], 
-                rating: 4.3, 
-                reviews: 7383, 
-                inStock: true, 
-                stock: 8,
-                brand: 'Wildcraft',
-                description: 'Wildcraft Medium Check-in Suitcase 67cm with 4 wheels.',
-                descImages: [
-                    'media/img/259_desc_1.webp',
-                    'media/img/259_desc_2.webp'
-                ]
-            },
-            { 
-                id: 261, 
-                name: 'Turbo Heavy Duty - Comfortable for Home and Restaurant - Super Strong Plastic Outdoor Chair (Feather Brown, Set of 4, Pre-assembled)', 
-                price: 497, 
-                oldPrice: 2999, 
-                images: [
-                    'media/img/261_product_1.jpeg',
-                    'media/img/261_product_2.jpeg',
-                    'media/img/261_product_3.jpeg',
-                    'media/img/261_product_4.jpeg'
-                ], 
-                rating: 4.3, 
-                reviews: 2835, 
-                inStock: true, 
-                stock: 5,
-                brand: 'Turbo',
-                description: 'Turbo Heavy Duty Outdoor Chair Set of 4 in Feather Brown.',
-                descImages: [
-                    'media/img/261_desc_1.webp',
-                    'media/img/261_desc_2.webp'
-                ]
-            },
-            { 
-                id: 262, 
-                name: 'Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)', 
-                price: 419, 
-                oldPrice: 2599, 
-                images: [
-                    'media/img/262_product_1.jpeg',
-                    'media/img/262_product_2.jpeg',
-                    'media/img/262_product_3.jpeg',
-                    'media/img/262_product_4.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 6188, 
-                inStock: true, 
-                stock: 9,
-                brand: 'Atomberg',
-                description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty and BLDC Motor. High air delivery with remote control. Energy efficient 5 Star rating.',
-                descImages: [
-                    'media/img/262_desc_1.webp',
-                    'media/img/262_desc_2.webp'
-                ]
-            },
-            { 
-                id: 263, 
-                name: 'Kanishka Celling Fan with 2 Year Warranty Energy Saving, Anti Dust, Anti Rust, High Air Delivery, Ultra High Speed 1200 mm Ceiling Fan (Smoke Brown | Pack of 2)', 
-                price: 549, 
-                oldPrice: 2499, 
-                images: [
-                    'media/img/263_product_1.jpg',
-                    'media/img/263_product_2.jpg',
-                    'media/img/263_product_3.jpg',
-                    'media/img/263_product_4.jpg',
-                    'media/img/263_product_5.jpg'
-                ], 
-                rating: 4.3, 
-                reviews: 5308, 
-                inStock: true, 
-                stock: 6,
-                brand: 'Kanishka',
-                description: 'Kanishka Ceiling Fan Pack of 2 with 2 Year Warranty in Smoke Brown.',
-                descImages: [
-                    'media/img/263_desc_1.webp',
-                    'media/img/263_desc_2.webp'
-                ]
-            },
-            { 
-                id: 264, 
-                name: 'BAJAJ Premium 35 L Tower Air Cooler (White, TX 35)', 
-                price: 699, 
-                oldPrice: 2999, 
-                images: [
-                    'media/img/264_product_1.jpeg',
-                    'media/img/264_product_2.jpeg',
-                    'media/img/264_product_3.jpeg',
-                    'media/img/264_product_4.jpeg',
-                    'media/img/264_product_5.jpeg'
-                ], 
-                rating: 4.2, 
-                reviews: 1312, 
-                inStock: true, 
-                stock: 4,
-                brand: 'BAJAJ',
-                description: 'BAJAJ Premium 35L Tower Air Cooler in White (TX 35).',
-                descImages: [
-                    'media/img/264_desc_1.webp',
-                    'media/img/264_desc_2.webp'
-                ]
-            },
-            { 
-                id: 276, 
-                name: 'Safari Hard Body Set of 3 Luggage 4 Wheels - Magnum Fury Set of 3 (Small 55cm | Medium 65cm | Large 75cm) 4W - Blue', 
-                price: 499, 
-                oldPrice: 3999, 
-                images: [
-                    'media/img/276_product_1.jpeg',
-                    'media/img/276_product_2.jpeg',
-                    'media/img/276_product_3.jpeg',
-                    'media/img/276_product_4.jpeg',
-                    'media/img/276_product_5.jpeg'
-                ], 
-                rating: 4.5, 
-                reviews: 1751, 
-                inStock: true, 
-                stock: 7,
-                brand: 'Safari',
-                description: 'Safari Hard Body Luggage Set of 3 with 4 Wheels in Blue.',
-                descImages: [
-                    'media/img/276_desc_1.webp',
-                    'media/img/276_desc_2.webp'
-                ]
-            },
-            { 
-                id: 277, 
-                name: 'BAJAJ 2 L, 3 L, 5 L Pressure Cooker (Aluminium)', 
-                price: 399, 
-                oldPrice: 1799, 
-                images: [
-                    'media/img/277_product_1.jpeg',
-                    'media/img/277_product_2.jpeg',
-                    'media/img/277_product_3.jpeg',
-                    'media/img/277_product_4.jpeg'
-                ], 
-                rating: 4.6, 
-                reviews: 2477, 
-                inStock: true, 
-                stock: 10,
-                brand: 'BAJAJ',
-                description: 'BAJAJ Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
-                descImages: [
-                    'media/img/277_desc_1.webp',
-                    'media/img/277_desc_2.webp'
-                ]
-            },
-            { 
-                id: 278, 
-                name: 'SONY New SA-D40M2 All In One 4.1ch Home Theatre system with Powerful Subwoofer 100 W Bluetooth Home Audio Speaker (Black, 4.1 Channel)', 
-                price: 499, 
-                oldPrice: 9490, 
-                images: [
-                    'media/img/278_product_1.jpeg',
-                    'media/img/278_product_2.jpeg',
-                    'media/img/278_product_3.jpeg',
-                    'media/img/278_product_4.jpeg'
-                ], 
-                rating: 4.4, 
-                reviews: 6571, 
-                inStock: true, 
-                stock: 3,
-                brand: 'SONY',
-                description: 'SONY SA-D40M2 4.1ch Home Theatre System with Bluetooth and subwoofer.',
-                descImages: [
-                    'media/img/278_desc_1.webp',
-                    'media/img/278_desc_2.webp'
-                ]
-            },
-            { 
-                id: 279, 
-                name: 'GREEN SOUL Kiev Orthopedic Office Chair | Ergonomic Design with Rocking Function Leatherette Office Adjustable Arm Chair (Black, DIY(Do-It-Yourself))', 
-                price: 467, 
-                oldPrice: 7190, 
-                images: [
-                    'media/img/279_product_1.jpeg',
-                    'media/img/279_product_2.jpeg',
-                    'media/img/279_product_3.jpeg',
-                    'media/img/279_product_4.jpeg'
-                ], 
-                rating: 4.7, 
-                reviews: 8834, 
-                inStock: true, 
-                stock: 5,
-                brand: 'GREEN SOUL',
-                description: 'GREEN SOUL Kiev Orthopedic Office Chair with ergonomic design.',
-                descImages: [
-                    'media/img/279_desc_1.webp'
-                ]
-            }
+            { id: 1, name: 'LEADER BEAST 26T Premium Cycle', price: 499, oldPrice: 6289, images: ['media/img/1_product_1.jpeg','media/img/1_product_2.jpeg','media/img/1_product_3.jpeg','media/img/1_product_4.jpeg','media/img/1_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'LEADER', description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes', descImages: ['media/img/1_desc_1.jpg','media/img/1_desc_2.jpg','media/img/1_desc_3.jpg'] },
+            { id: 2, name: 'vivo V50 5G (Rose Red, 128 GB)', price: 999, oldPrice: 34999, images: ['media/img/2_product_1.jpeg','media/img/2_product_2.jpeg','media/img/2_product_3.jpeg','media/img/2_product_4.jpeg','media/img/2_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'vivo', description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone that combines stunning design with powerful performance...', descImages: ['media/img/2_desc_1.jpg','media/img/2_desc_2.jpg','media/img/2_desc_3.jpg'] },
+            { id: 238, name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', price: 449, oldPrice: 2228, images: ['media/img/238_product_2.jpeg','media/img/238_product_3.jpeg','media/img/238_product_4.jpeg','media/img/238_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 15, brand: 'Pigeon', description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.', descImages: ['media/img/238_desc_1.webp','media/img/238_desc_2.webp'] },
+            { id: 239, name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', price: 498, oldPrice: 2499, images: ['media/img/239_product_1.jpeg','media/img/239_product_2.jpeg','media/img/239_product_3.jpeg','media/img/239_product_4.jpeg','media/img/239_product_5.jpeg'], rating: 4.7, reviews: 5690, inStock: true, stock: 20, brand: 'V-Guard', description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.', descImages: ['media/img/239_desc_1.webp','media/img/239_desc_2.webp'] },
+            { id: 240, name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', price: 398, oldPrice: 1699, images: ['media/img/240_product_1.jpeg','media/img/240_product_2.jpeg','media/img/240_product_3.jpeg','media/img/240_product_4.jpeg','media/img/240_product_5.jpeg'], rating: 4.7, reviews: 8666, inStock: true, stock: 10, brand: 'Prestige', description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.', descImages: ['media/img/240_desc_1.webp','media/img/240_desc_2.webp'] },
+            { id: 241, name: 'Pigeon PG-KESSEL-BOTTLE-COMBI Electric Kettle (1.2 L, Silver, Black)', price: 299, oldPrice: 999, images: ['media/img/241_product_1.jpeg','media/img/241_product_2.jpeg','media/img/241_product_3.jpeg'], rating: 4.4, reviews: 7802, inStock: true, stock: 25, brand: 'Pigeon', description: 'Pigeon Electric Kettle with 1.2L capacity, stainless steel body, and auto shut-off.', descImages: ['media/img/241_desc_1.webp','media/img/241_desc_2.webp'] },
+            { id: 242, name: 'Crompton DS 500 W Mixer Grinder (ACGM-DS500W3J BLK | 3 Jars | Black & Grey)', price: 597, oldPrice: 1799, images: ['media/img/242_product_1.jpeg','media/img/242_product_2.jpeg','media/img/242_product_3.jpeg','media/img/242_product_4.jpeg','media/img/242_product_5.jpeg'], rating: 4.4, reviews: 6636, inStock: true, stock: 12, brand: 'Crompton', description: 'Crompton DS 500W Mixer Grinder with 3 jars and 500W motor.', descImages: ['media/img/242_desc_1.webp'] },
+            { id: 243, name: 'Butterfly Aluminium Pressure Cooker 2 L, 3 L, 5 L Outer Lid Pressure Cooker (Aluminium)', price: 549, oldPrice: 1827, images: ['media/img/243_product_1.jpeg','media/img/243_product_2.jpeg','media/img/243_product_3.jpeg'], rating: 4.6, reviews: 7229, inStock: true, stock: 8, brand: 'Butterfly', description: 'Butterfly Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.', descImages: ['media/img/243_desc_1.webp','media/img/243_desc_2.webp'] },
+            { id: 244, name: 'THUNDERFIT 3 Pc Stainless Steel Knife Set Printed SS Ultra Sharp Butcher, Meat, Pairing, Vegetable for Kitchen', price: 298, oldPrice: 799, images: ['media/img/244_product_1.jpeg','media/img/244_product_2.jpeg'], rating: 4.8, reviews: 6205, inStock: true, stock: 30, brand: 'THUNDERFIT', description: 'THUNDERFIT 3-Piece Stainless Steel Knife Set with ultra sharp blades.', descImages: ['media/img/244_desc_1.webp','media/img/244_desc_2.webp'] },
+            { id: 245, name: 'JKR Enterprise 260 W White Electric Whisk, Hand Blender (JKR-2019)', price: 199, oldPrice: 599, images: ['media/img/245_product_1.jpeg','media/img/245_product_2.jpeg','media/img/245_product_3.jpeg','media/img/245_product_4.jpeg','media/img/245_product_5.jpeg'], rating: 4.6, reviews: 4633, inStock: true, stock: 18, brand: 'JKR Enterprise', description: 'JKR Enterprise 260W Electric Whisk with 7 speed settings.', descImages: ['media/img/245_desc_1.webp','media/img/245_desc_2.webp'] },
+            { id: 246, name: 'Owme Portable USB Rechargeable Juicer Blender Mini Smoothie Maker Bottle 105 W Juicer Mixer Grinder (Portable Handheld Juicer | 1 Jar | Blue)', price: 249, oldPrice: 999, images: ['media/img/246_product_1.jpeg','media/img/246_product_2.jpeg','media/img/246_product_3.jpeg','media/img/246_product_4.jpeg','media/img/246_product_5.jpeg'], rating: 4.5, reviews: 6060, inStock: true, stock: 22, brand: 'Owme', description: 'Owme Portable USB Rechargeable Juicer Blender with 105W motor.', descImages: ['media/img/246_desc_1.webp','media/img/246_desc_2.webp'] },
+            { id: 247, name: 'Samsung 23 L Auto Cook Programs, Child Safety Lock, Memory Feature, Deodorization Solo Microwave Oven (MS23A3513AK, BLACK)', price: 799, oldPrice: 6999, images: ['media/img/247_product_1.jpeg','media/img/247_product_2.jpeg','media/img/247_product_3.jpeg','media/img/247_product_4.jpeg','media/img/247_product_5.jpeg'], rating: 4.2, reviews: 9759, inStock: true, stock: 5, brand: 'Samsung', description: 'Samsung 23L Solo Microwave Oven with Auto Cook Programs and Child Safety Lock.', descImages: ['media/img/247_desc_1.webp','media/img/247_desc_2.webp'] },
+            { id: 248, name: 'Longway Multipurpose Portable Digital Kitchen Weighing Scale (Gray)', price: 149, oldPrice: 399, images: ['media/img/248_product_1.jpeg','media/img/248_product_2.jpeg','media/img/248_product_3.jpeg','media/img/248_product_4.jpeg','media/img/248_product_5.jpeg'], rating: 4.6, reviews: 2798, inStock: true, stock: 40, brand: 'Longway', description: 'Longway Portable Digital Kitchen Weighing Scale with precise measurement.', descImages: ['media/img/248_desc_1.webp','media/img/248_desc_2.webp'] },
+            { id: 249, name: 'Prestige Nutrifry Digital Air Fryer (4.5 L)', price: 1599, oldPrice: 3498, images: ['media/img/249_product_1.jpeg','media/img/249_product_2.jpeg','media/img/249_product_3.jpeg','media/img/249_product_4.jpeg','media/img/249_product_5.jpeg'], rating: 4.6, reviews: 8182, inStock: true, stock: 7, brand: 'Prestige', description: 'Prestige Nutrifry Digital Air Fryer with 4.5L capacity and 8 preset programs.', descImages: ['media/img/249_desc_1.webp','media/img/249_desc_2.webp'] },
+            { id: 251, name: 'realme TechLife 7.5 kg 5 Star Rating Semi Automatic Top Load Washing Machine Black, Grey (RMSA755NNNDG)', price: 2999, oldPrice: 7790, images: ['media/img/251_product_1.jpeg','media/img/251_product_2.jpeg','media/img/251_product_3.jpeg','media/img/251_product_4.jpeg','media/img/251_product_5.jpeg'], rating: 4.5, reviews: 2941, inStock: true, stock: 3, brand: 'realme', description: 'realme TechLife 7.5kg Semi Automatic Top Load Washing Machine with 5 Star rating.', descImages: ['media/img/251_desc_1.webp','media/img/251_desc_2.webp'] },
+            { id: 252, name: 'Flipkart SmartBuy Pack of 40 Melamin Emerald Bloom Melamine Dishwasher Safe|Stain Resistant Dinner Set (White, Green)', price: 469, oldPrice: 1399, images: ['media/img/252_product_1.jpeg','media/img/252_product_2.jpeg','media/img/252_product_3.jpeg','media/img/252_product_4.jpeg'], rating: 4.8, reviews: 4790, inStock: true, stock: 15, brand: 'Flipkart SmartBuy', description: 'Flipkart SmartBuy Pack of 40 Melamine Dinner Set with Emerald Bloom design.', descImages: ['media/img/252_desc_1.webp','media/img/252_desc_2.webp'] },
+            { id: 253, name: 'Sowbaghya Pack of 26 Steel Dinner Set (Silver)', price: 1299, oldPrice: 2299, images: ['media/img/253_product_1.jpeg'], rating: 4.4, reviews: 3464, inStock: true, stock: 10, brand: 'Sowbaghya', description: 'Sowbaghya Pack of 26 Steel Dinner Set in silver finish.', descImages: ['media/img/253_desc_1.webp','media/img/253_desc_2.webp'] },
+            { id: 254, name: 'Flipkart SmartBuy Plastic Grocery Container - 1200 ml, 650 ml, 350 ml, 250 ml (Pack of 20, Silver)', price: 197, oldPrice: 401, images: ['media/img/254_product_1.jpeg','media/img/254_product_2.jpeg','media/img/254_product_3.jpeg','media/img/254_product_4.jpeg','media/img/254_product_5.jpeg'], rating: 4.4, reviews: 1387, inStock: true, stock: 25, brand: 'Flipkart SmartBuy', description: 'Flipkart SmartBuy Pack of 20 Plastic Grocery Containers in 4 sizes.', descImages: ['media/img/254_desc_1.webp','media/img/254_desc_2.webp'] },
+            { id: 255, name: 'Snapple TAG Stainless Steel Water Bottle Single Wall ISI Certified 1000 ml Steel Bottle (Pack of 6, Silver)', price: 649, oldPrice: 1199, images: ['media/img/255_product_1.jpeg','media/img/255_product_2.jpeg','media/img/255_product_3.jpeg','media/img/255_product_4.jpeg','media/img/255_product_5.jpeg'], rating: 4.8, reviews: 5260, inStock: true, stock: 12, brand: 'Snapple', description: 'Snapple TAG Stainless Steel Water Bottle Pack of 6 with 1000ml capacity.', descImages: ['media/img/255_desc_1.webp','media/img/255_desc_2.webp'] },
+            { id: 256, name: 'NYTK RETAIL 2025 Foldable Barbeque With - 2 Spatula,1 Bbq, 10 Stick & 1 Air Blower Charcoal Grill (Foldable)', price: 489, oldPrice: 999, images: ['media/img/256_product_1.jpeg','media/img/256_product_2.jpeg','media/img/256_product_3.jpeg','media/img/256_product_4.jpeg','media/img/256_product_5.jpeg'], rating: 4.9, reviews: 6013, inStock: true, stock: 6, brand: 'NYTK RETAIL', description: 'NYTK RETAIL 2025 Foldable Barbeque Grill with complete accessory set.', descImages: ['media/img/256_desc_1.webp','media/img/256_desc_2.webp'] },
+            { id: 257, name: 'MGKENTERPRISE Fruits/Vegetables Kitchen Rack Plastic, Steel 4 Layer Portable Modern Trolly Plastic Fruit & Vegetable Basket', price: 397, oldPrice: 799, images: ['media/img/257_product_1.jpeg','media/img/257_product_2.jpeg','media/img/257_product_3.jpeg'], rating: 4.8, reviews: 9478, inStock: true, stock: 20, brand: 'MGKENTERPRISE', description: 'MGKENTERPRISE 4-Layer Portable Kitchen Rack for fruits and vegetables.', descImages: ['media/img/257_desc_1.webp','media/img/257_desc_2.webp'] },
+            { id: 258, name: 'MILTON Go Electric Stainless Steel Kettle, 2 Litres and Flip Lid Bottle, 750 ml 2750 ml Steel Flask (Pack of 2, Silver)', price: 397, oldPrice: 1699, images: ['media/img/258_product_1.jpeg','media/img/258_product_2.jpeg','media/img/258_product_3.jpeg','media/img/258_product_4.jpeg','media/img/258_product_5.jpeg'], rating: 4.5, reviews: 8350, inStock: true, stock: 14, brand: 'MILTON', description: 'MILTON Go Electric Stainless Steel Kettle 2L with Flip Lid Bottle.', descImages: ['media/img/258_desc_1.webp','media/img/258_desc_2.webp'] },
+            { id: 259, name: 'Wildcraft Medium Check-in Suitcase (67 cm) 4 Wheels - Grit : TorQ - Black', price: 399, oldPrice: 1999, images: ['media/img/259_product_1.jpeg','media/img/259_product_2.jpeg','media/img/259_product_3.jpeg','media/img/259_product_4.jpeg','media/img/259_product_5.jpeg'], rating: 4.3, reviews: 7383, inStock: true, stock: 8, brand: 'Wildcraft', description: 'Wildcraft Medium Check-in Suitcase 67cm with 4 wheels.', descImages: ['media/img/259_desc_1.webp','media/img/259_desc_2.webp'] },
+            { id: 261, name: 'Turbo Heavy Duty - Comfortable for Home and Restaurant - Super Strong Plastic Outdoor Chair (Feather Brown, Set of 4, Pre-assembled)', price: 497, oldPrice: 2999, images: ['media/img/261_product_1.jpeg','media/img/261_product_2.jpeg','media/img/261_product_3.jpeg','media/img/261_product_4.jpeg'], rating: 4.3, reviews: 2835, inStock: true, stock: 5, brand: 'Turbo', description: 'Turbo Heavy Duty Outdoor Chair Set of 4 in Feather Brown.', descImages: ['media/img/261_desc_1.webp','media/img/261_desc_2.webp'] },
+            { id: 262, name: 'Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)', price: 419, oldPrice: 2599, images: ['media/img/262_product_1.jpeg','media/img/262_product_2.jpeg','media/img/262_product_3.jpeg','media/img/262_product_4.jpeg'], rating: 4.4, reviews: 6188, inStock: true, stock: 9, brand: 'Atomberg', description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty and BLDC Motor. High air delivery with remote control. Energy efficient 5 Star rating.', descImages: ['media/img/262_desc_1.webp','media/img/262_desc_2.webp'] },
+            { id: 263, name: 'Kanishka Celling Fan with 2 Year Warranty Energy Saving, Anti Dust, Anti Rust, High Air Delivery, Ultra High Speed 1200 mm Ceiling Fan (Smoke Brown | Pack of 2)', price: 549, oldPrice: 2499, images: ['media/img/263_product_1.jpg','media/img/263_product_2.jpg','media/img/263_product_3.jpg','media/img/263_product_4.jpg','media/img/263_product_5.jpg'], rating: 4.3, reviews: 5308, inStock: true, stock: 6, brand: 'Kanishka', description: 'Kanishka Ceiling Fan Pack of 2 with 2 Year Warranty in Smoke Brown.', descImages: ['media/img/263_desc_1.webp','media/img/263_desc_2.webp'] },
+            { id: 264, name: 'BAJAJ Premium 35 L Tower Air Cooler (White, TX 35)', price: 699, oldPrice: 2999, images: ['media/img/264_product_1.jpeg','media/img/264_product_2.jpeg','media/img/264_product_3.jpeg','media/img/264_product_4.jpeg','media/img/264_product_5.jpeg'], rating: 4.2, reviews: 1312, inStock: true, stock: 4, brand: 'BAJAJ', description: 'BAJAJ Premium 35L Tower Air Cooler in White (TX 35).', descImages: ['media/img/264_desc_1.webp','media/img/264_desc_2.webp'] },
+            { id: 276, name: 'Safari Hard Body Set of 3 Luggage 4 Wheels - Magnum Fury Set of 3 (Small 55cm | Medium 65cm | Large 75cm) 4W - Blue', price: 499, oldPrice: 3999, images: ['media/img/276_product_1.jpeg','media/img/276_product_2.jpeg','media/img/276_product_3.jpeg','media/img/276_product_4.jpeg','media/img/276_product_5.jpeg'], rating: 4.5, reviews: 1751, inStock: true, stock: 7, brand: 'Safari', description: 'Safari Hard Body Luggage Set of 3 with 4 Wheels in Blue.', descImages: ['media/img/276_desc_1.webp','media/img/276_desc_2.webp'] },
+            { id: 277, name: 'BAJAJ 2 L, 3 L, 5 L Pressure Cooker (Aluminium)', price: 399, oldPrice: 1799, images: ['media/img/277_product_1.jpeg','media/img/277_product_2.jpeg','media/img/277_product_3.jpeg','media/img/277_product_4.jpeg'], rating: 4.6, reviews: 2477, inStock: true, stock: 10, brand: 'BAJAJ', description: 'BAJAJ Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.', descImages: ['media/img/277_desc_1.webp','media/img/277_desc_2.webp'] },
+            { id: 278, name: 'SONY New SA-D40M2 All In One 4.1ch Home Theatre system with Powerful Subwoofer 100 W Bluetooth Home Audio Speaker (Black, 4.1 Channel)', price: 499, oldPrice: 9490, images: ['media/img/278_product_1.jpeg','media/img/278_product_2.jpeg','media/img/278_product_3.jpeg','media/img/278_product_4.jpeg'], rating: 4.4, reviews: 6571, inStock: true, stock: 3, brand: 'SONY', description: 'SONY SA-D40M2 4.1ch Home Theatre System with Bluetooth and subwoofer.', descImages: ['media/img/278_desc_1.webp','media/img/278_desc_2.webp'] },
+            { id: 279, name: 'GREEN SOUL Kiev Orthopedic Office Chair | Ergonomic Design with Rocking Function Leatherette Office Adjustable Arm Chair (Black, DIY(Do-It-Yourself))', price: 467, oldPrice: 7190, images: ['media/img/279_product_1.jpeg','media/img/279_product_2.jpeg','media/img/279_product_3.jpeg','media/img/279_product_4.jpeg'], rating: 4.7, reviews: 8834, inStock: true, stock: 5, brand: 'GREEN SOUL', description: 'GREEN SOUL Kiev Orthopedic Office Chair with ergonomic design.', descImages: ['media/img/279_desc_1.webp'] }
         ];
 
         // ============================================================
         // STATE
         // ============================================================
         let currentProduct = null;
+        let currentQty = 1;
+        let currentOrderStep = 1;
+        let selectedPayment = null;
+        let paymentMethods = [];
+        let orders = [];
 
         // ============================================================
-        // GO BACK FUNCTION
+        // GO BACK
         // ============================================================
         function goBack() {
             window.history.back();
         }
 
         // ============================================================
-        // LOAD PRODUCT FROM SESSION / URL
+        // LOAD PAYMENT METHODS
+        // ============================================================
+        function loadPaymentData() {
+            try {
+                const saved = localStorage.getItem('admin_payments');
+                if (saved) {
+                    paymentMethods = JSON.parse(saved);
+                } else {
+                    paymentMethods = [
+                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '9882046180@okbizaxis', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '9882046180@okbizaxis', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                    ];
+                    localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
+                }
+            } catch(e) {
+                paymentMethods = [
+                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '9882046180@okbizaxis', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '9882046180@okbizaxis', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                ];
+            }
+            try {
+                const saved = localStorage.getItem('admin_orders');
+                if (saved) orders = JSON.parse(saved);
+                else orders = [];
+            } catch(e) { orders = []; }
+        }
+
+        function saveOrders() {
+            localStorage.setItem('admin_orders', JSON.stringify(orders));
+        }
+
+        // ============================================================
+        // LOAD PRODUCT
         // ============================================================
         function loadProduct() {
             try {
@@ -1509,7 +1122,6 @@
                 }
             }
 
-            // Fallback
             const defaultProduct = PRODUCTS_DATA.find(p => p.id === 262) || {
                 id: 262,
                 name: 'Atomberg Renesa Prime Ceiling Fan',
@@ -1522,37 +1134,28 @@
                 inStock: true,
                 stock: 9,
                 description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty.',
-                descImages: [
-                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538569Atombarg description 1.webp',
-                    'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538709Atombarg description 2.webp'
-                ]
+                descImages: ['https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538569Atombarg description 1.webp', 'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538709Atombarg description 2.webp']
             };
             currentProduct = defaultProduct;
             renderProduct(currentProduct);
         }
 
         // ============================================================
-        // RENDER PRODUCT (DYNAMIC WITH DESCRIPTION IMAGES)
+        // RENDER PRODUCT
         // ============================================================
         function renderProduct(product) {
             if (!product) return;
 
-            // Brand & Name
             document.getElementById('prodBrand').textContent = product.brand || 'Flipkart';
             document.getElementById('prodName').textContent = product.name || 'Product';
 
-            // Price
             const price = product.price || 0;
             const oldPrice = product.oldPrice || 0;
             const discount = oldPrice > 0 ? Math.round((1 - price/oldPrice) * 100) : 0;
             document.getElementById('prodPrice').textContent = `₹ ${price.toLocaleString()}`;
             document.getElementById('prodMrp').textContent = oldPrice > 0 ? `₹ ${oldPrice.toLocaleString()}` : '';
             document.getElementById('prodDiscount').textContent = discount > 0 ? `${discount}% off` : '';
-            
-            // QR বাটনে প্রাইস দেখান
-            document.getElementById('payAmount').textContent = price.toFixed(0);
 
-            // Carousel Images (all product images)
             const images = product.images || [product.image];
             const carouselInner = document.getElementById('carouselInner');
             const carouselIndicators = document.getElementById('carouselIndicators');
@@ -1569,62 +1172,225 @@
                     <li data-bs-target="#sliderX" data-bs-slide-to="${i}" class="${i === 0 ? 'active' : ''}"></li>
                 `).join('');
             } else {
-                carouselInner.innerHTML = `
-                    <div class="carousel-item active">
-                        <img class="d-block img-fluid m-auto" style="height: 400px; object-fit:contain;" 
-                             src="${product.image || ''}" alt="Product"
-                             onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E'">
-                    </div>
-                `;
+                carouselInner.innerHTML = `<div class="carousel-item active"><img class="d-block img-fluid m-auto" style="height: 400px; object-fit:contain;" src="${product.image || ''}" alt="Product" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect width=%22400%22 height=%22400%22 fill=%22%23f0f0f0%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-family=%22Arial%22 font-size=%2216%22 fill=%22%23999%22%3ENo Image%3C/text%3E%3C/svg%3E'"></div>`;
                 carouselIndicators.innerHTML = `<li data-bs-target="#sliderX" data-bs-slide-to="0" class="active"></li>`;
             }
 
-            // ============================================================
-            // DESCRIPTION WITH IMAGES - DYNAMIC
-            // ============================================================
             const descContainer = document.getElementById('productDescription');
-            
             let descImages = product.descImages || [];
-            
-            // If descImages is empty, check PRODUCTS_DATA again
             if (descImages.length === 0) {
                 const fullProduct = PRODUCTS_DATA.find(p => p.id === product.id);
                 if (fullProduct && fullProduct.descImages && fullProduct.descImages.length > 0) {
                     descImages = fullProduct.descImages;
                 }
             }
-            
             let descHTML = '';
-            
-            // Description text
             if (product.description) {
                 descHTML += `<div style="padding:12px 16px; font-size:14px; color:#212121; line-height:1.8;">${product.description}</div>`;
             }
-            
-            // Render description images dynamically
             if (descImages && descImages.length > 0) {
-                descHTML += descImages.map(img => `
-                    <img width="100%" src="${img}" alt="Description Image" 
-                         onerror="this.style.display='none'" 
-                         style="display:block; margin:0; max-width:100%;" />
-                `).join('');
+                descHTML += descImages.map(img => `<img width="100%" src="${img}" alt="Description Image" onerror="this.style.display='none'" style="display:block; margin:0; max-width:100%;" />`).join('');
             }
-            
-            // Fallback if no descImages
             if (!descHTML || descHTML.trim() === '') {
-                descHTML = `
-                    <div style="padding:24px 16px; color:#999; text-align:center; background:#f9f9f9; border-radius:8px; margin:8px 12px;">
-                        <i class="fas fa-image" style="font-size:32px; opacity:0.3; display:block; margin-bottom:8px;"></i>
-                        <span style="font-size:14px;">No description images available</span>
-                    </div>
-                `;
+                descHTML = `<div style="padding:24px 16px; color:#999; text-align:center;">No description available</div>`;
             }
-            
             descContainer.innerHTML = descHTML;
+
+            updateOrderSummary();
         }
 
         // ============================================================
-        // QR CODE PAYMENT SYSTEM
+        // ORDER SUMMARY
+        // ============================================================
+        function updateOrderSummary() {
+            if (!currentProduct) return;
+            const price = currentProduct.price || 0;
+            const total = price * currentQty;
+            const oldPrice = currentProduct.oldPrice || 0;
+
+            document.getElementById('summaryProduct').textContent = currentProduct.name || 'Product';
+            document.getElementById('summaryQty').textContent = currentQty;
+            document.getElementById('summaryPrice').textContent = `₹${price.toLocaleString()}`;
+            document.getElementById('summaryTotal').textContent = `₹${total.toLocaleString()}`;
+            document.getElementById('mrpOrder').textContent = oldPrice > 0 ? `₹${oldPrice.toLocaleString()}` : `₹${price.toLocaleString()}`;
+            document.getElementById('sellingPriceOrder').textContent = `₹${total.toLocaleString()}`;
+        }
+
+        // ============================================================
+        // VALIDATION
+        // ============================================================
+        function validateField(inputId, errorId, condition) {
+            const input = document.getElementById(inputId);
+            const error = document.getElementById(errorId);
+            if (!input || !error) return false;
+            const isValid = condition(input.value);
+            input.classList.remove('error', 'success');
+            error.classList.remove('show');
+            if (isValid) {
+                input.classList.add('success');
+                return true;
+            } else {
+                input.classList.add('error');
+                error.classList.add('show');
+                return false;
+            }
+        }
+
+        function validateName() {
+            return validateField('ordName', 'errName', (val) => val.trim().length >= 2);
+        }
+        function validatePhone() {
+            return validateField('ordPhone', 'errPhone', (val) => /^[0-9]{10}$/.test(val.trim()));
+        }
+        function validatePincode() {
+            return validateField('ordPincode', 'errPincode', (val) => /^[0-9]{6}$/.test(val.trim()));
+        }
+        function validateCity() {
+            return validateField('ordCity', 'errCity', (val) => val.trim().length >= 2);
+        }
+        function validateState() {
+            return validateField('ordState', 'errState', (val) => val.trim() !== '');
+        }
+        function validateAddress() {
+            return validateField('ordAddress', 'errAddress', (val) => val.trim().length >= 2);
+        }
+
+        function initValidation() {
+            const fields = [
+                { id: 'ordName', fn: validateName },
+                { id: 'ordPhone', fn: validatePhone },
+                { id: 'ordPincode', fn: validatePincode },
+                { id: 'ordCity', fn: validateCity },
+                { id: 'ordState', fn: validateState },
+                { id: 'ordAddress', fn: validateAddress }
+            ];
+            fields.forEach(({ id, fn }) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.addEventListener('input', fn);
+                    el.addEventListener('change', fn);
+                    el.addEventListener('blur', fn);
+                }
+            });
+        }
+
+        function validateStep1() {
+            const isNameValid = validateName();
+            const isPhoneValid = validatePhone();
+            const isPincodeValid = validatePincode();
+            const isCityValid = validateCity();
+            const isStateValid = validateState();
+            const isAddressValid = validateAddress();
+
+            if (isNameValid && isPhoneValid && isPincodeValid && isCityValid && isStateValid && isAddressValid) {
+                goToOrderStep(2);
+            } else {
+                showToast('❌ Please fill all required fields correctly');
+            }
+        }
+
+        // ============================================================
+        // ORDER PAGE NAVIGATION
+        // ============================================================
+        function openOrderPage() {
+            if (!currentProduct) { showToast('❌ No product selected'); return; }
+            if (!currentProduct.inStock) { showToast('❌ Product is out of stock'); return; }
+
+            currentOrderStep = 1;
+            selectedPayment = null;
+            document.getElementById('orderPage').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            document.getElementById('ordName').value = '';
+            document.getElementById('ordPhone').value = '';
+            document.getElementById('ordPincode').value = '';
+            document.getElementById('ordCity').value = '';
+            document.getElementById('ordState').value = '';
+            document.getElementById('ordAddress').value = '';
+            document.getElementById('ordAddress2').value = '';
+
+            document.querySelectorAll('#step1 .form-group input, #step1 .form-group select').forEach(el => {
+                el.classList.remove('error', 'success');
+            });
+            document.querySelectorAll('#step1 .error-msg').forEach(el => el.classList.remove('show'));
+
+            updateOrderSummary();
+            renderOrderPaymentMethods();
+            goToOrderStep(1);
+        }
+
+        function closeOrderPage() {
+            document.getElementById('orderPage').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function goToOrderStep(step) {
+            currentOrderStep = step;
+            document.querySelectorAll('.order-steps .step').forEach(el => {
+                const s = parseInt(el.dataset.step);
+                el.classList.remove('active', 'done');
+                if (s === step) el.classList.add('active');
+                else if (s < step) el.classList.add('done');
+            });
+            document.querySelectorAll('.step-content').forEach((el, i) => {
+                el.classList.toggle('active', (i + 1) === step);
+            });
+            document.querySelector('.order-container').scrollTop = 0;
+        }
+
+        // ============================================================
+        // RENDER PAYMENT METHODS
+        // ============================================================
+        function renderOrderPaymentMethods() {
+            const container = document.getElementById('paymentMethods');
+            if (!container) return;
+            const enabled = paymentMethods.filter(p => p.status === 'enabled');
+            if (enabled.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
+                document.getElementById('confirmBtn').disabled = true;
+                return;
+            }
+            document.getElementById('confirmBtn').disabled = false;
+
+            const iconMap = { phonepe: 'phonepe', paytm: 'paytm', googlepay: 'gpay', upi: 'upi' };
+            const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm', googlepay: 'Google Pay', upi: 'UPI' };
+
+            container.innerHTML = enabled.map(p => {
+                let logoPath = '';
+                if (p.name === 'phonepe') {
+                    logoPath = 'phonePe.png';
+                } else if (p.name === 'paytm') {
+                    logoPath = 'paytm.png';
+                } else if (p.logo) {
+                    logoPath = p.logo;
+                }
+                const hasLogo = logoPath && logoPath.trim() !== '';
+                return `
+                    <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
+                        <div class="pm-icon ${iconMap[p.name] || 'upi'}">
+                            ${hasLogo ? `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}\\'></i>';" />` : `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}"></i>`}
+                        </div>
+                        <div class="pm-info">
+                            <div class="pm-name">${displayMap[p.name] || p.name}</div>
+                            <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
+                        </div>
+                        <div class="pm-check"></div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function selectOrderPayment(id) {
+            selectedPayment = id;
+            document.querySelectorAll('.pm-option').forEach(el => {
+                const onclickStr = el.getAttribute('onclick') || '';
+                el.classList.toggle('selected', onclickStr.includes(id));
+            });
+            document.getElementById('confirmBtn').disabled = false;
+        }
+
+        // ============================================================
+        // CONFIRM ORDER WITH QR
         // ============================================================
         const UPI_SETTINGS = {
             upiID: '9882046180@okbizaxis',
@@ -1632,54 +1398,94 @@
             currency: 'INR'
         };
 
-function showQRCode() {
-    if (!currentProduct) {
-        showToast('❌ No product selected');
-        return;
-    }
+        function confirmOrderWithQR() {
+            if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
+            const method = paymentMethods.find(p => p.id === selectedPayment);
+            if (!method) { showToast('❌ Invalid payment method'); return; }
 
-    const amount = currentProduct.price || 0;
-    if (amount <= 0) {
-        showToast('❌ Invalid amount');
-        return;
-    }
+            const name = document.getElementById('ordName').value.trim();
+            const phone = document.getElementById('ordPhone').value.trim();
+            const pincode = document.getElementById('ordPincode').value.trim();
+            const city = document.getElementById('ordCity').value.trim();
+            const state = document.getElementById('ordState').value;
+            const address = document.getElementById('ordAddress').value.trim();
+            const address2 = document.getElementById('ordAddress2').value.trim();
 
-    const orderId = 'FLIP-' + Date.now().toString().slice(-6);
-    
-    document.getElementById('qrAmount').textContent = amount.toFixed(0);
-    document.getElementById('qrOrderId').textContent = orderId;
-    document.getElementById('qrUPI').textContent = UPI_SETTINGS.upiID;
+            if (!name || !phone || !pincode || !city || !address) {
+                showToast('❌ Please fill all required fields');
+                return;
+            }
+            if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
+            if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
 
-    // 🔥 QR কোডের জন্য `upi://` লিংক (QR স্ক্যান করার জন্য)
-    const upiURL = `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
-    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
-    
-    document.getElementById('qrImage').src = qrCodeURL;
-    document.getElementById('qrOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
+            const orderId = 'FLIP-' + Date.now().toString().slice(-6);
+            const amount = currentProduct.price * currentQty;
 
-    // 🔥 মোবাইলে অ্যাপ ওপেন করার জন্য আলাদা আলাদা ডিপ লিংক
-    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // PhonePe চেষ্টা
-        setTimeout(() => {
-            window.open(`phonepe://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
-        }, 300);
-        
-        // 1 সেকেন্ড পর Paytm চেষ্টা (যদি PhonePe না খোলে)
-        setTimeout(() => {
-            window.open(`paytmmp://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
-        }, 1000);
-        
-        // 2 সেকেন্ড পর Google Pay চেষ্টা
-        setTimeout(() => {
-            window.open(`gpay://upi/pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
-        }, 1700);
-    }
-}
+            const order = {
+                id: orderId,
+                product: currentProduct.name,
+                productId: currentProduct.id,
+                quantity: currentQty,
+                total: amount,
+                customer: name,
+                phone: phone,
+                address: address + (address2 ? ', ' + address2 : ''),
+                city: city,
+                state: state,
+                pincode: pincode,
+                payment: method.name,
+                status: 'pending',
+                date: new Date().toISOString().split('T')[0]
+            };
+            orders.unshift(order);
+            saveOrders();
 
-        function closeQR() {
-            document.getElementById('qrOverlay').classList.remove('active');
+            // QR Modal দেখান
+            showQRModal(amount, orderId, method);
+        }
+
+        // ============================================================
+        // QR MODAL
+        // ============================================================
+        function showQRModal(amount, orderId, method) {
+            document.getElementById('qrAmount').textContent = amount.toFixed(0);
+            document.getElementById('qrOrderId').textContent = orderId;
+            document.getElementById('qrUPI').textContent = UPI_SETTINGS.upiID;
+
+            const methodNames = {
+                'phonepe': '📱 PhonePe',
+                'paytm': '💳 Paytm',
+                'googlepay': '🔵 Google Pay',
+                'upi': '📱 UPI'
+            };
+            document.getElementById('qrAppName').textContent = methodNames[method.name] || '📱 UPI';
+
+            const upiURL = `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
+            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
+            
+            document.getElementById('qrImage').src = qrCodeURL;
+            document.getElementById('qrModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+
+            // অ্যাপ ওপেন করুন
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                setTimeout(() => {
+                    const deepLinks = {
+                        'phonepe': `phonepe://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                        'paytm': `paytmmp://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                        'googlepay': `gpay://upi/pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                        'upi': `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`
+                    };
+                    window.location.href = deepLinks[method.name] || deepLinks['upi'];
+                }, 500);
+            }
+        }
+
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.remove('active');
             document.body.style.overflow = '';
+            // অর্ডার সাবমিটের পর ইউজারকে সাকসেস পেজে পাঠান
+            // window.location.href = `success.html?orderId=${document.getElementById('qrOrderId').textContent}`;
         }
 
         // ============================================================
@@ -1733,16 +1539,44 @@ function showQRCode() {
         // INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
+            loadPaymentData();
             loadProduct();
+            initValidation();
+
+            document.getElementById('orderPage').addEventListener('click', function(e) {
+                if (e.target === this) closeOrderPage();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    if (document.getElementById('orderPage').classList.contains('active')) closeOrderPage();
+                    if (document.getElementById('qrModal').classList.contains('active')) closeQRModal();
+                }
+            });
             setTimeout(hideLoader, 600);
         });
 
         // Expose functions
         window.goBack = goBack;
-        window.showQRCode = showQRCode;
-        window.closeQR = closeQR;
+        window.openOrderPage = openOrderPage;
+        window.closeOrderPage = closeOrderPage;
+        window.goToOrderStep = goToOrderStep;
+        window.selectOrderPayment = selectOrderPayment;
+        window.confirmOrderWithQR = confirmOrderWithQR;
+        window.closeQRModal = closeQRModal;
         window.addToCart = addToCart;
         window.showToast = showToast;
+        window.validateStep1 = validateStep1;
+        window.updateQty = function(delta) {
+            const newQty = currentQty + delta;
+            if (newQty < 1) return;
+            const maxStock = currentProduct?.stock || 99;
+            if (newQty > maxStock) {
+                showToast(`Only ${maxStock} items available`);
+                return;
+            }
+            currentQty = newQty;
+            updateOrderSummary();
+        };
     </script>
 </body>
 </html>
