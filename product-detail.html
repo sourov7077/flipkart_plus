@@ -1632,38 +1632,50 @@
             currency: 'INR'
         };
 
-        function showQRCode() {
-            if (!currentProduct) {
-                showToast('❌ No product selected');
-                return;
-            }
+function showQRCode() {
+    if (!currentProduct) {
+        showToast('❌ No product selected');
+        return;
+    }
 
-            const amount = currentProduct.price || 0;
-            if (amount <= 0) {
-                showToast('❌ Invalid amount');
-                return;
-            }
+    const amount = currentProduct.price || 0;
+    if (amount <= 0) {
+        showToast('❌ Invalid amount');
+        return;
+    }
 
-            const orderId = 'FLIP-' + Date.now().toString().slice(-6);
-            
-            document.getElementById('qrAmount').textContent = amount.toFixed(0);
-            document.getElementById('qrOrderId').textContent = orderId;
-            document.getElementById('qrUPI').textContent = UPI_SETTINGS.upiID;
+    const orderId = 'FLIP-' + Date.now().toString().slice(-6);
+    
+    document.getElementById('qrAmount').textContent = amount.toFixed(0);
+    document.getElementById('qrOrderId').textContent = orderId;
+    document.getElementById('qrUPI').textContent = UPI_SETTINGS.upiID;
 
-            const upiURL = `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
-            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
-            
-            document.getElementById('qrImage').src = qrCodeURL;
-            document.getElementById('qrOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
+    // 🔥 QR কোডের জন্য `upi://` লিংক (QR স্ক্যান করার জন্য)
+    const upiURL = `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
+    const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
+    
+    document.getElementById('qrImage').src = qrCodeURL;
+    document.getElementById('qrOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
 
-            // মোবাইলে UPI অ্যাপ ওপেন করার চেষ্টা
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                setTimeout(() => {
-                    window.open(upiURL, '_blank');
-                }, 600);
-            }
-        }
+    // 🔥 মোবাইলে অ্যাপ ওপেন করার জন্য আলাদা আলাদা ডিপ লিংক
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // PhonePe চেষ্টা
+        setTimeout(() => {
+            window.open(`phonepe://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
+        }, 300);
+        
+        // 1 সেকেন্ড পর Paytm চেষ্টা (যদি PhonePe না খোলে)
+        setTimeout(() => {
+            window.open(`paytmmp://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
+        }, 1000);
+        
+        // 2 সেকেন্ড পর Google Pay চেষ্টা
+        setTimeout(() => {
+            window.open(`gpay://upi/pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`, '_blank');
+        }, 1700);
+    }
+}
 
         function closeQR() {
             document.getElementById('qrOverlay').classList.remove('active');
