@@ -1398,51 +1398,80 @@
             currency: 'INR'
         };
 
-        function confirmOrderWithQR() {
-            if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
-            const method = paymentMethods.find(p => p.id === selectedPayment);
-            if (!method) { showToast('❌ Invalid payment method'); return; }
+function confirmOrderWithQR() {
+    if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
+    const method = paymentMethods.find(p => p.id === selectedPayment);
+    if (!method) { showToast('❌ Invalid payment method'); return; }
 
-            const name = document.getElementById('ordName').value.trim();
-            const phone = document.getElementById('ordPhone').value.trim();
-            const pincode = document.getElementById('ordPincode').value.trim();
-            const city = document.getElementById('ordCity').value.trim();
-            const state = document.getElementById('ordState').value;
-            const address = document.getElementById('ordAddress').value.trim();
-            const address2 = document.getElementById('ordAddress2').value.trim();
+    const name = document.getElementById('ordName').value.trim();
+    const phone = document.getElementById('ordPhone').value.trim();
+    const pincode = document.getElementById('ordPincode').value.trim();
+    const city = document.getElementById('ordCity').value.trim();
+    const state = document.getElementById('ordState').value;
+    const address = document.getElementById('ordAddress').value.trim();
+    const address2 = document.getElementById('ordAddress2').value.trim();
 
-            if (!name || !phone || !pincode || !city || !address) {
-                showToast('❌ Please fill all required fields');
-                return;
-            }
-            if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
-            if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
+    if (!name || !phone || !pincode || !city || !address) {
+        showToast('❌ Please fill all required fields');
+        return;
+    }
+    if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
+    if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
 
-            const orderId = 'FLIP-' + Date.now().toString().slice(-6);
-            const amount = currentProduct.price * currentQty;
+    const orderId = 'FLIP-' + Date.now().toString().slice(-6);
+    const amount = currentProduct.price * currentQty;
 
-            const order = {
-                id: orderId,
-                product: currentProduct.name,
-                productId: currentProduct.id,
-                quantity: currentQty,
-                total: amount,
-                customer: name,
-                phone: phone,
-                address: address + (address2 ? ', ' + address2 : ''),
-                city: city,
-                state: state,
-                pincode: pincode,
-                payment: method.name,
-                status: 'pending',
-                date: new Date().toISOString().split('T')[0]
-            };
-            orders.unshift(order);
-            saveOrders();
+    const order = {
+        id: orderId,
+        product: currentProduct.name,
+        productId: currentProduct.id,
+        quantity: currentQty,
+        total: amount,
+        customer: name,
+        phone: phone,
+        address: address + (address2 ? ', ' + address2 : ''),
+        city: city,
+        state: state,
+        pincode: pincode,
+        payment: method.name,
+        status: 'pending',
+        date: new Date().toISOString().split('T')[0]
+    };
+    orders.unshift(order);
+    saveOrders();
 
-            // QR Modal দেখান
-            showQRModal(amount, orderId, method);
-        }
+    // 🔥 ডাইরেক্ট ডিপ লিংক – QR Modal বাদ!
+    let deepLink = method.deepLink || '';
+    deepLink = deepLink.replace(/{amount}/g, amount);
+    deepLink = deepLink.replace(/{orderId}/g, orderId);
+
+    if (!deepLink || deepLink === method.deepLink) {
+        const baseLinks = {
+            'phonepe': `phonepe://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
+            'paytm': `paytmmp://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
+            'googlepay': `gpay://upi/pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
+            'upi': `upi://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`
+        };
+        deepLink = baseLinks[method.name] || baseLinks['upi'];
+    }
+
+    // অর্ডার পেজ বন্ধ করে অ্যাপ ওপেন করো
+    closeOrderPage();
+    showToast('⏳ Opening payment app...');
+
+    // সরাসরি অ্যাপে পাঠানো (চ্যাট উইন্ডো আসবে)
+    setTimeout(() => {
+        window.open(deepLink, '_blank');
+    }, 500);
+
+    // সাকসেস পেজে পাঠানোর জন্য (অপশনাল)
+    setTimeout(() => {
+        window.location.href = `success.html?orderId=${orderId}&saved=${Math.round(amount * 0.1)}`;
+    }, 5000);
+}
+
+
+
 
         // ============================================================
         // QR MODAL
