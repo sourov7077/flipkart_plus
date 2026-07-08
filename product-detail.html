@@ -1445,15 +1445,15 @@ function confirmOrderWithQR() {
     deepLink = deepLink.replace(/{amount}/g, amount);
     deepLink = deepLink.replace(/{orderId}/g, orderId);
 
-    if (!deepLink || deepLink === method.deepLink) {
-        const baseLinks = {
-            'phonepe': `phonepe://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
-            'paytm': `paytmmp://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
-            'googlepay': `gpay://upi/pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`,
-            'upi': `upi://pay?pa=${method.receiver}&pn=MyStore&am=${amount}&cu=INR&tn=Order_${orderId}`
-        };
-        deepLink = baseLinks[method.name] || baseLinks['upi'];
-    }
+if (!deepLink || deepLink === method.deepLink) {
+    const baseLinks = {
+        'phonepe': `phonepe://pay?pa=${method.receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`,
+        'paytm': `paytmmp://pay?pa=${method.receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`,
+        'googlepay': `gpay://upi/pay?pa=${method.receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`,
+        'upi': `upi://pay?pa=${method.receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`
+    };
+    deepLink = baseLinks[method.name] || baseLinks['upi'];
+}
 
     // অর্ডার পেজ বন্ধ করে অ্যাপ ওপেন করো
     closeOrderPage();
