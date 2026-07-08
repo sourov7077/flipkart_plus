@@ -988,7 +988,7 @@
             <div class="qr-order-id">Order: <span id="qrOrderId">FLIP-XXXXXX</span></div>
             <div class="qr-upi-id">
                 <i class="fas fa-circle-check"></i> 
-                <span id="qrUPI">9882046180@okbizaxis</span>
+                <span id="qrUPI">7908669961@ptyes</span>
             </div>
             <div class="qr-app-name" id="qrAppName">📱 PhonePe</div>
             <p style="color:#888; font-size:13px; margin:4px 0 12px;">
@@ -1069,15 +1069,15 @@
                     paymentMethods = JSON.parse(saved);
                 } else {
                     paymentMethods = [
-                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '9882046180@okbizaxis', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
-                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '9882046180@okbizaxis', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '7908669961@ptyes', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '7908669961@ptyes', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
                     ];
                     localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
                 }
             } catch(e) {
                 paymentMethods = [
-                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '9882046180@okbizaxis', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
-                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '9882046180@okbizaxis', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=9882046180@okbizaxis&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
+                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: '7908669961@ptyes', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' },
+                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: '7908669961@ptyes', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=7908669961@ptyes&pn=Flipkart&am={amount}&cu=INR&tn=Order_{orderId}' }
                 ];
             }
             try {
@@ -1393,7 +1393,7 @@
         // CONFIRM ORDER WITH QR
         // ============================================================
         const UPI_SETTINGS = {
-            upiID: '9882046180@okbizaxis',
+            upiID: '7908669961@ptyes',
             name: 'Flipkart Plus',
             currency: 'INR'
         };
