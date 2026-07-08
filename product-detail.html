@@ -988,7 +988,7 @@
             <div class="qr-order-id">Order: <span id="qrOrderId">FLIP-XXXXXX</span></div>
             <div class="qr-upi-id">
                 <i class="fas fa-circle-check"></i> 
-                <span id="qrUPI">paytm.s1rsa53@pty</span>
+                <span id="qrUPI">paytm.s2zncsq@pty</span>
             </div>
             <div class="qr-app-name" id="qrAppName">📱 PhonePe</div>
             <p style="color:#888; font-size:13px; margin:4px 0 12px;">
@@ -1069,15 +1069,15 @@
                     paymentMethods = JSON.parse(saved);
                 } else {
                     paymentMethods = [
-                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s1rsa53@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s1rsa53@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' },
-                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s1rsa53@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s1rsa53@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' }
+                        { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' },
+                        { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' }
                     ];
                     localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
                 }
             } catch(e) {
                 paymentMethods = [
-                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s1rsa53@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s1rsa53@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' },
-                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s1rsa53@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s1rsa53@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' }
+                    { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' },
+                    { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=MyStore&am={amount}&cu=INR&tn=Order_{orderId}' }
                 ];
             }
             try {
@@ -1393,7 +1393,7 @@
         // CONFIRM ORDER WITH QR
         // ============================================================
         const UPI_SETTINGS = {
-            upiID: 'paytm.s1rsa53@pty',
+            upiID: 'paytm.s2zncsq@pty',
             name: 'MyStore',
             currency: 'INR'
         };
