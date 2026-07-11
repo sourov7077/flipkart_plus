@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Product Detail – Flipkart</title>
-    <link rel="icon" type="image/x-icon" href="https://filpkaart-sammar.shop/hotsale/assets/media/favicon.png">
     <link rel="icon" type="image/png" href="favicon.png" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -666,6 +665,41 @@
             color: var(--primary-blue);
             margin: 4px 0;
         }
+        .qr-modal-box .qr-actions {
+            display: flex;
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .qr-modal-box .qr-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .qr-modal-box .qr-actions .btn-download {
+            background: #2874f0;
+            color: #fff;
+        }
+        .qr-modal-box .qr-actions .btn-download:hover {
+            background: #1a5bc7;
+            transform: translateY(-2px);
+        }
+        .qr-modal-box .qr-actions .btn-scan {
+            background: #fb641b;
+            color: #fff;
+        }
+        .qr-modal-box .qr-actions .btn-scan:hover {
+            background: #e85a0e;
+            transform: translateY(-2px);
+        }
         .qr-modal-box .qr-close-btn {
             width: 100%;
             padding: 12px;
@@ -709,6 +743,7 @@
             .detail-header .header-title { font-size: 14px; }
             .qr-modal-box { padding: 20px; }
             .qr-modal-box .qr-image img { width: 180px; height: 180px; }
+            .qr-modal-box .qr-actions { flex-direction: column; }
         }
     </style>
 </head>
@@ -842,7 +877,7 @@
 
         </div>
 
-        <!-- BOTTOM BUTTONS (Add to Cart & Buy Now) -->
+        <!-- BOTTOM BUTTONS -->
         <div class="button-container flex">
             <button class="buynow-button buynow-button-white product-page-buy" onclick="addToCart()">
                 <i class="fas fa-shopping-cart me-1"></i> Add to Cart
@@ -854,7 +889,7 @@
 
     </div>
 
-    <!-- ORDER PAGE (STEP 1: Address, STEP 2: Summary, STEP 3: Payment) -->
+    <!-- ORDER PAGE -->
     <div class="order-page" id="orderPage">
         <div class="order-container">
             <button class="order-close" onclick="closeOrderPage()">&times;</button>
@@ -988,12 +1023,23 @@
             <div class="qr-order-id">Order: <span id="qrOrderId">FLIP-XXXXXX</span></div>
             <div class="qr-upi-id">
                 <i class="fas fa-circle-check"></i> 
-                <span id="qrUPI">paytm.s1rsa53@pty</span>
+                <span id="qrUPI">paytm.s221i99@pty</span>
             </div>
             <div class="qr-app-name" id="qrAppName">📱 PhonePe</div>
             <p style="color:#888; font-size:13px; margin:4px 0 12px;">
                 <i class="fas fa-phone"></i> Scan with selected UPI app
             </p>
+
+            <!-- ✅ QR Actions: Download & Scan -->
+            <div class="qr-actions">
+                <button class="btn-download" onclick="downloadQR()">
+                    <i class="fas fa-download"></i> Download QR
+                </button>
+                <button class="btn-scan" onclick="openUPIApp()">
+                    <i class="fas fa-camera"></i> Scan Now
+                </button>
+            </div>
+
             <button class="qr-close-btn" onclick="closeQRModal()">
                 <i class="fas fa-times"></i> Close
             </button>
@@ -1043,13 +1089,27 @@
         ];
 
         // ============================================================
-        // STATIC PAYMENT METHODS (localStorage ছাড়া)
+        // STATIC PAYMENT METHODS (শুধু ২টি - PhonePe ও Paytm, ডিপ লিংক বাদ)
         // ============================================================
         const PAYMENT_METHODS = [
-            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
-            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
-            { id: 3, name: 'googlepay', displayName: 'Google Pay', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Google Pay', status: 'enabled', deepLink: 'gpay://upi/pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
-            { id: 4, name: 'upi', displayName: 'UPI', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay via UPI', status: 'enabled', deepLink: 'upi://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' }
+            { 
+                id: 1, 
+                name: 'phonepe', 
+                displayName: 'PhonePe', 
+                receiver: 'paytm.s221i99@pty',  // ← আপনার দেওয়া UPI
+                instructions: 'Pay with PhonePe', 
+                status: 'enabled',
+                logo: 'phonePe.png'
+            },
+            { 
+                id: 2, 
+                name: 'paytm', 
+                displayName: 'Paytm', 
+                receiver: 'paytm.s221i99@pty',   // ← আপনার দেওয়া UPI
+                instructions: 'Pay with Paytm', 
+                status: 'enabled',
+                logo: 'paytm.png'
+            }
         ];
 
         // ============================================================
@@ -1305,41 +1365,40 @@
         // ============================================================
         // RENDER PAYMENT METHODS
         // ============================================================
-function renderOrderPaymentMethods() {
-    const container = document.getElementById('paymentMethods');
-    if (!container) return;
-    
-    const enabled = PAYMENT_METHODS.filter(p => p.status === 'enabled');
-    if (enabled.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
-        document.getElementById('confirmBtn').disabled = true;
-        return;
-    }
-    document.getElementById('confirmBtn').disabled = false;
+        function renderOrderPaymentMethods() {
+            const container = document.getElementById('paymentMethods');
+            if (!container) return;
+            
+            const enabled = PAYMENT_METHODS.filter(p => p.status === 'enabled');
+            if (enabled.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
+                document.getElementById('confirmBtn').disabled = true;
+                return;
+            }
+            document.getElementById('confirmBtn').disabled = false;
 
-    const iconMap = { phonepe: 'phonepe', paytm: 'paytm' };
-    const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm' };
+            const iconMap = { phonepe: 'phonepe', paytm: 'paytm' };
+            const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm' };
 
-    container.innerHTML = enabled.map(p => {
-        // লোগো পাথ চেক
-        const logoPath = p.logo || (p.name === 'phonepe' ? 'phonePe.png' : p.name === 'paytm' ? 'paytm.png' : '');
-        const hasLogo = logoPath && logoPath.trim() !== '';
-        
-        return `
-            <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
-                <div class="pm-icon ${iconMap[p.name] || 'upi'}">
-                    ${hasLogo ? `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}\\'></i>';" />` : 
-                    `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}"></i>`}
-                </div>
-                <div class="pm-info">
-                    <div class="pm-name">${displayMap[p.name] || p.name}</div>
-                    <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
-                </div>
-                <div class="pm-check"></div>
-            </div>
-        `;
-    }).join('');
-}
+            container.innerHTML = enabled.map(p => {
+                const logoPath = p.logo || (p.name === 'phonepe' ? 'phonePe.png' : p.name === 'paytm' ? 'paytm.png' : '');
+                const hasLogo = logoPath && logoPath.trim() !== '';
+                
+                return `
+                    <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
+                        <div class="pm-icon ${iconMap[p.name] || 'upi'}">
+                            ${hasLogo ? `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}\\'></i>';" />` : 
+                            `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}"></i>`}
+                        </div>
+                        <div class="pm-info">
+                            <div class="pm-name">${displayMap[p.name] || p.name}</div>
+                            <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
+                        </div>
+                        <div class="pm-check"></div>
+                    </div>
+                `;
+            }).join('');
+        }
 
         function selectOrderPayment(id) {
             selectedPayment = id;
@@ -1351,14 +1410,8 @@ function renderOrderPaymentMethods() {
         }
 
         // ============================================================
-        // CONFIRM ORDER WITH QR
+        // CONFIRM ORDER – শুধু QR কোড দেখান (ডিপ লিংক বাদ)
         // ============================================================
-        const UPI_SETTINGS = {
-            upiID: 'paytm.s2zncsq@pty',
-            name: 'Flipkart Payments',
-            currency: 'INR'
-        };
-
         function confirmOrderWithQR() {
             if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
             const method = PAYMENT_METHODS.find(p => p.id === selectedPayment);
@@ -1382,7 +1435,7 @@ function renderOrderPaymentMethods() {
             const orderId = 'FLIP-' + Date.now().toString().slice(-6);
             const amount = currentProduct.price * currentQty;
 
-            // অর্ডার সেভ করা (অপশনাল)
+            // অর্ডার সেভ করা
             const order = {
                 id: orderId,
                 product: currentProduct.name,
@@ -1407,30 +1460,69 @@ function renderOrderPaymentMethods() {
                 localStorage.setItem('orders', JSON.stringify(orders));
             } catch(e) {}
 
-            // ডিপ লিংক তৈরি
-            const receiver = method.receiver || UPI_SETTINGS.upiID;
-            const baseLink = `upi://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
+            // ✅ শুধু QR কোড তৈরি করুন (ডিপ লিংক ছাড়া)
+            const receiver = method.receiver || 'paytm.s221i99@pty';
+            const upiURL = `upi://pay?pa=${receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`;
+            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
 
-            const deepLinks = {
-                phonepe: `phonepe://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                paytm: `paytmmp://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                googlepay: `gpay://upi/pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                upi: baseLink
-            };
+            // QR মডাল দেখান
+            document.getElementById('qrAmount').textContent = amount.toFixed(0);
+            document.getElementById('qrOrderId').textContent = orderId;
+            document.getElementById('qrUPI').textContent = receiver;
+            document.getElementById('qrAppName').textContent = method.displayName || method.name;
+            document.getElementById('qrImage').src = qrCodeURL;
 
-            const redirectUrl = deepLinks[method.name] || baseLink;
+            // QR মডাল ওপেন করুন
+            document.getElementById('qrModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
 
             closeOrderPage();
-            showToast('⏳ Opening payment app...');
+            showToast('✅ QR Code ready! Scan to pay.');
+        }
 
-            setTimeout(function() {
-                window.location.href = redirectUrl;
-            }, 500);
+        // ============================================================
+        // QR ডাউনলোড ফাংশন
+        // ============================================================
+        function downloadQR() {
+            const img = document.getElementById('qrImage');
+            if (!img || !img.src) { showToast('❌ No QR code to download'); return; }
+            
+            const link = document.createElement('a');
+            link.download = 'QR-Payment.png';
+            link.href = img.src;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast('✅ QR Code downloaded!');
+        }
 
-            // ফ্যালব্যাক – ৫ সেকেন্ড পর success পেজে
-            setTimeout(function() {
-                window.location.href = 'success.html?orderId=' + orderId;
-            }, 5000);
+        // ============================================================
+        // স্ক্যান বাটন – অটোমেটিক UPI অ্যাপ ওপেন করবে
+        // ============================================================
+        function openUPIApp() {
+            const upiID = document.getElementById('qrUPI').textContent;
+            const amount = document.getElementById('qrAmount').textContent;
+            const orderId = document.getElementById('qrOrderId').textContent;
+            
+            if (!upiID) { showToast('❌ No UPI ID found'); return; }
+            
+            const upiURL = `upi://pay?pa=${upiID}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`;
+            
+            // মোবাইল ডিভাইস চেক
+            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                window.location.href = upiURL;
+                showToast('⏳ Opening UPI app...');
+            } else {
+                showToast('⚠️ Please scan QR code from your mobile');
+            }
+        }
+
+        // ============================================================
+        // QR MODAL ক্লোজ
+        // ============================================================
+        function closeQRModal() {
+            document.getElementById('qrModal').classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         // ============================================================
@@ -1493,6 +1585,7 @@ function renderOrderPaymentMethods() {
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (document.getElementById('orderPage').classList.contains('active')) closeOrderPage();
+                    if (document.getElementById('qrModal').classList.contains('active')) closeQRModal();
                 }
             });
             setTimeout(hideLoader, 600);
@@ -1505,6 +1598,9 @@ function renderOrderPaymentMethods() {
         window.goToOrderStep = goToOrderStep;
         window.selectOrderPayment = selectOrderPayment;
         window.confirmOrderWithQR = confirmOrderWithQR;
+        window.downloadQR = downloadQR;
+        window.openUPIApp = openUPIApp;
+        window.closeQRModal = closeQRModal;
         window.addToCart = addToCart;
         window.showToast = showToast;
         window.validateStep1 = validateStep1;
