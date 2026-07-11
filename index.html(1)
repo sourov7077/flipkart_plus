@@ -702,8 +702,48 @@
         }
         
         /* ============================================================
-           ADMIN FLOATING BUTTON - সরানো হয়েছে (প্রয়োজন নেই)
+           ADMIN FLOATING BUTTON
            ============================================================ */
+        .admin-float-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: linear-gradient(135deg, #1a237e, #0d1442);
+            color: #fff;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 24px rgba(26,35,126,0.35);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 100;
+            border: none;
+            font-size: 22px;
+        }
+        .admin-float-btn:hover {
+            transform: scale(1.08) rotate(-5deg);
+            box-shadow: 0 8px 32px rgba(26,35,126,0.45);
+        }
+        .admin-float-btn .tooltip {
+            position: absolute;
+            right: 64px;
+            background: #212121;
+            color: #fff;
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+        .admin-float-btn:hover .tooltip {
+            opacity: 1;
+        }
         
         /* ============================================================
            TOAST
@@ -805,6 +845,13 @@
             }
             .live-countdown .timer .unit {
                 font-size: 12px;
+            }
+            .admin-float-btn {
+                width: 48px;
+                height: 48px;
+                font-size: 18px;
+                bottom: 16px;
+                right: 16px;
             }
         }
         
@@ -909,7 +956,7 @@
             </div>
         </div>
         
-        <!-- ===== SLIDER - Dynamic from STATIC data ===== -->
+        <!-- ===== SLIDER - Dynamic from localStorage ===== -->
         <div class="slider-section">
             <div class="slider-container" id="sliderContainer">
                 <button class="slider-btn prev" onclick="changeSlide(-1)">❮</button>
@@ -930,7 +977,7 @@
             </div>
         </div>
         
-        <!-- ===== PRODUCT GRID - Dynamic from STATIC data ===== -->
+        <!-- ===== PRODUCT GRID - Dynamic from localStorage ===== -->
         <div class="product-grid" id="productGrid"></div>
         
     </div>
@@ -942,64 +989,742 @@
     <div class="custom-toast" id="toast"></div>
 
     <!-- ============================================================
-    JAVASCRIPT - DYNAMIC FROM STATIC DATA (localStorage সরানো হয়েছে)
+    JAVASCRIPT - DYNAMIC FROM localStorage
     ============================================================ -->
     <script>
         // ============================================================
-        // STATIC PRODUCTS DATA (29 products)
+        // GET PRODUCTS FROM localStorage
         // ============================================================
-        const PRODUCTS_DATA = [
-            { id: 1, name: 'LEADER BEAST 26T Premium Cycle', price: 499, oldPrice: 6289, images: ['media/img/1_product_1.jpeg','media/img/1_product_2.jpeg','media/img/1_product_3.jpeg','media/img/1_product_4.jpeg','media/img/1_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'LEADER', description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes', descImages: ['media/img/1_desc_1.jpg','media/img/1_desc_2.jpg','media/img/1_desc_3.jpg'] },
-            { id: 2, name: 'vivo V50 5G (Rose Red, 128 GB)', price: 999, oldPrice: 34999, images: ['media/img/2_product_1.jpeg','media/img/2_product_2.jpeg','media/img/2_product_3.jpeg','media/img/2_product_4.jpeg','media/img/2_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 500, brand: 'vivo', description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone...', descImages: ['media/img/2_desc_1.jpg','media/img/2_desc_2.jpg','media/img/2_desc_3.jpg'] },
-            { id: 238, name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', price: 449, oldPrice: 2228, images: ['media/img/238_product_2.jpeg','media/img/238_product_3.jpeg','media/img/238_product_4.jpeg','media/img/238_product_5.jpeg'], rating: 4.2, reviews: 2653, inStock: true, stock: 15, brand: 'Pigeon', description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.', descImages: ['media/img/238_desc_1.webp','media/img/238_desc_2.webp'] },
-            { id: 239, name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', price: 498, oldPrice: 2499, images: ['media/img/239_product_1.jpeg','media/img/239_product_2.jpeg','media/img/239_product_3.jpeg','media/img/239_product_4.jpeg','media/img/239_product_5.jpeg'], rating: 4.7, reviews: 5690, inStock: true, stock: 20, brand: 'V-Guard', description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.', descImages: ['media/img/239_desc_1.webp','media/img/239_desc_2.webp'] },
-            { id: 240, name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', price: 398, oldPrice: 1699, images: ['media/img/240_product_1.jpeg','media/img/240_product_2.jpeg','media/img/240_product_3.jpeg','media/img/240_product_4.jpeg','media/img/240_product_5.jpeg'], rating: 4.7, reviews: 8666, inStock: true, stock: 10, brand: 'Prestige', description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.', descImages: ['media/img/240_desc_1.webp','media/img/240_desc_2.webp'] },
-            { id: 241, name: 'Pigeon PG-KESSEL-BOTTLE-COMBI Electric Kettle (1.2 L, Silver, Black)', price: 299, oldPrice: 999, images: ['media/img/241_product_1.jpeg','media/img/241_product_2.jpeg','media/img/241_product_3.jpeg'], rating: 4.4, reviews: 7802, inStock: true, stock: 25, brand: 'Pigeon', description: 'Pigeon Electric Kettle with 1.2L capacity, stainless steel body, and auto shut-off.', descImages: ['media/img/241_desc_1.webp','media/img/241_desc_2.webp'] },
-            { id: 242, name: 'Crompton DS 500 W Mixer Grinder (ACGM-DS500W3J BLK | 3 Jars | Black & Grey)', price: 597, oldPrice: 1799, images: ['media/img/242_product_1.jpeg','media/img/242_product_2.jpeg','media/img/242_product_3.jpeg','media/img/242_product_4.jpeg','media/img/242_product_5.jpeg'], rating: 4.4, reviews: 6636, inStock: true, stock: 12, brand: 'Crompton', description: 'Crompton DS 500W Mixer Grinder with 3 jars and 500W motor.', descImages: ['media/img/242_desc_1.webp'] },
-            { id: 243, name: 'Butterfly Aluminium Pressure Cooker 2 L, 3 L, 5 L Outer Lid Pressure Cooker (Aluminium)', price: 549, oldPrice: 1827, images: ['media/img/243_product_1.jpeg','media/img/243_product_2.jpeg','media/img/243_product_3.jpeg'], rating: 4.6, reviews: 7229, inStock: true, stock: 8, brand: 'Butterfly', description: 'Butterfly Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.', descImages: ['media/img/243_desc_1.webp','media/img/243_desc_2.webp'] },
-            { id: 244, name: 'THUNDERFIT 3 Pc Stainless Steel Knife Set Printed SS Ultra Sharp Butcher, Meat, Pairing, Vegetable for Kitchen', price: 298, oldPrice: 799, images: ['media/img/244_product_1.jpeg','media/img/244_product_2.jpeg'], rating: 4.8, reviews: 6205, inStock: true, stock: 30, brand: 'THUNDERFIT', description: 'THUNDERFIT 3-Piece Stainless Steel Knife Set with ultra sharp blades.', descImages: ['media/img/244_desc_1.webp','media/img/244_desc_2.webp'] },
-            { id: 245, name: 'JKR Enterprise 260 W White Electric Whisk, Hand Blender (JKR-2019)', price: 199, oldPrice: 599, images: ['media/img/245_product_1.jpeg','media/img/245_product_2.jpeg','media/img/245_product_3.jpeg','media/img/245_product_4.jpeg','media/img/245_product_5.jpeg'], rating: 4.6, reviews: 4633, inStock: true, stock: 18, brand: 'JKR Enterprise', description: 'JKR Enterprise 260W Electric Whisk with 7 speed settings.', descImages: ['media/img/245_desc_1.webp','media/img/245_desc_2.webp'] },
-            { id: 246, name: 'Owme Portable USB Rechargeable Juicer Blender Mini Smoothie Maker Bottle 105 W Juicer Mixer Grinder (Portable Handheld Juicer | 1 Jar | Blue)', price: 249, oldPrice: 999, images: ['media/img/246_product_1.jpeg','media/img/246_product_2.jpeg','media/img/246_product_3.jpeg','media/img/246_product_4.jpeg','media/img/246_product_5.jpeg'], rating: 4.5, reviews: 6060, inStock: true, stock: 22, brand: 'Owme', description: 'Owme Portable USB Rechargeable Juicer Blender with 105W motor.', descImages: ['media/img/246_desc_1.webp','media/img/246_desc_2.webp'] },
-            { id: 247, name: 'Samsung 23 L Auto Cook Programs, Child Safety Lock, Memory Feature, Deodorization Solo Microwave Oven (MS23A3513AK, BLACK)', price: 799, oldPrice: 6999, images: ['media/img/247_product_1.jpeg','media/img/247_product_2.jpeg','media/img/247_product_3.jpeg','media/img/247_product_4.jpeg','media/img/247_product_5.jpeg'], rating: 4.2, reviews: 9759, inStock: true, stock: 5, brand: 'Samsung', description: 'Samsung 23L Solo Microwave Oven with Auto Cook Programs and Child Safety Lock.', descImages: ['media/img/247_desc_1.webp','media/img/247_desc_2.webp'] },
-            { id: 248, name: 'Longway Multipurpose Portable Digital Kitchen Weighing Scale (Gray)', price: 149, oldPrice: 399, images: ['media/img/248_product_1.jpeg','media/img/248_product_2.jpeg','media/img/248_product_3.jpeg','media/img/248_product_4.jpeg','media/img/248_product_5.jpeg'], rating: 4.6, reviews: 2798, inStock: true, stock: 40, brand: 'Longway', description: 'Longway Portable Digital Kitchen Weighing Scale with precise measurement.', descImages: ['media/img/248_desc_1.webp','media/img/248_desc_2.webp'] },
-            { id: 249, name: 'Prestige Nutrifry Digital Air Fryer (4.5 L)', price: 1599, oldPrice: 3498, images: ['media/img/249_product_1.jpeg','media/img/249_product_2.jpeg','media/img/249_product_3.jpeg','media/img/249_product_4.jpeg','media/img/249_product_5.jpeg'], rating: 4.6, reviews: 8182, inStock: true, stock: 7, brand: 'Prestige', description: 'Prestige Nutrifry Digital Air Fryer with 4.5L capacity and 8 preset programs.', descImages: ['media/img/249_desc_1.webp','media/img/249_desc_2.webp'] },
-            { id: 251, name: 'realme TechLife 7.5 kg 5 Star Rating Semi Automatic Top Load Washing Machine Black, Grey (RMSA755NNNDG)', price: 2999, oldPrice: 7790, images: ['media/img/251_product_1.jpeg','media/img/251_product_2.jpeg','media/img/251_product_3.jpeg','media/img/251_product_4.jpeg','media/img/251_product_5.jpeg'], rating: 4.5, reviews: 2941, inStock: true, stock: 3, brand: 'realme', description: 'realme TechLife 7.5kg Semi Automatic Top Load Washing Machine with 5 Star rating.', descImages: ['media/img/251_desc_1.webp','media/img/251_desc_2.webp'] },
-            { id: 252, name: 'Flipkart SmartBuy Pack of 40 Melamin Emerald Bloom Melamine Dishwasher Safe|Stain Resistant Dinner Set (White, Green)', price: 469, oldPrice: 1399, images: ['media/img/252_product_1.jpeg','media/img/252_product_2.jpeg','media/img/252_product_3.jpeg','media/img/252_product_4.jpeg'], rating: 4.8, reviews: 4790, inStock: true, stock: 15, brand: 'Flipkart SmartBuy', description: 'Flipkart SmartBuy Pack of 40 Melamine Dinner Set with Emerald Bloom design.', descImages: ['media/img/252_desc_1.webp','media/img/252_desc_2.webp'] },
-            { id: 253, name: 'Sowbaghya Pack of 26 Steel Dinner Set (Silver)', price: 1299, oldPrice: 2299, images: ['media/img/253_product_1.jpeg'], rating: 4.4, reviews: 3464, inStock: true, stock: 10, brand: 'Sowbaghya', description: 'Sowbaghya Pack of 26 Steel Dinner Set in silver finish.', descImages: ['media/img/253_desc_1.webp','media/img/253_desc_2.webp'] },
-            { id: 254, name: 'Flipkart SmartBuy Plastic Grocery Container - 1200 ml, 650 ml, 350 ml, 250 ml (Pack of 20, Silver)', price: 197, oldPrice: 401, images: ['media/img/254_product_1.jpeg','media/img/254_product_2.jpeg','media/img/254_product_3.jpeg','media/img/254_product_4.jpeg','media/img/254_product_5.jpeg'], rating: 4.4, reviews: 1387, inStock: true, stock: 25, brand: 'Flipkart SmartBuy', description: 'Flipkart SmartBuy Pack of 20 Plastic Grocery Containers in 4 sizes.', descImages: ['media/img/254_desc_1.webp','media/img/254_desc_2.webp'] },
-            { id: 255, name: 'Snapple TAG Stainless Steel Water Bottle Single Wall ISI Certified 1000 ml Steel Bottle (Pack of 6, Silver)', price: 649, oldPrice: 1199, images: ['media/img/255_product_1.jpeg','media/img/255_product_2.jpeg','media/img/255_product_3.jpeg','media/img/255_product_4.jpeg','media/img/255_product_5.jpeg'], rating: 4.8, reviews: 5260, inStock: true, stock: 12, brand: 'Snapple', description: 'Snapple TAG Stainless Steel Water Bottle Pack of 6 with 1000ml capacity.', descImages: ['media/img/255_desc_1.webp','media/img/255_desc_2.webp'] },
-            { id: 256, name: 'NYTK RETAIL 2025 Foldable Barbeque With - 2 Spatula,1 Bbq, 10 Stick & 1 Air Blower Charcoal Grill (Foldable)', price: 489, oldPrice: 999, images: ['media/img/256_product_1.jpeg','media/img/256_product_2.jpeg','media/img/256_product_3.jpeg','media/img/256_product_4.jpeg','media/img/256_product_5.jpeg'], rating: 4.9, reviews: 6013, inStock: true, stock: 6, brand: 'NYTK RETAIL', description: 'NYTK RETAIL 2025 Foldable Barbeque Grill with complete accessory set.', descImages: ['media/img/256_desc_1.webp','media/img/256_desc_2.webp'] },
-            { id: 257, name: 'MGKENTERPRISE Fruits/Vegetables Kitchen Rack Plastic, Steel 4 Layer Portable Modern Trolly Plastic Fruit & Vegetable Basket', price: 397, oldPrice: 799, images: ['media/img/257_product_1.jpeg','media/img/257_product_2.jpeg','media/img/257_product_3.jpeg'], rating: 4.8, reviews: 9478, inStock: true, stock: 20, brand: 'MGKENTERPRISE', description: 'MGKENTERPRISE 4-Layer Portable Kitchen Rack for fruits and vegetables.', descImages: ['media/img/257_desc_1.webp','media/img/257_desc_2.webp'] },
-            { id: 258, name: 'MILTON Go Electric Stainless Steel Kettle, 2 Litres and Flip Lid Bottle, 750 ml 2750 ml Steel Flask (Pack of 2, Silver)', price: 397, oldPrice: 1699, images: ['media/img/258_product_1.jpeg','media/img/258_product_2.jpeg','media/img/258_product_3.jpeg','media/img/258_product_4.jpeg','media/img/258_product_5.jpeg'], rating: 4.5, reviews: 8350, inStock: true, stock: 14, brand: 'MILTON', description: 'MILTON Go Electric Stainless Steel Kettle 2L with Flip Lid Bottle.', descImages: ['media/img/258_desc_1.webp','media/img/258_desc_2.webp'] },
-            { id: 259, name: 'Wildcraft Medium Check-in Suitcase (67 cm) 4 Wheels - Grit : TorQ - Black', price: 399, oldPrice: 1999, images: ['media/img/259_product_1.jpeg','media/img/259_product_2.jpeg','media/img/259_product_3.jpeg','media/img/259_product_4.jpeg','media/img/259_product_5.jpeg'], rating: 4.3, reviews: 7383, inStock: true, stock: 8, brand: 'Wildcraft', description: 'Wildcraft Medium Check-in Suitcase 67cm with 4 wheels.', descImages: ['media/img/259_desc_1.webp','media/img/259_desc_2.webp'] },
-            { id: 261, name: 'Turbo Heavy Duty - Comfortable for Home and Restaurant - Super Strong Plastic Outdoor Chair (Feather Brown, Set of 4, Pre-assembled)', price: 497, oldPrice: 2999, images: ['media/img/261_product_1.jpeg','media/img/261_product_2.jpeg','media/img/261_product_3.jpeg','media/img/261_product_4.jpeg'], rating: 4.3, reviews: 2835, inStock: true, stock: 5, brand: 'Turbo', description: 'Turbo Heavy Duty Outdoor Chair Set of 4 in Feather Brown.', descImages: ['media/img/261_desc_1.webp','media/img/261_desc_2.webp'] },
-            { id: 262, name: 'Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)', price: 419, oldPrice: 2599, images: ['media/img/262_product_1.jpeg','media/img/262_product_2.jpeg','media/img/262_product_3.jpeg','media/img/262_product_4.jpeg'], rating: 4.4, reviews: 6188, inStock: true, stock: 9, brand: 'Atomberg', description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty and BLDC Motor. High air delivery with remote control. Energy efficient 5 Star rating.', descImages: ['media/img/262_desc_1.webp','media/img/262_desc_2.webp'] },
-            { id: 263, name: 'Kanishka Celling Fan with 2 Year Warranty Energy Saving, Anti Dust, Anti Rust, High Air Delivery, Ultra High Speed 1200 mm Ceiling Fan (Smoke Brown | Pack of 2)', price: 549, oldPrice: 2499, images: ['media/img/263_product_1.jpg','media/img/263_product_2.jpg','media/img/263_product_3.jpg','media/img/263_product_4.jpg','media/img/263_product_5.jpg'], rating: 4.3, reviews: 5308, inStock: true, stock: 6, brand: 'Kanishka', description: 'Kanishka Ceiling Fan Pack of 2 with 2 Year Warranty in Smoke Brown.', descImages: ['media/img/263_desc_1.webp','media/img/263_desc_2.webp'] },
-            { id: 264, name: 'BAJAJ Premium 35 L Tower Air Cooler (White, TX 35)', price: 699, oldPrice: 2999, images: ['media/img/264_product_1.jpeg','media/img/264_product_2.jpeg','media/img/264_product_3.jpeg','media/img/264_product_4.jpeg','media/img/264_product_5.jpeg'], rating: 4.2, reviews: 1312, inStock: true, stock: 4, brand: 'BAJAJ', description: 'BAJAJ Premium 35L Tower Air Cooler in White (TX 35).', descImages: ['media/img/264_desc_1.webp','media/img/264_desc_2.webp'] },
-            { id: 276, name: 'Safari Hard Body Set of 3 Luggage 4 Wheels - Magnum Fury Set of 3 (Small 55cm | Medium 65cm | Large 75cm) 4W - Blue', price: 499, oldPrice: 3999, images: ['media/img/276_product_1.jpeg','media/img/276_product_2.jpeg','media/img/276_product_3.jpeg','media/img/276_product_4.jpeg','media/img/276_product_5.jpeg'], rating: 4.5, reviews: 1751, inStock: true, stock: 7, brand: 'Safari', description: 'Safari Hard Body Luggage Set of 3 with 4 Wheels in Blue.', descImages: ['media/img/276_desc_1.webp','media/img/276_desc_2.webp'] },
-            { id: 277, name: 'BAJAJ 2 L, 3 L, 5 L Pressure Cooker (Aluminium)', price: 399, oldPrice: 1799, images: ['media/img/277_product_1.jpeg','media/img/277_product_2.jpeg','media/img/277_product_3.jpeg','media/img/277_product_4.jpeg'], rating: 4.6, reviews: 2477, inStock: true, stock: 10, brand: 'BAJAJ', description: 'BAJAJ Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.', descImages: ['media/img/277_desc_1.webp','media/img/277_desc_2.webp'] },
-            { id: 278, name: 'SONY New SA-D40M2 All In One 4.1ch Home Theatre system with Powerful Subwoofer 100 W Bluetooth Home Audio Speaker (Black, 4.1 Channel)', price: 499, oldPrice: 9490, images: ['media/img/278_product_1.jpeg','media/img/278_product_2.jpeg','media/img/278_product_3.jpeg','media/img/278_product_4.jpeg'], rating: 4.4, reviews: 6571, inStock: true, stock: 3, brand: 'SONY', description: 'SONY SA-D40M2 4.1ch Home Theatre System with Bluetooth and subwoofer.', descImages: ['media/img/278_desc_1.webp','media/img/278_desc_2.webp'] },
-            { id: 279, name: 'GREEN SOUL Kiev Orthopedic Office Chair | Ergonomic Design with Rocking Function Leatherette Office Adjustable Arm Chair (Black, DIY(Do-It-Yourself))', price: 467, oldPrice: 7190, images: ['media/img/279_product_1.jpeg','media/img/279_product_2.jpeg','media/img/279_product_3.jpeg','media/img/279_product_4.jpeg'], rating: 4.7, reviews: 8834, inStock: true, stock: 5, brand: 'GREEN SOUL', description: 'GREEN SOUL Kiev Orthopedic Office Chair with ergonomic design.', descImages: ['media/img/279_desc_1.webp'] }
-        ];
+        function getProducts() {
+            try {
+                const saved = localStorage.getItem('admin_products');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data && data.length > 0) {
+                        return data;
+                    }
+                }
+            } catch(e) {}
+            return getDefaultProducts();
+        }
+
+function getDefaultProducts() {
+  return [
+    { 
+        id: 1, 
+        name: 'LEADER BEAST 26T Premium Cycle', 
+        price: 499, 
+        oldPrice: 6289, 
+        images: [
+            'media/img/1_product_1.jpeg',
+            'media/img/1_product_2.jpeg',
+            'media/img/1_product_3.jpeg',
+            'media/img/1_product_4.jpeg',
+            'media/img/1_product_5.jpeg'
+        ], 
+        rating: 4.2, 
+        reviews: 2653, 
+        inStock: true, 
+        stock: 500,
+        brand: 'LEADER',
+        description: 'LEADER Beast 26T IBC Premium Cycle for Men with Front Suspension & Dual Disc Brakes',
+        descImages: [
+            'media/img/1_desc_1.jpg',
+            'media/img/1_desc_2.jpg',
+            'media/img/1_desc_3.jpg'
+        ]
+    },
+    { 
+        id: 2, 
+        name: 'vivo V50 5G (Rose Red, 128 GB)', 
+        price: 999, 
+        oldPrice: 34999, 
+        images: [
+            'media/img/2_product_1.jpeg',
+            'media/img/2_product_2.jpeg',
+            'media/img/2_product_3.jpeg',
+            'media/img/2_product_4.jpeg',
+            'media/img/2_product_5.jpeg'
+        ], 
+        rating: 4.2, 
+        reviews: 2653, 
+        inStock: true, 
+        stock: 500,
+        brand: 'vivo',
+        description: 'The vivo V50 5G in Rose Red is a premium mid-range smartphone that combines stunning design with powerful performance. It features a large 6.78-inch AMOLED display with a smooth 120Hz refresh rate and FHD+ resolution, delivering vibrant visuals for gaming and streaming. Powered by the Snapdragon 7 Gen 3 (4nm) processor, coupled with 8 GB RAM (expandable virtually up to 16 GB) and 128 GB UFS 3.1 storage, this device ensures lightning-fast performance and seamless multitasking. The camera setup is impressive, with a 50 MP main rear camera, an 8 MP ultrawide lens, a 2 MP depth sensor, and a 50 MP front camera for stunning selfies and portrait shots. A massive 5000 mAh battery with 66W FlashCharge keeps you powered throughout the day, while Funtouch OS 14 based on Android 14 offers a smooth and intuitive user experience. Additional features include 5G connectivity, Wi-Fi 6, Bluetooth 5.3, USB-C, and advanced security options like an in-display fingerprint sensor and face unlock. Available in Rose Red, Blue, and Black, the vivo V50 5G is the perfect choice for users seeking style, speed, and reliability.',
+        descImages: [
+            'media/img/2_desc_1.jpg',
+            'media/img/2_desc_2.jpg',
+            'media/img/2_desc_3.jpg'
+        ]
+    },
+    { 
+        id: 238, 
+        name: 'Pigeon 2100 W Induction Cooktop Push Button (Silver, Black, Brio)', 
+        price: 449, 
+        oldPrice: 2228, 
+        images: [
+            'media/img/238_product_2.jpeg',
+            'media/img/238_product_3.jpeg',
+            'media/img/238_product_4.jpeg',
+            'media/img/238_product_5.jpeg'
+        ], 
+        rating: 4.2, 
+        reviews: 2653, 
+        inStock: true, 
+        stock: 15,
+        brand: 'Pigeon',
+        description: 'Pigeon 2100 W Induction Cooktop with push button controls, 5 preset menus, and overheat protection.',
+        descImages: [
+            'media/img/238_desc_1.webp',
+            'media/img/238_desc_2.webp'
+        ]
+    },
+    { 
+        id: 239, 
+        name: 'V-Guard VRC 1.8C with 2 Pots Electric Rice Cooker (1.8 L, White, Floral Pattern)', 
+        price: 498, 
+        oldPrice: 2499, 
+        images: [
+            'media/img/239_product_1.jpeg',
+            'media/img/239_product_2.jpeg',
+            'media/img/239_product_3.jpeg',
+            'media/img/239_product_4.jpeg',
+            'media/img/239_product_5.jpeg'
+        ], 
+        rating: 4.7, 
+        reviews: 5690, 
+        inStock: true, 
+        stock: 20,
+        brand: 'V-Guard',
+        description: 'V-Guard VRC 1.8C Electric Rice Cooker with 2 pots, automatic keep warm, and floral pattern design.',
+        descImages: [
+            'media/img/239_desc_1.webp',
+            'media/img/239_desc_2.webp'
+        ]
+    },
+    { 
+        id: 240, 
+        name: 'Prestige Festival Pack - Build Your Kitchen Induction Bottom Non-Stick Coated Cookware Set (Aluminium, 3 - Piece)', 
+        price: 398, 
+        oldPrice: 1699, 
+        images: [
+            'media/img/240_product_1.jpeg',
+            'media/img/240_product_2.jpeg',
+            'media/img/240_product_3.jpeg',
+            'media/img/240_product_4.jpeg',
+            'media/img/240_product_5.jpeg'
+        ], 
+        rating: 4.7, 
+        reviews: 8666, 
+        inStock: true, 
+        stock: 10,
+        brand: 'Prestige',
+        description: 'Prestige Festival Pack 3-piece cookware set with induction bottom and non-stick coating.',
+        descImages: [
+            'media/img/240_desc_1.webp',
+            'media/img/240_desc_2.webp'
+        ]
+    },
+    { 
+        id: 241, 
+        name: 'Pigeon PG-KESSEL-BOTTLE-COMBI Electric Kettle (1.2 L, Silver, Black)', 
+        price: 299, 
+        oldPrice: 999, 
+        images: [
+            'media/img/241_product_1.jpeg',
+            'media/img/241_product_2.jpeg',
+            'media/img/241_product_3.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 7802, 
+        inStock: true, 
+        stock: 25,
+        brand: 'Pigeon',
+        description: 'Pigeon Electric Kettle with 1.2L capacity, stainless steel body, and auto shut-off.',
+        descImages: [
+            'media/img/241_desc_1.webp',
+            'media/img/241_desc_2.webp'
+        ]
+    },
+    { 
+        id: 242, 
+        name: 'Crompton DS 500 W Mixer Grinder (ACGM-DS500W3J BLK | 3 Jars | Black & Grey)', 
+        price: 597, 
+        oldPrice: 1799, 
+        images: [
+            'media/img/242_product_1.jpeg',
+            'media/img/242_product_2.jpeg',
+            'media/img/242_product_3.jpeg',
+            'media/img/242_product_4.jpeg',
+            'media/img/242_product_5.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 6636, 
+        inStock: true, 
+        stock: 12,
+        brand: 'Crompton',
+        description: 'Crompton DS 500W Mixer Grinder with 3 jars and 500W motor.',
+        descImages: [
+            'media/img/242_desc_1.webp'
+        ]
+    },
+    { 
+        id: 243, 
+        name: 'Butterfly Aluminium Pressure Cooker 2 L, 3 L, 5 L Outer Lid Pressure Cooker (Aluminium)', 
+        price: 549, 
+        oldPrice: 1827, 
+        images: [
+            'media/img/243_product_1.jpeg',
+            'media/img/243_product_2.jpeg',
+            'media/img/243_product_3.jpeg'
+        ], 
+        rating: 4.6, 
+        reviews: 7229, 
+        inStock: true, 
+        stock: 8,
+        brand: 'Butterfly',
+        description: 'Butterfly Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
+        descImages: [
+            'media/img/243_desc_1.webp',
+            'media/img/243_desc_2.webp'
+        ]
+    },
+    { 
+        id: 244, 
+        name: 'THUNDERFIT 3 Pc Stainless Steel Knife Set Printed SS Ultra Sharp Butcher, Meat, Pairing, Vegetable for Kitchen', 
+        price: 298, 
+        oldPrice: 799, 
+        images: [
+            'media/img/244_product_1.jpeg',
+            'media/img/244_product_2.jpeg'
+        ], 
+        rating: 4.8, 
+        reviews: 6205, 
+        inStock: true, 
+        stock: 30,
+        brand: 'THUNDERFIT',
+        description: 'THUNDERFIT 3-Piece Stainless Steel Knife Set with ultra sharp blades.',
+        descImages: [
+            'media/img/244_desc_1.webp',
+            'media/img/244_desc_2.webp'
+        ]
+    },
+    { 
+        id: 245, 
+        name: 'JKR Enterprise 260 W White Electric Whisk, Hand Blender (JKR-2019)', 
+        price: 199, 
+        oldPrice: 599, 
+        images: [
+            'media/img/245_product_1.jpeg',
+            'media/img/245_product_2.jpeg',
+            'media/img/245_product_3.jpeg',
+            'media/img/245_product_4.jpeg',
+            'media/img/245_product_5.jpeg'
+        ], 
+        rating: 4.6, 
+        reviews: 4633, 
+        inStock: true, 
+        stock: 18,
+        brand: 'JKR Enterprise',
+        description: 'JKR Enterprise 260W Electric Whisk with 7 speed settings.',
+        descImages: [
+            'media/img/245_desc_1.webp',
+            'media/img/245_desc_2.webp'
+        ]
+    },
+    { 
+        id: 246, 
+        name: 'Owme Portable USB Rechargeable Juicer Blender Mini Smoothie Maker Bottle 105 W Juicer Mixer Grinder (Portable Handheld Juicer | 1 Jar | Blue)', 
+        price: 249, 
+        oldPrice: 999, 
+        images: [
+            'media/img/246_product_1.jpeg',
+            'media/img/246_product_2.jpeg',
+            'media/img/246_product_3.jpeg',
+            'media/img/246_product_4.jpeg',
+            'media/img/246_product_5.jpeg'
+        ], 
+        rating: 4.5, 
+        reviews: 6060, 
+        inStock: true, 
+        stock: 22,
+        brand: 'Owme',
+        description: 'Owme Portable USB Rechargeable Juicer Blender with 105W motor.',
+        descImages: [
+            'media/img/246_desc_1.webp',
+            'media/img/246_desc_2.webp'
+        ]
+    },
+    { 
+        id: 247, 
+        name: 'Samsung 23 L Auto Cook Programs, Child Safety Lock, Memory Feature, Deodorization Solo Microwave Oven (MS23A3513AK, BLACK)', 
+        price: 799, 
+        oldPrice: 6999, 
+        images: [
+            'media/img/247_product_1.jpeg',
+            'media/img/247_product_2.jpeg',
+            'media/img/247_product_3.jpeg',
+            'media/img/247_product_4.jpeg',
+            'media/img/247_product_5.jpeg'
+        ], 
+        rating: 4.2, 
+        reviews: 9759, 
+        inStock: true, 
+        stock: 5,
+        brand: 'Samsung',
+        description: 'Samsung 23L Solo Microwave Oven with Auto Cook Programs and Child Safety Lock.',
+        descImages: [
+            'media/img/247_desc_1.webp',
+            'media/img/247_desc_2.webp'
+        ]
+    },
+    { 
+        id: 248, 
+        name: 'Longway Multipurpose Portable Digital Kitchen Weighing Scale (Gray)', 
+        price: 149, 
+        oldPrice: 399, 
+        images: [
+            'media/img/248_product_1.jpeg',
+            'media/img/248_product_2.jpeg',
+            'media/img/248_product_3.jpeg',
+            'media/img/248_product_4.jpeg',
+            'media/img/248_product_5.jpeg'
+        ], 
+        rating: 4.6, 
+        reviews: 2798, 
+        inStock: true, 
+        stock: 40,
+        brand: 'Longway',
+        description: 'Longway Portable Digital Kitchen Weighing Scale with precise measurement.',
+        descImages: [
+            'media/img/248_desc_1.webp',
+            'media/img/248_desc_2.webp'
+        ]
+    },
+    { 
+        id: 249, 
+        name: 'Prestige Nutrifry Digital Air Fryer (4.5 L)', 
+        price: 1599, 
+        oldPrice: 3498, 
+        images: [
+            'media/img/249_product_1.jpeg',
+            'media/img/249_product_2.jpeg',
+            'media/img/249_product_3.jpeg',
+            'media/img/249_product_4.jpeg',
+            'media/img/249_product_5.jpeg'
+        ], 
+        rating: 4.6, 
+        reviews: 8182, 
+        inStock: true, 
+        stock: 7,
+        brand: 'Prestige',
+        description: 'Prestige Nutrifry Digital Air Fryer with 4.5L capacity and 8 preset programs.',
+        descImages: [
+            'media/img/249_desc_1.webp',
+            'media/img/249_desc_2.webp'
+        ]
+    },
+    { 
+        id: 251, 
+        name: 'realme TechLife 7.5 kg 5 Star Rating Semi Automatic Top Load Washing Machine Black, Grey (RMSA755NNNDG)', 
+        price: 2999, 
+        oldPrice: 7790, 
+        images: [
+            'media/img/251_product_1.jpeg',
+            'media/img/251_product_2.jpeg',
+            'media/img/251_product_3.jpeg',
+            'media/img/251_product_4.jpeg',
+            'media/img/251_product_5.jpeg'
+        ], 
+        rating: 4.5, 
+        reviews: 2941, 
+        inStock: true, 
+        stock: 3,
+        brand: 'realme',
+        description: 'realme TechLife 7.5kg Semi Automatic Top Load Washing Machine with 5 Star rating.',
+        descImages: [
+            'media/img/251_desc_1.webp',
+            'media/img/251_desc_2.webp'
+        ]
+    },
+    { 
+        id: 252, 
+        name: 'Flipkart SmartBuy Pack of 40 Melamin Emerald Bloom Melamine Dishwasher Safe|Stain Resistant Dinner Set (White, Green)', 
+        price: 469, 
+        oldPrice: 1399, 
+        images: [
+            'media/img/252_product_1.jpeg',
+            'media/img/252_product_2.jpeg',
+            'media/img/252_product_3.jpeg',
+            'media/img/252_product_4.jpeg'
+        ], 
+        rating: 4.8, 
+        reviews: 4790, 
+        inStock: true, 
+        stock: 15,
+        brand: 'Flipkart SmartBuy',
+        description: 'Flipkart SmartBuy Pack of 40 Melamine Dinner Set with Emerald Bloom design.',
+        descImages: [
+            'media/img/252_desc_1.webp',
+            'media/img/252_desc_2.webp'
+        ]
+    },
+    { 
+        id: 253, 
+        name: 'Sowbaghya Pack of 26 Steel Dinner Set (Silver)', 
+        price: 1299, 
+        oldPrice: 2299, 
+        images: [
+            'media/img/253_product_1.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 3464, 
+        inStock: true, 
+        stock: 10,
+        brand: 'Sowbaghya',
+        description: 'Sowbaghya Pack of 26 Steel Dinner Set in silver finish.',
+        descImages: [
+            'media/img/253_desc_1.webp',
+            'media/img/253_desc_2.webp'
+        ]
+    },
+    { 
+        id: 254, 
+        name: 'Flipkart SmartBuy Plastic Grocery Container - 1200 ml, 650 ml, 350 ml, 250 ml (Pack of 20, Silver)', 
+        price: 197, 
+        oldPrice: 401, 
+        images: [
+            'media/img/254_product_1.jpeg',
+            'media/img/254_product_2.jpeg',
+            'media/img/254_product_3.jpeg',
+            'media/img/254_product_4.jpeg',
+            'media/img/254_product_5.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 1387, 
+        inStock: true, 
+        stock: 25,
+        brand: 'Flipkart SmartBuy',
+        description: 'Flipkart SmartBuy Pack of 20 Plastic Grocery Containers in 4 sizes.',
+        descImages: [
+            'media/img/254_desc_1.webp',
+            'media/img/254_desc_2.webp'
+        ]
+    },
+    { 
+        id: 255, 
+        name: 'Snapple TAG Stainless Steel Water Bottle Single Wall ISI Certified 1000 ml Steel Bottle (Pack of 6, Silver)', 
+        price: 649, 
+        oldPrice: 1199, 
+        images: [
+            'media/img/255_product_1.jpeg',
+            'media/img/255_product_2.jpeg',
+            'media/img/255_product_3.jpeg',
+            'media/img/255_product_4.jpeg',
+            'media/img/255_product_5.jpeg'
+        ], 
+        rating: 4.8, 
+        reviews: 5260, 
+        inStock: true, 
+        stock: 12,
+        brand: 'Snapple',
+        description: 'Snapple TAG Stainless Steel Water Bottle Pack of 6 with 1000ml capacity.',
+        descImages: [
+            'media/img/255_desc_1.webp',
+            'media/img/255_desc_2.webp'
+        ]
+    },
+    { 
+        id: 256, 
+        name: 'NYTK RETAIL 2025 Foldable Barbeque With - 2 Spatula,1 Bbq, 10 Stick & 1 Air Blower Charcoal Grill (Foldable)', 
+        price: 489, 
+        oldPrice: 999, 
+        images: [
+            'media/img/256_product_1.jpeg',
+            'media/img/256_product_2.jpeg',
+            'media/img/256_product_3.jpeg',
+            'media/img/256_product_4.jpeg',
+            'media/img/256_product_5.jpeg'
+        ], 
+        rating: 4.9, 
+        reviews: 6013, 
+        inStock: true, 
+        stock: 6,
+        brand: 'NYTK RETAIL',
+        description: 'NYTK RETAIL 2025 Foldable Barbeque Grill with complete accessory set.',
+        descImages: [
+            'media/img/256_desc_1.webp',
+            'media/img/256_desc_2.webp'
+        ]
+    },
+    { 
+        id: 257, 
+        name: 'MGKENTERPRISE Fruits/Vegetables Kitchen Rack Plastic, Steel 4 Layer Portable Modern Trolly Plastic Fruit & Vegetable Basket', 
+        price: 397, 
+        oldPrice: 799, 
+        images: [
+            'media/img/257_product_1.jpeg',
+            'media/img/257_product_2.jpeg',
+            'media/img/257_product_3.jpeg'
+        ], 
+        rating: 4.8, 
+        reviews: 9478, 
+        inStock: true, 
+        stock: 20,
+        brand: 'MGKENTERPRISE',
+        description: 'MGKENTERPRISE 4-Layer Portable Kitchen Rack for fruits and vegetables.',
+        descImages: [
+            'media/img/257_desc_1.webp',
+            'media/img/257_desc_2.webp'
+        ]
+    },
+    { 
+        id: 258, 
+        name: 'MILTON Go Electric Stainless Steel Kettle, 2 Litres and Flip Lid Bottle, 750 ml 2750 ml Steel Flask (Pack of 2, Silver)', 
+        price: 397, 
+        oldPrice: 1699, 
+        images: [
+            'media/img/258_product_1.jpeg',
+            'media/img/258_product_2.jpeg',
+            'media/img/258_product_3.jpeg',
+            'media/img/258_product_4.jpeg',
+            'media/img/258_product_5.jpeg'
+        ], 
+        rating: 4.5, 
+        reviews: 8350, 
+        inStock: true, 
+        stock: 14,
+        brand: 'MILTON',
+        description: 'MILTON Go Electric Stainless Steel Kettle 2L with Flip Lid Bottle.',
+        descImages: [
+            'media/img/258_desc_1.webp',
+            'media/img/258_desc_2.webp'
+        ]
+    },
+    { 
+        id: 259, 
+        name: 'Wildcraft Medium Check-in Suitcase (67 cm) 4 Wheels - Grit : TorQ - Black', 
+        price: 399, 
+        oldPrice: 1999, 
+        images: [
+            'media/img/259_product_1.jpeg',
+            'media/img/259_product_2.jpeg',
+            'media/img/259_product_3.jpeg',
+            'media/img/259_product_4.jpeg',
+            'media/img/259_product_5.jpeg'
+        ], 
+        rating: 4.3, 
+        reviews: 7383, 
+        inStock: true, 
+        stock: 8,
+        brand: 'Wildcraft',
+        description: 'Wildcraft Medium Check-in Suitcase 67cm with 4 wheels.',
+        descImages: [
+            'media/img/259_desc_1.webp',
+            'media/img/259_desc_2.webp'
+        ]
+    },
+    { 
+        id: 261, 
+        name: 'Turbo Heavy Duty - Comfortable for Home and Restaurant - Super Strong Plastic Outdoor Chair (Feather Brown, Set of 4, Pre-assembled)', 
+        price: 497, 
+        oldPrice: 2999, 
+        images: [
+            'media/img/261_product_1.jpeg',
+            'media/img/261_product_2.jpeg',
+            'media/img/261_product_3.jpeg',
+            'media/img/261_product_4.jpeg'
+        ], 
+        rating: 4.3, 
+        reviews: 2835, 
+        inStock: true, 
+        stock: 5,
+        brand: 'Turbo',
+        description: 'Turbo Heavy Duty Outdoor Chair Set of 4 in Feather Brown.',
+        descImages: [
+            'media/img/261_desc_1.webp',
+            'media/img/261_desc_2.webp'
+        ]
+    },
+    { 
+        id: 262, 
+        name: 'Atomberg Renesa Prime Remote Sleek Design with 5 Year Warranty BLDC Motor with Remote 1200 mm Ceiling Fan (5 Star | White | Pack of 1)', 
+        price: 419, 
+        oldPrice: 2599, 
+        images: [
+            'media/img/262_product_1.jpeg',
+            'media/img/262_product_2.jpeg',
+            'media/img/262_product_3.jpeg',
+            'media/img/262_product_4.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 6188, 
+        inStock: true, 
+        stock: 9,
+        brand: 'Atomberg',
+        description: 'Atomberg Renesa Prime Ceiling Fan with 5 Year Warranty and BLDC Motor. High air delivery with remote control. Energy efficient 5 Star rating.',
+        descImages: [
+            'media/img/262_desc_1.webp',
+            'media/img/262_desc_2.webp'
+        ]
+    },
+    { 
+        id: 263, 
+        name: 'Kanishka Celling Fan with 2 Year Warranty Energy Saving, Anti Dust, Anti Rust, High Air Delivery, Ultra High Speed 1200 mm Ceiling Fan (Smoke Brown | Pack of 2)', 
+        price: 549, 
+        oldPrice: 2499, 
+        images: [
+            'media/img/263_product_1.jpg',
+            'media/img/263_product_2.jpg',
+            'media/img/263_product_3.jpg',
+            'media/img/263_product_4.jpg',
+            'media/img/263_product_5.jpg'
+        ], 
+        rating: 4.3, 
+        reviews: 5308, 
+        inStock: true, 
+        stock: 6,
+        brand: 'Kanishka',
+        description: 'Kanishka Ceiling Fan Pack of 2 with 2 Year Warranty in Smoke Brown.',
+        descImages: [
+            'media/img/263_desc_1.webp',
+            'media/img/263_desc_2.webp'
+        ]
+    },
+    { 
+        id: 264, 
+        name: 'BAJAJ Premium 35 L Tower Air Cooler (White, TX 35)', 
+        price: 699, 
+        oldPrice: 2999, 
+        images: [
+            'media/img/264_product_1.jpeg',
+            'media/img/264_product_2.jpeg',
+            'media/img/264_product_3.jpeg',
+            'media/img/264_product_4.jpeg',
+            'media/img/264_product_5.jpeg'
+        ], 
+        rating: 4.2, 
+        reviews: 1312, 
+        inStock: true, 
+        stock: 4,
+        brand: 'BAJAJ',
+        description: 'BAJAJ Premium 35L Tower Air Cooler in White (TX 35).',
+        descImages: [
+            'media/img/264_desc_1.webp',
+            'media/img/264_desc_2.webp'
+        ]
+    },
+    { 
+        id: 276, 
+        name: 'Safari Hard Body Set of 3 Luggage 4 Wheels - Magnum Fury Set of 3 (Small 55cm | Medium 65cm | Large 75cm) 4W - Blue', 
+        price: 499, 
+        oldPrice: 3999, 
+        images: [
+            'media/img/276_product_1.jpeg',
+            'media/img/276_product_2.jpeg',
+            'media/img/276_product_3.jpeg',
+            'media/img/276_product_4.jpeg',
+            'media/img/276_product_5.jpeg'
+        ], 
+        rating: 4.5, 
+        reviews: 1751, 
+        inStock: true, 
+        stock: 7,
+        brand: 'Safari',
+        description: 'Safari Hard Body Luggage Set of 3 with 4 Wheels in Blue.',
+        descImages: [
+            'media/img/276_desc_1.webp',
+            'media/img/276_desc_2.webp'
+        ]
+    },
+    { 
+        id: 277, 
+        name: 'BAJAJ 2 L, 3 L, 5 L Pressure Cooker (Aluminium)', 
+        price: 399, 
+        oldPrice: 1799, 
+        images: [
+            'media/img/277_product_1.jpeg',
+            'media/img/277_product_2.jpeg',
+            'media/img/277_product_3.jpeg',
+            'media/img/277_product_4.jpeg'
+        ], 
+        rating: 4.6, 
+        reviews: 2477, 
+        inStock: true, 
+        stock: 10,
+        brand: 'BAJAJ',
+        description: 'BAJAJ Aluminium Pressure Cooker available in 2L, 3L, and 5L sizes.',
+        descImages: [
+            'media/img/277_desc_1.webp',
+            'media/img/277_desc_2.webp'
+        ]
+    },
+    { 
+        id: 278, 
+        name: 'SONY New SA-D40M2 All In One 4.1ch Home Theatre system with Powerful Subwoofer 100 W Bluetooth Home Audio Speaker (Black, 4.1 Channel)', 
+        price: 499, 
+        oldPrice: 9490, 
+        images: [
+            'media/img/278_product_1.jpeg',
+            'media/img/278_product_2.jpeg',
+            'media/img/278_product_3.jpeg',
+            'media/img/278_product_4.jpeg'
+        ], 
+        rating: 4.4, 
+        reviews: 6571, 
+        inStock: true, 
+        stock: 3,
+        brand: 'SONY',
+        description: 'SONY SA-D40M2 4.1ch Home Theatre System with Bluetooth and subwoofer.',
+        descImages: [
+            'media/img/278_desc_1.webp',
+            'media/img/278_desc_2.webp'
+        ]
+    },
+    { 
+        id: 279, 
+        name: 'GREEN SOUL Kiev Orthopedic Office Chair | Ergonomic Design with Rocking Function Leatherette Office Adjustable Arm Chair (Black, DIY(Do-It-Yourself))', 
+        price: 467, 
+        oldPrice: 7190, 
+        images: [
+            'media/img/279_product_1.jpeg',
+            'media/img/279_product_2.jpeg',
+            'media/img/279_product_3.jpeg',
+            'media/img/279_product_4.jpeg'
+        ], 
+        rating: 4.7, 
+        reviews: 8834, 
+        inStock: true, 
+        stock: 5,
+        brand: 'GREEN SOUL',
+        description: 'GREEN SOUL Kiev Orthopedic Office Chair with ergonomic design.',
+        descImages: [
+            'media/img/279_desc_1.webp'
+        ]
+    }
+];
+
+}
 
         // ============================================================
-        // STATIC SLIDERS DATA
+        // GET SLIDERS FROM localStorage
         // ============================================================
-        const SLIDERS_DATA = [
+        function getSliders() {
+            try {
+                const saved = localStorage.getItem('admin_sliders');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    if (data && data.length > 0) {
+                        return data;
+                    }
+                }
+            } catch(e) {}
+            return [
                 { id: 1, image: 'slider_img1.jpg', tag: '', title: '', subtitle: '', condition: '' },
                 { id: 2, image: 'slider_img2.jpg', tag: '', title: '', subtitle: '', condition: '' },
                 { id: 3, image: 'slider_img3.jpg', tag: '', title: '', subtitle: '', condition: '' }
-        ];
-
-        // ============================================================
-        // GET PRODUCTS & SLIDERS (localStorage ছাড়া সরাসরি)
-        // ============================================================
-        function getProducts() {
-            return PRODUCTS_DATA;
-        }
-
-        function getSliders() {
-            return SLIDERS_DATA;
+            ];
         }
 
         // ============================================================
