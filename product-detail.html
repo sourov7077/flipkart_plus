@@ -1392,97 +1392,103 @@
         }
 
         // ============================================================
-        // QR SCANNER (HTML5-QR-CODE) – ওয়েবসাইটের ভিতরেই
-        // ============================================================
-        function startScanner() {
-            const container = document.getElementById('scannerContainer');
-            const readerElement = document.getElementById('scannerReader');
-            
-            if (!container || !readerElement) { showToast('❌ Scanner not available'); return; }
+// ============================================================
+// QR SCANNER (HTML5-QR-CODE) – ওয়েবসাইটের ভিতরেই
+// ============================================================
+function startScanner() {
+    const container = document.getElementById('scannerContainer');
+    const readerElement = document.getElementById('scannerReader');
+    
+    if (!container || !readerElement) { 
+        showToast('❌ Scanner not available'); 
+        return; 
+    }
 
-            // মোবাইল ডিভাইস চেক
-            if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                showToast('⚠️ Camera scanning is only available on mobile devices');
-                return;
-            }
+    // মোবাইল ডিভাইস চেক
+    if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+        showToast('⚠️ Camera scanning is only available on mobile devices');
+        return;
+    }
 
-            // আগের scanner বন্ধ করুন
-            if (html5QrCode) {
-                try { html5QrCode.stop().then(() => { html5QrCode.clear(); }); } catch(e) {}
+    // আগের scanner বন্ধ করুন
+    if (html5QrCode) {
+        try { 
+            html5QrCode.stop().then(() => { 
+                html5QrCode.clear(); 
+            }); 
+        } catch(e) {}
+        html5QrCode = null;
+    }
+
+    container.style.display = 'block';
+    document.getElementById('btnStartScan').style.display = 'none';
+    document.getElementById('btnStopScan').style.display = 'inline-flex';
+    document.getElementById('scanResult').classList.remove('show');
+
+    try {
+        html5QrCode = new Html5Qrcode("scannerReader");
+        const config = {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+            aspectRatio: 1.0
+        };
+
+        html5QrCode.start(
+            { facingMode: "environment" },
+            config,
+            onScanSuccess,
+            onScanError
+        );
+        isScanning = true;
+        showToast('📷 Camera started. Place QR code in frame.');
+    } catch (err) {
+        console.error(err);
+        showToast('❌ Could not start camera: ' + err.message);
+        container.style.display = 'none';
+        document.getElementById('btnStartScan').style.display = 'inline-flex';
+        document.getElementById('btnStopScan').style.display = 'none';
+        isScanning = false;
+    }
+}
+
+// অটোমেটিক স্ক্যান সফল হলে
+function onScanSuccess(decodedText, decodedResult) {
+    stopScanner(); // ক্যামেরা বন্ধ করুন
+    
+    // স্ক্যান করা ডেটা থেকে অ্যামাউন্ট বের করুন
+    let amount = 'N/A';
+    try {
+        const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+        if (urlParams.has('am')) amount = urlParams.get('am');
+    } catch(e) {}
+    
+    // অ্যামাউন্ট দেখান
+    document.getElementById('scannedAmount').textContent = amount;
+    document.getElementById('scanResult').classList.add('show');
+    showToast('✅ QR Scanned! Amount: ₹' + amount);
+    
+    // এখানে আপনি চাইলে success পেজেও রিডাইরেক্ট করতে পারেন
+    // window.location.href = 'success.html?orderId=' + document.getElementById('qrOrderId').textContent;
+}
+
+function onScanError(err) {
+    // ইরর ইগনোর করুন (সাধারণত ক্যামেরা চলাকালীন)
+}
+
+function stopScanner() {
+    if (html5QrCode) {
+        try {
+            html5QrCode.stop().then(() => {
+                html5QrCode.clear();
                 html5QrCode = null;
-            }
-
-            container.style.display = 'block';
-            document.getElementById('btnStartScan').style.display = 'none';
-            document.getElementById('btnStopScan').style.display = 'inline-flex';
-            document.getElementById('scanResult').classList.remove('show');
-
-            try {
-                html5QrCode = new Html5Qrcode("scannerReader");
-                const config = {
-                    fps: 10,
-                    qrbox: { width: 250, height: 250 },
-                    aspectRatio: 1.0
-                };
-
-                html5QrCode.start(
-                    { facingMode: "environment" },
-                    config,
-                    onScanSuccess,
-                    onScanError
-                );
-                isScanning = true;
-                showToast('📷 Camera started. Place QR code in frame.');
-            } catch (err) {
-                console.error(err);
-                showToast('❌ Could not start camera: ' + err.message);
-                container.style.display = 'none';
-                document.getElementById('btnStartScan').style.display = 'inline-flex';
-                document.getElementById('btnStopScan').style.display = 'none';
-                isScanning = false;
-            }
-        }
-
-        function onScanSuccess(decodedText, decodedResult) {
-            // একবার স্ক্যান হলে থামান
-            stopScanner();
-            
-            // স্ক্যান করা ডেটা থেকে অ্যামাউন্ট বের করুন (যদি থাকে)
-            let amount = 'N/A';
-            try {
-                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
-                if (urlParams.has('am')) amount = urlParams.get('am');
-            } catch(e) {}
-            
-            document.getElementById('scannedAmount').textContent = amount;
-            document.getElementById('scanResult').classList.add('show');
-            
-            // সাফল্যের মেসেজ
-            showToast('✅ QR Scanned! Amount: ₹' + amount);
-            
-            // এখানে আপনি চাইলে পেমেন্ট সফল পেজেও রিডাইরেক্ট করতে পারেন
-            // window.location.href = 'success.html?orderId=' + document.getElementById('qrOrderId').textContent;
-        }
-
-        function onScanError(err) {
-            // ইরর ইগনোর করুন (সাধারণত ক্যামেরা চলাকালীন)
-        }
-
-        function stopScanner() {
-            if (html5QrCode) {
-                try {
-                    html5QrCode.stop().then(() => {
-                        html5QrCode.clear();
-                        html5QrCode = null;
-                    }).catch(() => {});
-                } catch(e) {}
-            }
-            document.getElementById('scannerContainer').style.display = 'none';
-            document.getElementById('btnStartScan').style.display = 'inline-flex';
-            document.getElementById('btnStopScan').style.display = 'none';
-            isScanning = false;
-        }
-
+            }).catch(() => {});
+        } catch(e) {}
+    }
+    document.getElementById('scannerContainer').style.display = 'none';
+    document.getElementById('btnStartScan').style.display = 'inline-flex';
+    document.getElementById('btnStopScan').style.display = 'none';
+    isScanning = false;
+}
         // ============================================================
         // QR ডাউনলোড
         // ============================================================
