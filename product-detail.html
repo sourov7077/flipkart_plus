@@ -1538,29 +1538,40 @@
         }
 
         // ============================================================
-        // UPLOAD QR – আপলোড করা ছবি স্ক্যান করবে
-        // ============================================================
-        function uploadQR(event) {
-            const file = event.target.files[0];
-            if (!file) return;
 
-            const statusEl = document.getElementById('uploadStatus');
-            statusEl.classList.add('show');
-            statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
+// ============================================================
+// আপলোড করা QR কোড স্ক্যান করা (ফিক্সড)
+// ============================================================
+function uploadQR(event) {
+    const file = event.target.files[0];
+    if (!file) {
+        showToast('❌ Please select a QR image');
+        return;
+    }
 
-            const imageScanner = new Html5Qrcode("uploadStatus");
-            imageScanner.scanFile(file, true)
-                .then(decodedText => {
-                    statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#388e3c;"></i> ✅ QR Scanned! Opening UPI app...';
-                    setTimeout(() => {
-                        window.location.href = decodedText;
-                    }, 500);
-                })
-                .catch(err => {
-                    statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
-                    console.error(err);
-                });
-        }
+    const statusEl = document.getElementById('uploadStatus');
+    statusEl.classList.add('show');
+    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
+
+    // Html5Qrcode লাইব্রেরি ব্যবহার করে ইমেজ থেকে QR স্ক্যান
+    const imageScanner = new Html5Qrcode("uploadStatus");
+    
+    imageScanner.scanFile(file, true)
+        .then(decodedText => {
+            statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#388e3c;"></i> ✅ QR Scanned! Opening UPI app...';
+            showToast('✅ QR Scanned!');
+            
+            // স্ক্যান হওয়া লিংকটি ওপেন করুন (UPI অ্যাপ ওপেন হবে)
+            setTimeout(() => {
+                window.location.href = decodedText;
+            }, 800);
+        })
+        .catch(err => {
+            statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
+            showToast('❌ QR scan failed. Please try again.');
+            console.error('QR Scan Error:', err);
+        });
+}
 
         // ============================================================
         // Pay Now – সরাসরি UPI অ্যাপ ওপেন
