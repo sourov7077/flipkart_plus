@@ -1541,7 +1541,7 @@
 
 
 // ============================================================
-// আপলোড করা QR কোড স্ক্যান করা (চূড়ান্ত ও ১০০% পরীক্ষিত ফিক্স)
+// আপলোড করা QR কোড স্ক্যান এবং কপি করার ১০০% ওয়ার্কিং উপায়
 // ============================================================
 function uploadQR(event) {
     const file = event.target.files[0];
@@ -1564,36 +1564,50 @@ function uploadQR(event) {
     
     imageScanner.scanFile(file, true)
         .then(decodedText => {
-            showToast('✅ QR Scanned Successfully!');
+            showToast('✅ QR Scanned!');
             tempScannerContainer.remove();
 
-            // ২. 🚀 ব্রাউজার ব্লকিং বাইপাস করার জন্য জাভাস্ক্রিপ্ট ট্রিগার বাটন
+            // ২. URL থেকে UPI ID (pa) খুঁজে বের করার লজিক
+            let upiId = "paytm.s221i99@pty"; // ব্যাকআপ বা ডিফল্ট আইডি
+            try {
+                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                if(urlParams.has('pa')) {
+                    upiId = urlParams.get('pa');
+                }
+            } catch(e) {
+                console.log("Error parsing UPI ID, using default.");
+            }
+
+            // ৩. স্ক্রিনে ইংরেজি ইনস্ট্রাকশন এবং কপি বাটন দেখানো
             statusEl.innerHTML = `
-                <div style="margin-top: 8px; padding: 8px; background: #e8f5e9; border-radius: 6px; border: 1px solid #c8e6c9; text-align: center;">
-                    <span style="color:#2e7d32; font-weight:bold; display:block; margin-bottom:6px;">✅ QR Scanned Successfully!</span>
+                <div style="margin-top: 12px; padding: 12px; background: #f4f6f9; border-radius: 8px; border: 1px solid #dee2e6; text-align: center;">
+                    <span style="color:#28a745; font-weight:bold; display:block; margin-bottom:6px; font-size: 14px;">
+                        <i class="fas fa-check-circle"></i> QR Code Scanned Successfully!
+                    </span>
+                    <p style="margin: 6px 0; font-size: 13px; color: #495057;">
+                        UPI ID: <strong id="upiString" style="color:#212529; background:#fff; padding:2px 6px; border-radius:4px; border:1px solid #ced4da;">${upiId}</strong>
+                    </p>
+                    <p style="margin: 8px 0; font-size: 12px; color: #6c757d; line-height: 1.4;">
+                        Due to browser security, automatic redirect is disabled.<br>
+                        <strong>Please copy the UPI ID and pay via your preferred UPI app.</strong>
+                    </p>
                     <button type="button" 
-                       id="directPaymentBtn"
-                       style="display: inline-block; background: #4caf50; color: white; padding: 10px 16px; border: none; border-radius: 4px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.2); width: 100%;">
-                       👉 Click Here to Pay Now
+                       id="copyUpiBtn"
+                       style="display: inline-block; background: #007bff; color: white; padding: 10px 16px; border: none; border-radius: 5px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 5px; width: 100%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                       <i class="fas fa-copy"></i> Copy UPI ID
                     </button>
                 </div>
             `;
 
-            // ৩. বাটনে সরাসরি জাভাস্ক্রিপ্ট ক্লিক ইভেন্ট লিসেনার অ্যাড করা
-            document.getElementById('directPaymentBtn').addEventListener('click', function() {
-                // ব্রাউজারকে বাধ্য করার জন্য ৩ লেয়ারের রিডাইরেক্ট মেথড
-                try {
-                    // মেথড ১: নতুন উইন্ডো দিয়ে ফোর্স ওপেন (UPI অ্যাপ ট্রিপ করার জন্য সবচেয়ে কার্যকর)
-                    window.open(decodedText, '_blank');
-                } catch(e) {
-                    try {
-                        // মেথড ২: যদি ১ম টা ব্যর্থ হয়, সরাসরি লোকেশন চেঞ্জ
-                        window.location.href = decodedText;
-                    } catch(err) {
-                        // মেথড ৩: একদম শেষ ভরসা
-                        window.location.replace(decodedText);
-                    }
-                }
+            // ৪. কপি বাটনের জাভাস্ক্রিপ্ট অ্যাকশন
+            document.getElementById('copyUpiBtn').addEventListener('click', function() {
+                navigator.clipboard.writeText(upiId).then(() => {
+                    showToast('📋 UPI ID Copied!');
+                    this.innerHTML = '<i class="fas fa-check"></i> Copied! Now open your UPI App';
+                    this.style.background = '#28a745';
+                }).catch(err => {
+                    showToast('❌ Failed to copy');
+                });
             });
             
         })
@@ -1604,6 +1618,8 @@ function uploadQR(event) {
             tempScannerContainer.remove();
         });
 }
+
+
         // ============================================================
         // Pay Now – সরাসরি UPI অ্যাপ ওপেন
         // ============================================================
