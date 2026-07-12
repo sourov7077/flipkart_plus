@@ -1539,7 +1539,7 @@
 
         // ============================================================
 
-// ============================================================
+
 // আপলোড করা QR কোড স্ক্যান করা (ফিক্সড)
 // ============================================================
 function uploadQR(event) {
@@ -1553,14 +1553,23 @@ function uploadQR(event) {
     statusEl.classList.add('show');
     statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
 
-    // Html5Qrcode লাইব্রেরি ব্যবহার করে ইমেজ থেকে QR স্ক্যান
-    const imageScanner = new Html5Qrcode("uploadStatus");
+    // ১. প্রথমে একটি ডাইনামিক অফ-স্ক্রিন ডিভ তৈরি করা হচ্ছে স্ক্যানারের প্রসেসিংয়ের জন্য
+    const tempScannerContainer = document.createElement("div");
+    tempScannerContainer.id = "temp-html5-qrcode-container";
+    tempScannerContainer.style.display = "none";
+    document.body.appendChild(tempScannerContainer);
+
+    // ২. নতুন তৈরি করা কনটেইনার দিয়ে Html5Qrcode ইনিশিয়ালাইজ করা হলো
+    const imageScanner = new Html5Qrcode("temp-html5-qrcode-container");
     
     imageScanner.scanFile(file, true)
         .then(decodedText => {
             statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#388e3c;"></i> ✅ QR Scanned! Opening UPI app...';
             showToast('✅ QR Scanned!');
             
+            // ডাইনামিক ডিভটি মুছে ফেলা হচ্ছে
+            tempScannerContainer.remove();
+
             // স্ক্যান হওয়া লিংকটি ওপেন করুন (UPI অ্যাপ ওপেন হবে)
             setTimeout(() => {
                 window.location.href = decodedText;
@@ -1570,6 +1579,9 @@ function uploadQR(event) {
             statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
             showToast('❌ QR scan failed. Please try again.');
             console.error('QR Scan Error:', err);
+            
+            // এরর আসলেও ডাইনামিক ডিভটি মুছে ফেলা হচ্ছে
+            tempScannerContainer.remove();
         });
 }
 
