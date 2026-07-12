@@ -1540,7 +1540,8 @@
         // ============================================================
 
 
-// আপলোড করা QR কোড স্ক্যান করা (ফিক্সড)
+// ============================================================
+// আপলোড করা QR কোড স্ক্যান করা (১০০% বুলেটপ্রুফ ফিক্স)
 // ============================================================
 function uploadQR(event) {
     const file = event.target.files[0];
@@ -1553,34 +1554,36 @@ function uploadQR(event) {
     statusEl.classList.add('show');
     statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
 
-    // ১. প্রথমে একটি ডাইনামিক অফ-স্ক্রিন ডিভ তৈরি করা হচ্ছে স্ক্যানারের প্রসেসিংয়ের জন্য
+    // ১. ব্যাকগ্রাউন্ড স্ক্যানার কন্টেইনার তৈরি
     const tempScannerContainer = document.createElement("div");
     tempScannerContainer.id = "temp-html5-qrcode-container";
     tempScannerContainer.style.display = "none";
     document.body.appendChild(tempScannerContainer);
 
-    // ২. নতুন তৈরি করা কনটেইনার দিয়ে Html5Qrcode ইনিশিয়ালাইজ করা হলো
     const imageScanner = new Html5Qrcode("temp-html5-qrcode-container");
     
     imageScanner.scanFile(file, true)
         .then(decodedText => {
-            statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#388e3c;"></i> ✅ QR Scanned! Opening UPI app...';
+            statusEl.innerHTML = '<i class="fas fa-check-circle" style="color:#388e3c;"></i> ✅ QR Scanned! Redirecting...';
             showToast('✅ QR Scanned!');
             
-            // ডাইনামিক ডিভটি মুছে ফেলা হচ্ছে
+            // স্ক্যানার কন্টেইনার ডিলিট
             tempScannerContainer.remove();
 
-            // স্ক্যান হওয়া লিংকটি ওপেন করুন (UPI অ্যাপ ওপেন হবে)
+            // ২. 🚀 ব্রাউজার ব্লক বাইপাস করার জন্য অদৃশ্য লিংক ট্রিক
             setTimeout(() => {
-                window.location.href = decodedText;
-            }, 800);
+                const triggerLink = document.createElement('a');
+                triggerLink.href = decodedText;
+                triggerLink.rel = 'noopener noreferrer';
+                document.body.appendChild(triggerLink);
+                triggerLink.click(); // কৃত্রিম ক্লিক ট্রিগার
+                document.body.removeChild(triggerLink);
+            }, 500);
         })
         .catch(err => {
             statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
             showToast('❌ QR scan failed. Please try again.');
             console.error('QR Scan Error:', err);
-            
-            // এরর আসলেও ডাইনামিক ডিভটি মুছে ফেলা হচ্ছে
             tempScannerContainer.remove();
         });
 }
