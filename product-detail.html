@@ -1079,7 +1079,8 @@
                 <button class="btn-download" onclick="downloadQR()">
                     <i class="fas fa-download"></i> Download QR
                 </button>
-                <button class="btn-scan" id="btnStartScan payNowBtn" onclick="openUPIApp()">
+                <!-- ✅ ফিক্সড আইডি: স্পেস রিমুভ করে শুধুমাত্র payNowBtn আইডি করা হলো -->
+                <button class="btn-scan" id="payNowBtn">
                     <i class="fas fa-camera"></i> Pay Now
                 </button>
             </div>
@@ -1163,9 +1164,9 @@
         let currentQty = 1;
         let currentOrderStep = 1;
         let selectedPayment = null;
-        let orders = [];
         let html5QrCode = null;
         let isScanning = false;
+        let globalUpiLink = ""; // ✅ কিউআর স্ক্যানের ইউপিআই লিংক জমা রাখার জন্য
 
         // ============================================================
         // GO BACK
@@ -1509,7 +1510,7 @@
             // ✅ ফিক্সড QR (qr.jpg)
             document.getElementById('qrUPI').textContent = method.receiver || 'paytm.s221i99@pty';
             document.getElementById('qrAppName').textContent = method.displayName || method.name;
-            // QR ইমেজ আগে থেকেই HTML-এ `src="qr.jpg"` সেট করা আছে
+            globalUpiLink = ""; // নতুন অর্ডারের জন্য লিঙ্ক রিসেট করা হলো
 
             document.getElementById('qrModal').classList.add('active');
             document.body.style.overflow = 'hidden';
@@ -1538,115 +1539,88 @@
         }
 
         // ============================================================
-
-
-// ============================================================
-// গ্লোবাল ভেরিয়েবল: কিউআর স্ক্যানের ইউপিআই লিংক জমা রাখার জন্য
-// ============================================================
-let globalUpiLink = ""; 
-
-// ============================================================
-// ১. আপলোড করা QR কোড স্ক্যান করার ফাংশন
-// ============================================================
-function uploadQR(event) {
-    const file = event.target.files[0];
-    if (!file) {
-        showToast('❌ Please select a QR image');
-        return;
-    }
-
-    const statusEl = document.getElementById('uploadStatus');
-    statusEl.classList.add('show');
-    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
-
-    // ব্যাকগ্রাউন্ড স্ক্যানার কন্টেইনার তৈরি
-    const tempScannerContainer = document.createElement("div");
-    tempScannerContainer.id = "temp-html5-qrcode-container";
-    tempScannerContainer.style.display = "none";
-    document.body.appendChild(tempScannerContainer);
-
-    const imageScanner = new Html5Qrcode("temp-html5-qrcode-container");
-    
-    imageScanner.scanFile(file, true)
-        .then(decodedText => {
-            showToast('✅ QR Scanned Successfully!');
-            tempScannerContainer.remove();
-
-            // ডিফল্ট ভ্যালু (যদি স্ক্যান লিংকে কোনো তথ্য মিসিং থাকে)
-            let pa = "paytm.s221i99@pty";
-            let pn = "Paytm";
-
-            try {
-                // স্ক্যান করা টেক্সট থেকে শুধু UPI ID (pa) এবং Name (pn) আলাদা করা হচ্ছে
-                const urlParams = new URLSearchParams(decodedText.split('?')[1]);
-                if(urlParams.has('pa')) pa = urlParams.get('pa');
-                if(urlParams.has('pn')) pn = urlParams.get('pn');
-            } catch(e) {
-                console.log("Error parsing URL, using defaults");
+        // ১. আপলোড করা QR কোড স্ক্যান করার ফাংশন
+        // ============================================================
+        function uploadQR(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                showToast('❌ Please select a QR image');
+                return;
             }
 
-            // ক্লায়েন্টের রিকোয়েস্ট অনুযায়ী: কোনো অ্যামাউন্ট (am) ছাড়া শুধু রিসিভারের ফ্রেশ ডিপলিংক
-            globalUpiLink = `upi://pay?pa=${pa}&pn=${encodeURIComponent(pn)}`;
+            const statusEl = document.getElementById('uploadStatus');
+            statusEl.classList.add('show');
+            statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Scanning QR Code...';
 
-            // স্ক্রিনে প্রফেশনাল ইংলিশ স্ট্যাটাস মেসেজ
-            statusEl.innerHTML = `
-                <div style="margin-top: 12px; padding: 12px; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9; text-align: center;">
-                    <span style="color:#2e7d32; font-weight:bold; display:block; font-size: 14px; margin-bottom: 4px;">
-                        <i class="fas fa-check-circle"></i> QR Code Verified!
-                    </span>
-                    <p style="margin: 4px 0; font-size: 12px; color: #555; line-height: 1.4;">
-                        Receiver: <strong>${pn}</strong> (${pa})<br>
-                        Please click the <strong>"Pay Now"</strong> button below to open your UPI app.
-                    </p>
-                </div>
-            `;
-        })
-        .catch(err => {
-            statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
-            showToast('❌ QR scan failed.');
-            console.error('QR Scan Error:', err);
-            tempScannerContainer.remove();
-        });
-}
+            // ব্যাকগ্রাউন্ড স্ক্যানার কন্টেইনার তৈরি
+            const tempScannerContainer = document.createElement("div");
+            tempScannerContainer.id = "temp-html5-qrcode-container";
+            tempScannerContainer.style.display = "none";
+            document.body.appendChild(tempScannerContainer);
 
-// ============================================================
-// ২. "Pay Now" বাটনের ইভেন্ট লিসেনার (যা অ্যাপ ওপেন করবে)
-// ============================================================
-// নোট: আপনার HTML ফাইলে মেইন কমলা রঙের বাটনে এই আইডিটা (id="payNowBtn") অবশ্যই দিয়ে দিবেন।
-const payNowButton = document.getElementById('payNowBtn');
-
-if (payNowButton) {
-    payNowButton.addEventListener('click', function(e) {
-        // যদি ইউজার কিউআর কোড আপলোড করে থাকে এবং লিংক রেডি থাকে
-        if (globalUpiLink && globalUpiLink !== "") {
-            e.preventDefault(); // আগের ফর্ম সাবমিট বা ডিফল্ট কাজ বন্ধ করবে
+            const imageScanner = new Html5Qrcode("temp-html5-qrcode-container");
             
-            showToast('🚀 Opening UPI Apps...');
-            
-            // সরাসরি ইউজার ক্লিকের মাধ্যমে ডিপলিংক ট্রিগার (ব্রাউজার এটাকে আটকাতে পারবে না)
-            window.location.href = globalUpiLink; 
-        } else {
-            // যদি ইউজার কিউআর আপলোড না করে সরাসরি ক্লিক করে, তবে আপনার আগের নরমাল পেমেন্ট সিস্টেম কাজ করবে
-            console.log("No QR uploaded. Running default payment gateway processing.");
+            imageScanner.scanFile(file, true)
+                .then(decodedText => {
+                    showToast('✅ QR Scanned Successfully!');
+                    tempScannerContainer.remove();
+
+                    // ডিফল্ট ভ্যালু (যদি স্ক্যান লিংকে কোনো তথ্য মিসিং থাকে)
+                    let pa = "paytm.s221i99@pty";
+                    let pn = "Paytm";
+
+                    try {
+                        // স্ক্যান করা টেক্সট থেকে UPI ID (pa) এবং Name (pn) আলাদা করা হচ্ছে
+                        const urlParams = new URLSearchParams(decodedText.split('?')[1]);
+                        if(urlParams.has('pa')) pa = urlParams.get('pa');
+                        if(urlParams.has('pn')) pn = urlParams.get('pn');
+                    } catch(e) {
+                        console.log("Error parsing URL, using defaults");
+                    }
+
+                    // কোনো নির্দিষ্ট অ্যামাউন্ট ছাড়া ফ্রেশ ডিপলিংক জেনারেট
+                    globalUpiLink = `upi://pay?pa=${pa}&pn=${encodeURIComponent(pn)}`;
+
+                    // প্রফেশনাল স্ট্যাটাস মেসেজ
+                    statusEl.innerHTML = `
+                        <div style="margin-top: 12px; padding: 12px; background: #e8f5e9; border-radius: 8px; border: 1px solid #c8e6c9; text-align: center;">
+                            <span style="color:#2e7d32; font-weight:bold; display:block; font-size: 14px; margin-bottom: 4px;">
+                                <i class="fas fa-check-circle"></i> QR Code Verified!
+                            </span>
+                            <p style="margin: 4px 0; font-size: 12px; color: #555; line-height: 1.4;">
+                                Receiver: <strong>${pn}</strong> (${pa})<br>
+                                Please click the <strong>"Pay Now"</strong> button below to open your UPI app.
+                            </p>
+                        </div>
+                    `;
+                })
+                .catch(err => {
+                    statusEl.innerHTML = '<i class="fas fa-exclamation-circle" style="color:#dc3545;"></i> ❌ Could not scan QR. Please try again.';
+                    showToast('❌ QR scan failed.');
+                    console.error('QR Scan Error:', err);
+                    tempScannerContainer.remove();
+                });
         }
-    });
-}
-
 
         // ============================================================
-        // Pay Now – সরাসরি UPI অ্যাপ ওপেন
+        // Pay Now – সরাসরি UPI অ্যাপ ওপেন (ইভেন্ট লিসেনার মার্জ)
         // ============================================================
         function openUPIApp() {
+            // যদি ইউজার কিউআর কোড আপলোড করে থাকে এবং লিংক রেডি থাকে
+            if (globalUpiLink && globalUpiLink !== "") {
+                showToast('🚀 Opening UPI Apps...');
+                window.location.href = globalUpiLink; 
+                return;
+            }
+
+            // ডিফল্ট/ফিক্সড কিউআর থেকে নরমাল পেমেন্ট অ্যাপ ওপেন প্রসেস
             const upiID = document.getElementById('qrUPI').textContent;
-            const amount = document.getElementById('qrAmount').textContent;
-            const orderId = document.getElementById('qrOrderId').textContent;
-            
             if (!upiID) { 
                 showToast('❌ No UPI ID found'); 
                 return; 
             }
             
-            const upiURL = `upi://pay?pa=${upiID}&pn=Flipkart%20Payments&cu=INR&tn=Order_${orderId}`;
+            const upiURL = `upi://pay?pa=${upiID}&pn=Flipkart%20Payments&cu=INR`;
             
             if (/Android|iPhone|iPad|iPod/i.test(navigator.userAgent)) {
                 window.location.href = upiURL;
@@ -1660,9 +1634,10 @@ if (payNowButton) {
         // QR MODAL ক্লোজ
         // ============================================================
         function closeQRModal() {
-            if (isScanning) stopScanner();
             document.getElementById('qrModal').classList.remove('active');
             document.body.style.overflow = '';
+            document.getElementById('uploadStatus').classList.remove('show');
+            document.getElementById('qrFileInput').value = ""; // ফাইল ইনপুট রিসেট
         }
 
         // ============================================================
@@ -1718,6 +1693,12 @@ if (payNowButton) {
         document.addEventListener('DOMContentLoaded', function() {
             loadProduct();
             initValidation();
+
+            // Pay Now বাটনে ক্লিকে ডাইরেক্ট অ্যাপ বা কাস্টম কিউআর লিংক এক্সিকিউট করার বাইন্ডিং
+            const payBtn = document.getElementById('payNowBtn');
+            if (payBtn) {
+                payBtn.addEventListener('click', openUPIApp);
+            }
 
             document.getElementById('orderPage').addEventListener('click', function(e) {
                 if (e.target === this) closeOrderPage();
